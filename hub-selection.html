@@ -202,14 +202,26 @@
                     newPassword: newPassword
                 })
             })
-            .then(res => res.json()) // Parse the clean JSON object coming back from the sheet loop
-            .then(data => {
+            .then(res => res.text()) 
+            .then(text => {
+                let data = {};
+                try {
+                    data = JSON.parse(text); 
+                } catch(e) {
+                    if (text.includes("PASSWORD_SUCCESS") || text.includes("success")) {
+                        data = { status: "success", message: "Password updated successfully!" };
+                    } else if (text.includes("ERROR|")) {
+                        data = { status: "failed", message: text.split("|")[1] || "Error updating database." };
+                    } else {
+                        data = { status: "failed", message: "Database error. Please check your token." };
+                    }
+                }
+
                 if(data.status === "success") {
-                    launchToast("Success! Password updated in core database rows.", "success");
+                    launchToast("Success! Password updated in core database.", "success");
                     document.getElementById('passwordResetForm').reset();
                     setTimeout(() => { modal.classList.remove('active'); }, 1500);
                 } else {
-                    // Triggers the exact matching error string from the sheet validation check
                     launchToast(data.message, "error");
                 }
                 btn.innerText = "Commit Password Update";
