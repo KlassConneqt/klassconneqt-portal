@@ -51,7 +51,7 @@
             align-items: center;
             gap: 12px;
             font-weight: 600;
-            z-index: 2000;
+            z-index: 3000;
             transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -182,6 +182,27 @@
             border-color: var(--accent-blue);
         }
 
+        /* FORGOT LINK UTILITY */
+        .form-options {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        .link-forgot {
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            font-weight: 600;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .link-forgot:hover {
+            text-decoration: underline;
+        }
+
         .btn-submit {
             width: 100%;
             padding: 12px;
@@ -193,7 +214,6 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background 0.3s;
-            margin-top: 10px;
         }
 
         .btn-submit:hover { background-color: #0284c7; }
@@ -204,12 +224,27 @@
             margin-top: 20px;
             font-size: 0.85rem;
             color: #64748b;
+            line-height: 1.8;
         }
 
         .login-footer-text a {
             color: var(--accent-blue);
             font-weight: bold;
         }
+
+        /* FORGOT PASSWORD MODAL OVERLAY */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6);
+            display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease; z-index: 2000;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box { background: white; width: 100%; max-width: 420px; padding: 35px; border-radius: 8px; border-top: 4px solid var(--accent-blue); position: relative; text-align: center; }
+        .modal-box h3 { font-size: 1.4rem; margin-bottom: 15px; color: var(--primary-dark); }
+        .modal-box p { font-size: 0.95rem; color: #64748b; margin-bottom: 25px; line-height: 1.6; }
+        .btn-whatsapp-redirect { display: block; width: 100%; padding: 12px; background-color: #10b981; color: white; font-weight: bold; border-radius: 4px; text-align: center; margin-bottom: 10px; transition: opacity 0.3s; }
+        .btn-whatsapp-redirect:hover { opacity: 0.9; }
+        .btn-close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #94a3b8; }
 
         /* FOOTER */
         footer {
@@ -293,6 +328,11 @@
                     <label for="studentPassword">Access Password / Token</label>
                     <input type="password" id="studentPassword" class="form-control" placeholder="••••••••" required>
                 </div>
+                
+                <div class="form-options">
+                    <button type="button" class="link-forgot" id="openForgotBtn">Forgot Password?</button>
+                </div>
+
                 <button type="submit" class="btn-submit">Secure Log In</button>
             </form>
             
@@ -300,6 +340,16 @@
                 New Student? <br>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSeOSoMB10cxwLUS1Ta6RHoXBwWJrZzF7JcvZ2l6uQNe1B1Fsg/viewform" target="_blank">Request Portal Access</a>
             </div>
+        </div>
+    </div>
+
+    <div id="forgotModal" class="modal-overlay">
+        <div class="modal-box">
+            <button type="button" class="btn-close-modal" id="closeForgotBtn">&times;</button>
+            <h3>Account Protection Desk</h3>
+            <p>For ultimate protection of course materials and student records, password credentials must be reset manually by our network security panel.</p>
+            <p>Click the secure link below to open an instant request ticket with your instructor desk via WhatsApp.</p>
+            <a href="https://wa.me/918807606980?text=Hello%20KlassConneqt%20Admin,%20I%20forgot%20my%20Student%20Portal%20password.%20Please%20verify%20my%20enrolled%20profile%20and%20issue%20a%20new%20temporary%20access%20token.%20Thank%20you!" target="_blank" class="btn-whatsapp-redirect">💬 Open WhatsApp Support Desk</a>
         </div>
     </div>
 
@@ -344,6 +394,7 @@
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbzLXleZ8Y_Spd8XIwmmW7rsKG3t4KsX2THdr48t3SOe5TmNU4Qi_2Qq0n0bWIX9LQJQmw/exec';
 
+        // Custom notification box module
         function launchToast(msg, type) {
             const toast = document.getElementById('toastEngine');
             const icon = document.getElementById('toastIcon');
@@ -355,6 +406,11 @@
             
             setTimeout(() => { toast.classList.remove('active'); }, 4000);
         }
+
+        // Forgot Password Window Toggle Events
+        const forgotModal = document.getElementById('forgotModal');
+        document.getElementById('openForgotBtn').addEventListener('click', () => forgotModal.classList.add('active'));
+        document.getElementById('closeForgotBtn').addEventListener('click', () => forgotModal.classList.remove('active'));
 
         document.getElementById('portalLoginForm').addEventListener('submit', function(e) {
             e.preventDefault();
