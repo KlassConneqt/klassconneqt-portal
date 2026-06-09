@@ -192,44 +192,35 @@
             btn.innerText = "Synchronizing Spreadsheet Master...";
             btn.disabled = true;
 
-            fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            // EXACT INECOLIV FETCH ARCHITECTURE
+            fetch(API_URL, { 
+                method: 'POST', 
                 body: JSON.stringify({
                     action: "changePassword",
                     email: email,
                     oldPassword: oldPassword,
                     newPassword: newPassword
-                })
+                }) 
             })
-            .then(res => res.text()) 
+            .then(r => r.text()) 
             .then(text => {
-                let data = {};
                 try {
-                    data = JSON.parse(text); 
-                } catch(e) {
-                    if (text.includes("PASSWORD_SUCCESS") || text.includes("success")) {
-                        data = { status: "success", message: "Password updated successfully!" };
-                    } else if (text.includes("ERROR|")) {
-                        data = { status: "failed", message: text.split("|")[1] || "Error updating database." };
+                    const res = JSON.parse(text);
+                    if(res.status === 'success') {
+                        launchToast("Success! Password updated in core database.", "success");
+                        document.getElementById('passwordResetForm').reset();
+                        setTimeout(() => { modal.classList.remove('active'); }, 1500);
                     } else {
-                        data = { status: "failed", message: "Database error. Please check your token." };
+                        launchToast(res.message, "error");
                     }
-                }
-
-                if(data.status === "success") {
-                    launchToast("Success! Password updated in core database.", "success");
-                    document.getElementById('passwordResetForm').reset();
-                    setTimeout(() => { modal.classList.remove('active'); }, 1500);
-                } else {
-                    launchToast(data.message, "error");
+                } catch (jsonError) {
+                    console.error("Google Server Response:", text);
+                    launchToast("Server Blocked Request. Please try again.", "error");
                 }
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
-            })
-            .catch(err => {
-                console.error("REAL ERROR TRACE:", err);
-                launchToast("System Error: " + err.message, "error");
+            }).catch(e => { 
+                launchToast("Critical Network Error. Check connection.", "error"); 
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
             });
