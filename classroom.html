@@ -103,13 +103,18 @@
 
     document.getElementById('loadingMsg').style.display = 'none';
 
+    const batches = [...new Set(
+        data.courses.map(c => c.batch)
+    )];
+
     let html = '';
 
-    data.courses.forEach(course => {
+    batches.forEach(batch => {
         html += `
             <div class="folder-card">
                 <div class="folder-icon">📚</div>
-                <h3>${course.batch}</h3>
+                <h3>${batch}</h3>
+                <p>Click to view materials</p>
             </div>
         `;
     });
