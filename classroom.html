@@ -82,104 +82,37 @@
     </div>
 
     <script>
-        // YOUR GET DEPLOYMENT URL
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwGpKyEX6jHqy5347ndG76EQHmhL8tX8HWQyRsVzb5PI7beZXMnfYLpD5HbdAE-Gwyyew/exec';
-
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec';
         const userEmail = localStorage.getItem('portalUser');
         if (!userEmail) window.location.href = 'login.html';
-
-        // Global memory to hold the data so we don't have to fetch it twice!
-        let courseDataGrouped = {};
 
         window.onload = function() {
             const requestUrl = API_URL + "?action=getCourses&email=" + encodeURIComponent(userEmail);
 
             fetch(requestUrl)
-            .then(r => r.text())
+            .then(r => r.text()) // 🛡️ READ AS TEXT FIRST, NEVER JSON
             .then(text => {
+                console.log("RAW RESPONSE FROM GOOGLE:", text); // Check F12 Console!
+                
                 let data = {};
-                try { data = JSON.parse(text); } catch(e) { data = { status: "error" }; }
+                try {
+                    data = JSON.parse(text); // Try to parse only if valid
+                } catch(e) {
+                    document.getElementById('loadingMsg').innerText = "❌ API Error: Google returned HTML instead of Data. Check your Deployment settings.";
+                    return;
+                }
 
-                if (data.status === "success" && data.courses.length > 0) {
+                if (data.status === "success") {
                     document.getElementById('loadingMsg').style.display = 'none';
-                    
-                    // Step 1: Group the materials by Batch Name (Folder)
-                    data.courses.forEach(course => {
-                        if (!courseDataGrouped[course.batch]) {
-                            courseDataGrouped[course.batch] = [];
-                        }
-                        courseDataGrouped[course.batch].push(course);
-                    });
-
-                    // Step 2: Draw the Folders on the screen
-                    renderFolders();
-
-                } else if (data.status === "success" && data.courses.length === 0) {
-                    document.getElementById('loadingMsg').innerText = "You have no active courses assigned yet.";
+                    // ... (rest of your rendering code) ...
                 } else {
-                    document.getElementById('loadingMsg').innerText = "❌ Secure connection failed.";
+                    document.getElementById('loadingMsg').innerText = "Error: " + data.message;
                 }
             })
             .catch(err => {
-                document.getElementById('loadingMsg').innerText = "❌ Network routing error.";
+                document.getElementById('loadingMsg').innerText = "❌ Network Request Failed.";
             });
         };
-
-        // --- RENDER FUNCTION: Show Folders ---
-        function renderFolders() {
-            const grid = document.getElementById('dynamicGrid');
-            grid.innerHTML = ""; // Clear grid
-            
-            document.getElementById('pageTitle').innerText = "My Subscribed Courses";
-            document.getElementById('pageSubTitle').innerText = "Select a course folder to view its materials.";
-            document.getElementById('backToFoldersBtn').style.display = 'none';
-
-            // Loop through the grouped batches and create a folder for each
-            Object.keys(courseDataGrouped).forEach(batchName => {
-                const fileCount = courseDataGrouped[batchName].length;
-                const folderHTML = `
-                    <div class="folder-card" onclick="renderMaterials('${batchName}')">
-                        <div class="folder-icon">📁</div>
-                        <h3>${batchName}</h3>
-                        <p>${fileCount} Learning Modules</p>
-                    </div>
-                `;
-                grid.innerHTML += folderHTML;
-            });
-        }
-
-        // --- RENDER FUNCTION: Show Files inside a Folder ---
-        function renderMaterials(batchName) {
-            const grid = document.getElementById('dynamicGrid');
-            grid.innerHTML = ""; // Clear grid
-            
-            document.getElementById('pageTitle').innerText = batchName;
-            document.getElementById('pageSubTitle').innerText = "View or download your module resources.";
-            document.getElementById('backToFoldersBtn').style.display = 'block';
-
-            // Loop through just the files for THIS batch
-            const materials = courseDataGrouped[batchName];
-            
-            materials.forEach(course => {
-                let badgeClass = "badge";
-                let icon = "🔗";
-                
-                if (course.type.toLowerCase().includes("video")) { badgeClass += " badge-video"; icon = "▶️"; }
-                else if (course.type.toLowerCase().includes("pdf")) { badgeClass += " badge-pdf"; icon = "📄"; }
-
-                const cardHTML = `
-                    <div class="material-card">
-                        <div>
-                            <span class="${badgeClass}">${icon} ${course.type.toUpperCase()}</span>
-                            <h3>${course.title}</h3>
-                            <p><b>Subject:</b> ${course.subject} <br> <b>Topic:</b> ${course.subCategory}</p>
-                        </div>
-                        <a href="${course.url}" target="_blank" class="btn-open">Access Module</a>
-                    </div>
-                `;
-                grid.innerHTML += cardHTML;
-            });
-        }
     </script>
 </body>
 </html>
