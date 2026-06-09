@@ -247,13 +247,13 @@
     </footer>
 
     <script>
-        // Basic session protection check
+        // Session validation check
         if (!localStorage.getItem('portalUser')) {
             alert("Unauthorized access detected. Please log in first.");
             window.location.href = 'login.html';
         }
 
-        // Handle clean session logout
+        // Secure session logout
         document.getElementById('logoutBtn').addEventListener('click', function() {
             localStorage.removeItem('portalUser');
             alert("Logged out securely.");
