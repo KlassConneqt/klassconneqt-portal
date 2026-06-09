@@ -152,7 +152,6 @@
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbzLXleZ8Y_Spd8XIwmmW7rsKG3t4KsX2THdr48t3SOe5TmNU4Qi_2Qq0n0bWIX9LQJQmw/exec';
 
-        // Security session guarding gate
         if (!localStorage.getItem('portalUser')) {
             window.location.href = 'login.html';
         } else {
@@ -169,12 +168,10 @@
             setTimeout(() => { toast.classList.remove('active'); }, 4000);
         }
 
-        // Modal triggers
         const modal = document.getElementById('settingsModal');
         document.getElementById('openSettingsBtn').addEventListener('click', () => modal.classList.add('active'));
         document.getElementById('closeSettingsBtn').addEventListener('click', () => modal.classList.remove('active'));
 
-        // Handle password sync submit action with strict validation loops
         document.getElementById('passwordResetForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = localStorage.getItem('portalUser');
@@ -205,31 +202,30 @@
                     newPassword: newPassword
                 })
             })
-            .then(res => {
-                if (!res.ok) throw new Error('Network array parsing fault');
-                return res.json();
-            })
-            .then(data => {
-                if(data.status === "success") {
+            .then(res => res.text()) // Safely intercept text responses to smash redirect errors
+            .then(responseText => {
+                const parts = responseText.split('|');
+                
+                if (parts[0] === "PASSWORD_SUCCESS") {
                     launchToast("Success! Password updated in core database.", "success");
                     document.getElementById('passwordResetForm').reset();
+                    // Keep track of the updated string for the current login session state
                     setTimeout(() => { modal.classList.remove('active'); }, 1500);
                 } else {
-                    // Pulls the direct "Current password does not match" rejection from your sheet
-                    launchToast(data.message || "Database update rejected.", "error");
+                    // Pulls and displays the exact "Current password does not match" rejection from row cell
+                    const failureReason = parts[1] || "Update transmission rejected.";
+                    launchToast(failureReason, "error");
                 }
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
             })
             .catch(err => {
-                console.error('Validation Trap Log:', err);
-                // FIX THE LOOPHOLE: If data routing flags or password arrays match poorly, flag failure strictly
-                launchToast("Verification Failed: Incorrect current password signature.", "error");
+                launchToast("Network system routing error. Try again.", "error");
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
             });
         });
-        
+
         document.getElementById('logoutBtn').addEventListener('click', function() {
             localStorage.clear();
             window.location.href = 'login.html';
