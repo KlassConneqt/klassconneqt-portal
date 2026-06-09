@@ -41,7 +41,7 @@
         .btn-logout { padding: 8px 16px; background-color: #334155; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-logout:hover { background-color: #ef4444; }
 
-        /* DASHBOARD GRID CONTAINER */
+        /* CONTAINERS */
         .hub-container { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 60px 5%; display: flex; flex-direction: column; justify-content: center; }
         .welcome-header { text-align: center; margin-bottom: 40px; }
         .welcome-header h2 { font-size: 2.2rem; color: var(--primary-dark); margin-bottom: 10px; }
@@ -58,7 +58,7 @@
         .btn-courses { background-color: var(--accent-blue); }
         .btn-support { background-color: var(--accent-green); }
 
-        /* PASSWORD MODAL POPUP WINDOW INTERFACE */
+        /* MODAL WINDOW FOR PASSWORD MODIFICATION */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6);
             display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none;
@@ -185,16 +185,15 @@
                 return;
             }
             if (newPassword !== confirmPassword) {
-                launchToast("Confirm password confirmation mismatch.", "error");
+                launchToast("Confirm password verification mismatch.", "error");
                 return;
             }
 
-            btn.innerText = "Synchronizing Data Matrix...";
+            btn.innerText = "Synchronizing Spreadsheet Master...";
             btn.disabled = true;
 
             fetch(API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({
                     action: "changePassword",
                     email: email,
@@ -202,25 +201,21 @@
                     newPassword: newPassword
                 })
             })
-            .then(res => res.text()) // Safely intercept text responses to smash redirect errors
-            .then(responseText => {
-                const parts = responseText.split('|');
-                
-                if (parts[0] === "PASSWORD_SUCCESS") {
-                    launchToast("Success! Password updated in core database.", "success");
+            .then(res => res.json()) // Parse the clean JSON object coming back from the sheet loop
+            .then(data => {
+                if(data.status === "success") {
+                    launchToast("Success! Password updated in core database rows.", "success");
                     document.getElementById('passwordResetForm').reset();
-                    // Keep track of the updated string for the current login session state
                     setTimeout(() => { modal.classList.remove('active'); }, 1500);
                 } else {
-                    // Pulls and displays the exact "Current password does not match" rejection from row cell
-                    const failureReason = parts[1] || "Update transmission rejected.";
-                    launchToast(failureReason, "error");
+                    // Triggers the exact matching error string from the sheet validation check
+                    launchToast(data.message, "error");
                 }
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
             })
             .catch(err => {
-                launchToast("Network system routing error. Try again.", "error");
+                launchToast("Network system routing failure. Please retry.", "error");
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
             });
