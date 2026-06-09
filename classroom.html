@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KlassConneqt | My Course Vault</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <style>
+        :root {
+            --primary-dark: #0f172a;
+            --secondary-dark: #1e293b;
+            --bg-light: #f8fafc;
+            --text-dark: #334155;
+            --accent-blue: #0284c7;
+            --accent-green: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
+
+        /* NAV BAR */
+        nav { background-color: var(--primary-dark); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; }
+        .logo-title { font-size: 1.5rem; font-weight: 800; }
+        .btn-home { padding: 8px 16px; background-color: #334155; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-weight: bold; }
+        .btn-home:hover { background-color: #475569; }
+
+        /* DASHBOARD LAYOUT */
+        .vault-container { max-width: 1200px; margin: 40px auto; padding: 0 5%; }
+        
+        .vault-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; }
+        .vault-header h2 { color: var(--primary-dark); font-size: 2rem; }
+        
+        /* BREADCRUMB BACK BUTTON (Hidden by default) */
+        #backToFoldersBtn { display: none; padding: 8px 16px; background-color: #e2e8f0; color: #334155; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        #backToFoldersBtn:hover { background-color: #cbd5e1; }
+
+        #loadingMsg { text-align: center; font-size: 1.2rem; color: #64748b; margin-top: 50px; font-weight: bold; }
+
+        /* GRID SYSTEM */
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
+        
+        /* FOLDER CARDS (Step 1) */
+        .folder-card { background: white; border-radius: 8px; padding: 30px 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--accent-blue); text-align: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .folder-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .folder-icon { font-size: 3.5rem; margin-bottom: 15px; }
+        .folder-card h3 { color: var(--primary-dark); font-size: 1.3rem; }
+        .folder-card p { color: #64748b; font-size: 0.9rem; margin-top: 5px; }
+
+        /* MATERIAL CARDS (Step 2) */
+        .material-card { background: white; border-radius: 8px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--accent-green); display: flex; flex-direction: column; justify-content: space-between; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-bottom: 10px; }
+        .badge-video { background: #fee2e2; color: #991b1b; }
+        .badge-pdf { background: #dcfce7; color: #065f46; }
+
+        .material-card h3 { font-size: 1.2rem; color: var(--primary-dark); margin-bottom: 5px; }
+        .material-card p { font-size: 0.85rem; color: #64748b; margin-bottom: 20px; }
+        
+        .btn-open { text-align: center; width: 100%; padding: 10px; background: var(--accent-blue); color: white; border-radius: 4px; text-decoration: none; font-weight: bold; transition: opacity 0.3s; }
+        .btn-open:hover { opacity: 0.9; }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-title">KLASSCONNEQT VAULT</div>
+        <a href="hub-selection.html" class="btn-home">⬅ Hub</a>
+    </nav>
+
+    <div class="vault-container">
+        <div class="vault-header">
+            <div>
+                <h2 id="pageTitle">My Subscribed Courses</h2>
+                <p id="pageSubTitle">Select a course folder to view its materials.</p>
+            </div>
+            <button id="backToFoldersBtn" onclick="renderFolders()">🔙 Back to Folders</button>
+        </div>
+
+        <div id="loadingMsg">⏳ Syncing your vault... Please wait.</div>
+        
+        <div class="grid-layout" id="dynamicGrid"></div>
+    </div>
+
+    <script>
+        // YOUR GET DEPLOYMENT URL
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec';
+
+        const userEmail = localStorage.getItem('portalUser');
+        if (!userEmail) window.location.href = 'login.html';
+
+        // Global memory to hold the data so we don't have to fetch it twice!
+        let courseDataGrouped = {};
+
+        window.onload = function() {
+            const requestUrl = API_URL + "?action=getCourses&email=" + encodeURIComponent(userEmail);
+
+            fetch(requestUrl)
+            .then(r => r.text())
+            .then(text => {
+                let data = {};
+                try { data = JSON.parse(text); } catch(e) { data = { status: "error" }; }
+
+                if (data.status === "success" && data.courses.length > 0) {
+                    document.getElementById('loadingMsg').style.display = 'none';
+                    
+                    // Step 1: Group the materials by Batch Name (Folder)
+                    data.courses.forEach(course => {
+                        if (!courseDataGrouped[course.batch]) {
+                            courseDataGrouped[course.batch] = [];
+                        }
+                        courseDataGrouped[course.batch].push(course);
+                    });
+
+                    // Step 2: Draw the Folders on the screen
+                    renderFolders();
+
+                } else if (data.status === "success" && data.courses.length === 0) {
+                    document.getElementById('loadingMsg').innerText = "You have no active courses assigned yet.";
+                } else {
+                    document.getElementById('loadingMsg').innerText = "❌ Secure connection failed.";
+                }
+            })
+            .catch(err => {
+                document.getElementById('loadingMsg').innerText = "❌ Network routing error.";
+            });
+        };
+
+        // --- RENDER FUNCTION: Show Folders ---
+        function renderFolders() {
+            const grid = document.getElementById('dynamicGrid');
+            grid.innerHTML = ""; // Clear grid
+            
+            document.getElementById('pageTitle').innerText = "My Subscribed Courses";
+            document.getElementById('pageSubTitle').innerText = "Select a course folder to view its materials.";
+            document.getElementById('backToFoldersBtn').style.display = 'none';
+
+            // Loop through the grouped batches and create a folder for each
+            Object.keys(courseDataGrouped).forEach(batchName => {
+                const fileCount = courseDataGrouped[batchName].length;
+                const folderHTML = `
+                    <div class="folder-card" onclick="renderMaterials('${batchName}')">
+                        <div class="folder-icon">📁</div>
+                        <h3>${batchName}</h3>
+                        <p>${fileCount} Learning Modules</p>
+                    </div>
+                `;
+                grid.innerHTML += folderHTML;
+            });
+        }
+
+        // --- RENDER FUNCTION: Show Files inside a Folder ---
+        function renderMaterials(batchName) {
+            const grid = document.getElementById('dynamicGrid');
+            grid.innerHTML = ""; // Clear grid
+            
+            document.getElementById('pageTitle').innerText = batchName;
+            document.getElementById('pageSubTitle').innerText = "View or download your module resources.";
+            document.getElementById('backToFoldersBtn').style.display = 'block';
+
+            // Loop through just the files for THIS batch
+            const materials = courseDataGrouped[batchName];
+            
+            materials.forEach(course => {
+                let badgeClass = "badge";
+                let icon = "🔗";
+                
+                if (course.type.toLowerCase().includes("video")) { badgeClass += " badge-video"; icon = "▶️"; }
+                else if (course.type.toLowerCase().includes("pdf")) { badgeClass += " badge-pdf"; icon = "📄"; }
+
+                const cardHTML = `
+                    <div class="material-card">
+                        <div>
+                            <span class="${badgeClass}">${icon} ${course.type.toUpperCase()}</span>
+                            <h3>${course.title}</h3>
+                            <p><b>Subject:</b> ${course.subject} <br> <b>Topic:</b> ${course.subCategory}</p>
+                        </div>
+                        <a href="${course.url}" target="_blank" class="btn-open">Access Module</a>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+    </script>
+</body>
+</html>
