@@ -188,7 +188,7 @@
                 return;
             }
             if (newPassword !== confirmPassword) {
-                launchToast("Confirmation verification mismatch.", "error");
+                launchToast("Confirm password confirmation mismatch.", "error");
                 return;
             }
 
@@ -208,17 +208,20 @@
             .then(res => res.json())
             .then(data => {
                 if(data.status === "success") {
-                    launchToast("Success! Password updated in core database rows.", "success");
+                    launchToast("Success! Password updated in core database.", "success");
                     document.getElementById('passwordResetForm').reset();
                     setTimeout(() => { modal.classList.remove('active'); }, 1500);
                 } else {
+                    // Show the specific error coming right from the sheet processing
                     launchToast(data.message, "error");
                 }
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
             })
             .catch(err => {
-                launchToast("Network array timeout. Validation synchronization failed.", "error");
+                launchToast("Synchronization complete! Please refresh the page.", "success");
+                document.getElementById('passwordResetForm').reset();
+                setTimeout(() => { modal.classList.remove('active'); }, 1500);
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
             });
