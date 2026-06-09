@@ -100,9 +100,23 @@
                 const data = JSON.parse(text);
                 
                 if (data.status === "success") {
-                    document.getElementById('loadingMsg').style.display = 'none';
-                    // ... (rest of your logic to render folders)
-                } else {
+
+    document.getElementById('loadingMsg').style.display = 'none';
+
+    let html = '';
+
+    data.courses.forEach(course => {
+        html += `
+            <div class="folder-card">
+                <div class="folder-icon">📚</div>
+                <h3>${course.batch}</h3>
+            </div>
+        `;
+    });
+
+    document.getElementById('dynamicGrid').innerHTML = html;
+}
+                else {
                     document.getElementById('loadingMsg').innerText = "Error: " + data.message;
                 }
             })
