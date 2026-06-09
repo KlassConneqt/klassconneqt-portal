@@ -394,31 +394,36 @@
             const submitBtn = this.querySelector('.btn-submit');
             
             // Set loading state
-            submitBtn.innerText = "Authorizing Access Tokens...";
+            submitBtn.innerText = "Verifying Credentials...";
             submitBtn.disabled = true;
 
-            // Transmit validation handshake payload
+            // Transmit validation handshake payload without preflight blocks
             fetch(API_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Bypasses browser extension blocks
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'text/plain;charset=utf-8' // Prevents CORS preflight failures on Google redirection
                 },
                 body: JSON.stringify({ email: email, password: password })
             })
-            .then(response => {
-                /*
-                  Because 'no-cors' yields an opaque response object context, 
-                  we fall back to a streamlined client verification cascade.
-                  For our 50-student deployment, we process validation routing smoothly.
-                */
-                localStorage.setItem('portalUser', email);
-                alert("Security handshake sent! Access authorization granted.");
-                window.location.href = 'hub-selection.html';
+            .then(response => response.json()) // Parse the real database response
+            .then(data => {
+                if (data.status === "success") {
+                    // Save real verified data to browser session memory
+                    localStorage.setItem('portalUser', data.email);
+                    localStorage.setItem('portalUserName', data.name);
+                    
+                    alert("Access Granted! Welcome back, " + data.name + ".");
+                    window.location.href = 'hub-selection.html';
+                } else {
+                    // Throw the exact error message coming from your Google Sheet rows
+                    alert("Authentication Failed: " + data.message);
+                    submitBtn.innerText = "Secure Log In";
+                    submitBtn.disabled = false;
+                }
             })
             .catch(error => {
                 console.error('Handshake Error:', error);
-                alert("Authorization transmission error. Check connection parameters.");
+                alert("Database connection timeout or unrecognized user token.");
                 submitBtn.innerText = "Secure Log In";
                 submitBtn.disabled = false;
             });
