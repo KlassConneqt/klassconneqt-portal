@@ -174,7 +174,7 @@
         document.getElementById('openSettingsBtn').addEventListener('click', () => modal.classList.add('active'));
         document.getElementById('closeSettingsBtn').addEventListener('click', () => modal.classList.remove('active'));
 
-        // Handle password sync submit action
+        // Handle password sync submit action with strict validation loops
         document.getElementById('passwordResetForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = localStorage.getItem('portalUser');
@@ -192,7 +192,7 @@
                 return;
             }
 
-            btn.innerText = "Synchronizing Spreadsheet Matrix...";
+            btn.innerText = "Synchronizing Data Matrix...";
             btn.disabled = true;
 
             fetch(API_URL, {
@@ -205,28 +205,31 @@
                     newPassword: newPassword
                 })
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('Network array parsing fault');
+                return res.json();
+            })
             .then(data => {
                 if(data.status === "success") {
                     launchToast("Success! Password updated in core database.", "success");
                     document.getElementById('passwordResetForm').reset();
                     setTimeout(() => { modal.classList.remove('active'); }, 1500);
                 } else {
-                    // Show the specific error coming right from the sheet processing
-                    launchToast(data.message, "error");
+                    // Pulls the direct "Current password does not match" rejection from your sheet
+                    launchToast(data.message || "Database update rejected.", "error");
                 }
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
             })
             .catch(err => {
-                launchToast("Synchronization complete! Please refresh the page.", "success");
-                document.getElementById('passwordResetForm').reset();
-                setTimeout(() => { modal.classList.remove('active'); }, 1500);
+                console.error('Validation Trap Log:', err);
+                // FIX THE LOOPHOLE: If data routing flags or password arrays match poorly, flag failure strictly
+                launchToast("Verification Failed: Incorrect current password signature.", "error");
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
             });
         });
-
+        
         document.getElementById('logoutBtn').addEventListener('click', function() {
             localStorage.clear();
             window.location.href = 'login.html';
