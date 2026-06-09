@@ -1,1 +1,395 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KlassConneqt | Student Portal Login</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <style>
+        :root {
+            --primary-dark: #0f172a;
+            --secondary-dark: #1e293b;
+            --bg-light: #f8fafc;
+            --text-dark: #334155;
+            --text-light: #f8fafc;
+            --accent-blue: #0284c7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* NAVIGATION BAR */
+        nav {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container img {
+            height: 85px;
+            width: 85px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-light);
+        }
+
+        .logo-tagline {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #94a3b8;
+            margin-top: -5px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            margin: 0 15px;
+            color: var(--text-light);
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* LOGIN PORTAL CONTAINER */
+        .login-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 5%;
+        }
+
+        .login-card {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--accent-blue);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--primary-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: #0284c7;
+        }
+
+        .login-footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .login-footer-text a {
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--secondary-dark);
+            color: var(--text-light);
+            padding: 60px 5% 20px 5%;
+            font-size: 0.95rem;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .footer-brand .footer-logo img {
+            height: 45px;
+            width: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .footer-brand p {
+            color: #cbd5e1;
+            line-height: 1.6;
+            font-size: 0.85rem;
+            max-width: 250px;
+            margin-top: 10px;
+        }
+
+        .footer-col h4 {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+            color: #cbd5e1;
+            transition: color 0.3s;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--accent-blue);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        /* MOBILE RESPONSIVENESS FIXES */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 5%;
+                text-align: center;
+            }
+            .logo-container {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .logo-container img {
+                height: 60px;
+                width: 60px;
+            }
+            .logo-title {
+                font-size: 1.5rem;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+            }
+            .nav-links a {
+                margin: 5px;
+                font-size: 0.95rem;
+            }
+            .login-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-container">
+            <img src="logo.png" alt="KlassConneqt Logo">
+            <div class="logo-text">
+                <span class="logo-title">KLASSCONNEQT</span>
+                <span class="logo-tagline">Seamless Learning, Anytime, Anywhere.</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="https://klassconneqt.github.io/index.html">Official Site</a>
+            <a href="https://klassconneqt.github.io/gallery.html">Gallery</a>
+        </div>
+    </nav>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Student Hub Gateway</h2>
+                <p>Enter your credentials to access your portal</p>
+            </div>
+            
+            <form id="portalLoginForm">
+                <div class="form-group">
+                    <label for="studentEmail">Registered Email</label>
+                    <input type="email" id="studentEmail" class="form-control" placeholder="name@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="studentPassword">Access Password / Token</label>
+                    <input type="password" id="studentPassword" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-submit">Secure Log In</button>
+            </form>
+            
+            <div class="login-footer-text">
+                Need portal access? <br>
+                <a href="https://klassconneqt.github.io/cart.html">Submit an Admission Enquiry</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="logo.png" alt="KlassConneqt Logo">
+                    <span>KLASSCONNEQT</span>
+                </div>
+                <p>Seamless Learning, Anytime, Anywhere.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Academic Excellence</h4>
+                <ul>
+                    <li>Mathematics Mastery</li>
+                    <li>Conceptual Physics</li>
+                    <li>Advanced Chemistry</li>
+                    <li>Inspirational Biology</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Professional Track</h4>
+                <ul>
+                    <li>CCNA Bootcamp</li>
+                    <li>Placement Aptitude</li>
+                    <li>Japanese Language</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Secure Hub</h4>
+                <ul style="color: #cbd5e1;">
+                    <li style="margin-bottom: 12px;">📍 Salem, Tamilnadu, India</li>
+                    <li style="margin-bottom: 12px;">✉️ klassconnect.edu@gmail.com</li>
+                    <li style="margin-bottom: 12px;">📞 +91-8807606980</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 KlassConneqt. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('portalLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('studentEmail').value;
+            
+            localStorage.setItem('portalUser', email);
+            alert("Security authorization processed successfully! Routing to selections...");
+            window.location.href = 'hub-selection.html';
+        });
+    </script>
+</body>
+</html>
