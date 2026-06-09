@@ -422,22 +422,19 @@
 
             fetch(API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Prevents CORS preflight
                 body: JSON.stringify({ action: "login", email: email, password: password })
             })
-            .then(res => res.text()) // Read raw token output safely bypassing CORS blocks
-            .then(responseText => {
-                const parts = responseText.split('|');
-                
-                if (parts[0] === "LOGIN_SUCCESS") {
-                    localStorage.setItem('portalUser', parts[2]);
-                    localStorage.setItem('portalUserName', parts[1]);
+            .then(res => res.json()) // NOW WE CORRECTLY EXPECT JSON!
+            .then(data => {
+                if (data.status === "success") {
+                    localStorage.setItem('portalUser', data.email);
+                    localStorage.setItem('portalUserName', data.name);
                     
                     launchToast("Access Authorized! Routing...", "success");
                     setTimeout(() => { window.location.href = 'hub-selection.html'; }, 1500);
                 } else {
-                    const errorMsg = parts[1] || "Authentication rejected.";
-                    launchToast(errorMsg, "error");
+                    launchToast(data.message, "error");
                     submitBtn.innerText = "Secure Log In";
                     submitBtn.disabled = false;
                 }
