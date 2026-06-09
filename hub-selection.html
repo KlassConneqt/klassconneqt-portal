@@ -150,7 +150,8 @@
     <footer><p>&copy; 2026 KlassConneqt Secure Portal System. All Rights Reserved.</p></footer>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzLXleZ8Y_Spd8XIwmmW7rsKG3t4KsX2THdr48t3SOe5TmNU4Qi_2Qq0n0bWIX9LQJQmw/exec';
+        // REPLACE THIS URL IF YOUR NEW DEPLOYMENT CHANGED IT!
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec';
 
         if (!localStorage.getItem('portalUser')) {
             window.location.href = 'login.html';
@@ -180,19 +181,13 @@
             const confirmPassword = document.getElementById('confirmPass').value;
             const btn = document.getElementById('modalSubmitBtn');
 
-            if (newPassword.length < 6) {
-                launchToast("New password must be at least 6 characters.", "error");
-                return;
-            }
-            if (newPassword !== confirmPassword) {
-                launchToast("Confirm password verification mismatch.", "error");
-                return;
-            }
+            if (newPassword.length < 6) { launchToast("New password must be at least 6 characters.", "error"); return; }
+            if (newPassword !== confirmPassword) { launchToast("Confirm password verification mismatch.", "error"); return; }
 
-            btn.innerText = "Synchronizing Spreadsheet Master...";
+            btn.innerText = "Synchronizing Database...";
             btn.disabled = true;
 
-            // EXACT INECOLIV FETCH ARCHITECTURE
+            // 🛡️ EXACT INECOLIV FETCH STRUCTURE (NO HEADERS)
             fetch(API_URL, { 
                 method: 'POST', 
                 body: JSON.stringify({
@@ -215,7 +210,7 @@
                     }
                 } catch (jsonError) {
                     console.error("Google Server Response:", text);
-                    launchToast("Server Blocked Request. Please try again.", "error");
+                    launchToast("Server Blocked Request. Please check console.", "error");
                 }
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
