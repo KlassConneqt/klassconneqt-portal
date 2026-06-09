@@ -82,54 +82,147 @@
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec';
-        const userEmail = localStorage.getItem('portalUser');
-        if (!userEmail) window.location.href = 'login.html';
+    const userEmail = localStorage.getItem('portalUser');
 
-        window.onload = function() {
-            // Use the NEW URL you just copied from the deployment
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPfo_fyDnpomeQcXRxLUM89sMgIF1f-BkwXz4_WL6DWosFBiDGDgMYwCPWdcdXFq-JQA/exec'; 
+    if (!userEmail) {
+        window.location.href = 'login.html';
+    }
 
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "getCourses", email: userEmail })
+    let allCourses = [];
+
+    function renderFolders() {
+
+        document.getElementById('pageTitle').innerText =
+            'My Subscribed Courses';
+
+        document.getElementById('pageSubTitle').innerText =
+            'Select a course folder to view its materials.';
+
+        document.getElementById('backToFoldersBtn').style.display =
+            'none';
+
+        const batches = [...new Set(
+            allCourses.map(course => course.batch)
+        )];
+
+        let html = '';
+
+        batches.forEach(batch => {
+
+            html += `
+                <div class="folder-card"
+                     onclick="openFolder('${batch.replace(/'/g, "\\'")}')">
+
+                    <div class="folder-icon">📚</div>
+
+                    <h3>${batch}</h3>
+
+                    <p>Click to view materials</p>
+
+                </div>
+            `;
+        });
+
+        document.getElementById('dynamicGrid').innerHTML = html;
+    }
+
+    function openFolder(batchName) {
+
+        document.getElementById('pageTitle').innerText =
+            batchName;
+
+        document.getElementById('pageSubTitle').innerText =
+            'Available materials';
+
+        document.getElementById('backToFoldersBtn').style.display =
+            'block';
+
+        const materials = allCourses.filter(
+            course => course.batch === batchName
+        );
+
+        let html = '';
+
+        materials.forEach(item => {
+
+            const badgeClass =
+                item.type.toLowerCase() === 'video'
+                    ? 'badge-video'
+                    : 'badge-pdf';
+
+            html += `
+                <div class="material-card">
+
+                    <div>
+
+                        <span class="badge ${badgeClass}">
+                            ${item.type}
+                        </span>
+
+                        <h3>${item.title}</h3>
+
+                        <p>
+                            ${item.subject} • ${item.subCategory}
+                        </p>
+
+                    </div>
+
+                    <a href="${item.url}"
+                       target="_blank"
+                       class="btn-open">
+                        Open Material
+                    </a>
+
+                </div>
+            `;
+        });
+
+        document.getElementById('dynamicGrid').innerHTML =
+            html;
+    }
+
+    window.onload = function () {
+
+        const SCRIPT_URL =
+            'https://script.google.com/macros/s/AKfycbzPfo_fyDnpomeQcXRxLUM89sMgIF1f-BkwXz4_WL6DWosFBiDGDgMYwCPWdcdXFq-JQA/exec';
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: 'getCourses',
+                email: userEmail
             })
-            .then(r => r.text())
-            .then(text => {
-                console.log("Response text:", text); // Check F12 Console
-                const data = JSON.parse(text);
-                
-                if (data.status === "success") {
+        })
+        .then(response => response.text())
+        .then(text => {
 
-    document.getElementById('loadingMsg').style.display = 'none';
+            console.log('Response:', text);
 
-    const batches = [...new Set(
-        data.courses.map(c => c.batch)
-    )];
+            const data = JSON.parse(text);
 
-    let html = '';
+            if (data.status === 'success') {
 
-    batches.forEach(batch => {
-        html += `
-            <div class="folder-card">
-                <div class="folder-icon">📚</div>
-                <h3>${batch}</h3>
-                <p>Click to view materials</p>
-            </div>
-        `;
-    });
+                allCourses = data.courses;
 
-    document.getElementById('dynamicGrid').innerHTML = html;
-}
-                else {
-                    document.getElementById('loadingMsg').innerText = "Error: " + data.message;
-                }
-            })
-            .catch(e => {
-                document.getElementById('loadingMsg').innerText = "Network Error.";
-                console.error(e);
-            });
-        };
-    </script>
+                document.getElementById('loadingMsg').style.display =
+                    'none';
+
+                renderFolders();
+
+            } else {
+
+                document.getElementById('loadingMsg').innerText =
+                    'Error: ' + data.message;
+            }
+        })
+        .catch(error => {
+
+            console.error(error);
+
+            document.getElementById('loadingMsg').innerText =
+                'Network Error. Please try again.';
+        });
+    };
+</script>
 </body>
 </html>
