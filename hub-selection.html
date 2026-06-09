@@ -16,208 +16,91 @@
             --accent-green: #10b981;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
 
-        body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        /* TOAST BANNERS */
+        .toast-notification {
+            position: fixed; top: -100px; right: 20px; background: white; padding: 16px 24px; border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-left: 5px solid #cbd5e1; display: flex; align-items: center;
+            gap: 12px; font-weight: 600; z-index: 3000; transition: top 0.4s ease;
         }
+        .toast-notification.active { top: 20px; }
+        .toast-success { border-left-color: #10b981; color: #065f46; }
+        .toast-error { border-left-color: #ef4444; color: #991b1b; }
 
-        /* NAVIGATION BAR */
-        nav {
-            background-color: var(--primary-dark);
-            color: var(--text-light);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+        /* NAV BAR */
+        nav { background-color: var(--primary-dark); color: var(--text-light); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-container img { height: 85px; width: 85px; object-fit: cover; border-radius: 50%; }
+        .logo-text { display: flex; flex-direction: column; }
+        .logo-title { font-size: 1.8rem; font-weight: 800; }
+        .logo-tagline { font-size: 0.75rem; color: #94a3b8; margin-top: -5px; }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .btn-settings { padding: 8px 16px; background-color: #0284c7; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-logout { padding: 8px 16px; background-color: #334155; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-logout:hover { background-color: #ef4444; }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-container img {
-            height: 85px;
-            width: 85px;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-        }
-
-        .logo-tagline {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            margin-top: -5px;
-        }
-
-        .btn-logout {
-            padding: 8px 16px;
-            background-color: #334155;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .btn-logout:hover {
-            background-color: #ef4444;
-        }
-
-        /* DASHBOARD GRID */
-        .hub-container {
-            flex: 1;
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 60px 5%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .welcome-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .welcome-header h2 {
-            font-size: 2.2rem;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-        }
-
-        .welcome-header p {
-            color: #64748b;
-            font-size: 1.1rem;
-        }
-
-        .grid-selection {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-        }
-
-        .hub-card {
-            background: white;
-            border-radius: 8px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 5px solid #cbd5e1;
-        }
-
-        .hub-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-        }
-
+        /* DASHBOARD GRID CONTAINER */
+        .hub-container { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 60px 5%; display: flex; flex-direction: column; justify-content: center; }
+        .welcome-header { text-align: center; margin-bottom: 40px; }
+        .welcome-header h2 { font-size: 2.2rem; color: var(--primary-dark); margin-bottom: 10px; }
+        .welcome-header p { color: #64748b; font-size: 1.1rem; }
+        .grid-selection { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .hub-card { background: white; border-radius: 8px; padding: 40px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-top: 5px solid #cbd5e1; }
+        .hub-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
         .card-courses { border-top-color: var(--accent-blue); }
         .card-support { border-top-color: var(--accent-green); }
-
-        .icon-box {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-
-        .hub-card h3 {
-            font-size: 1.5rem;
-            color: var(--primary-dark);
-            margin-bottom: 15px;
-        }
-
-        .hub-card p {
-            color: #64748b;
-            font-size: 0.95rem;
-            margin-bottom: 30px;
-            max-width: 280px;
-        }
-
-        .btn-action {
-            width: 100%;
-            padding: 14px;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: opacity 0.3s;
-            text-decoration: none;
-            display: block;
-        }
-
+        .icon-box { font-size: 3rem; margin-bottom: 20px; }
+        .hub-card h3 { font-size: 1.5rem; color: var(--primary-dark); margin-bottom: 15px; }
+        .hub-card p { color: #64748b; font-size: 0.95rem; margin-bottom: 30px; max-width: 280px; }
+        .btn-action { width: 100%; padding: 14px; color: white; border: none; border-radius: 4px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: opacity 0.3s; text-decoration: none; display: block; }
         .btn-courses { background-color: var(--accent-blue); }
         .btn-support { background-color: var(--accent-green); }
 
-        .btn-action:hover {
-            opacity: 0.9;
+        /* PASSWORD MODAL POPUP WINDOW INTERFACE */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6);
+            display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease; z-index: 2000;
         }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box { background: white; width: 100%; max-width: 400px; padding: 35px; border-radius: 8px; border-top: 4px solid var(--accent-blue); position: relative; }
+        .modal-box h3 { margin-bottom: 15px; color: var(--primary-dark); }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; }
+        .btn-modal-submit { width: 100%; padding: 12px; background: var(--accent-blue); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #94a3b8; }
 
-        /* FOOTER */
-        footer {
-            background-color: var(--secondary-dark);
-            color: var(--text-light);
-            padding: 40px 5% 20px 5%;
-            font-size: 0.95rem;
-            text-align: center;
-            margin-top: auto;
-        }
-
-        @media (max-width: 768px) {
-            nav { flex-direction: column; gap: 15px; text-align: center; }
-            .logo-container { flex-direction: column; gap: 5px; }
-            .logo-container img { height: 60px; width: 60px; }
-            .grid-selection { grid-template-columns: 1fr; }
-        }
+        footer { background-color: var(--secondary-dark); color: var(--text-light); padding: 40px 5% 20px 5%; font-size: 0.95rem; text-align: center; margin-top: auto; }
+        @media (max-width: 768px) { nav { flex-direction: column; gap: 15px; text-align: center; } .logo-container { flex-direction: column; gap: 5px; } .logo-container img { height: 60px; width: 60px; } .grid-selection { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
+    <div id="toastEngine" class="toast-notification">
+        <span id="toastIcon"></span>
+        <span id="toastMessage"></span>
+    </div>
+
     <nav>
         <div class="logo-container">
-<img src="https://klassconneqt.github.io/logo.png" alt="KlassConneqt Logo"> 
+            <img src="https://klassconneqt.github.io/logo.png" alt="KlassConneqt Logo">
             <div class="logo-text">
                 <span class="logo-title">KLASSCONNEQT</span>
                 <span class="logo-tagline">Student Hub Dashboard</span>
             </div>
         </div>
-        <button class="btn-logout" id="logoutBtn">Secure Logout</button>
+        <div class="nav-actions">
+            <button class="btn-settings" id="openSettingsBtn">⚙️ Change Password</button>
+            <button class="btn-logout" id="logoutBtn">Secure Logout</button>
+        </div>
     </nav>
 
     <div class="hub-container">
         <div class="welcome-header">
-            <h2>Welcome Back, Student!</h2>
+            <h2>Welcome Back, <span id="studentDisplay">Student</span>!</h2>
             <p>Select your destination from the secure gateway modules below.</p>
         </div>
 
@@ -242,21 +125,107 @@
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 KlassConneqt Secure Portal System. All Rights Reserved.</p>
-    </footer>
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="btn-close-modal" id="closeSettingsBtn">&times;</button>
+            <h3>Update Vault Password</h3>
+            <form id="passwordResetForm">
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" id="oldPass" class="form-control" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label>New Secure Password</label>
+                    <input type="password" id="newPass" class="form-control" required placeholder="Min 6 characters">
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirmPass" class="form-control" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-modal-submit" id="modalSubmitBtn">Commit Password Update</button>
+            </form>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 KlassConneqt Secure Portal System. All Rights Reserved.</p></footer>
 
     <script>
-        // Session validation check
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzLXleZ8Y_Spd8XIwmmW7rsKG3t4KsX2THdr48t3SOe5TmNU4Qi_2Qq0n0bWIX9LQJQmw/exec';
+
+        // Security session guarding gate
         if (!localStorage.getItem('portalUser')) {
-            alert("Unauthorized access detected. Please log in first.");
             window.location.href = 'login.html';
+        } else {
+            document.getElementById('studentDisplay').innerText = localStorage.getItem('portalUserName') || "Student";
         }
 
-        // Secure session logout
+        function launchToast(msg, type) {
+            const toast = document.getElementById('toastEngine');
+            const icon = document.getElementById('toastIcon');
+            const text = document.getElementById('toastMessage');
+            text.innerText = msg;
+            toast.className = "toast-notification active " + (type === "success" ? "toast-success" : "toast-error");
+            icon.innerText = type === "success" ? "✅" : "❌";
+            setTimeout(() => { toast.classList.remove('active'); }, 4000);
+        }
+
+        // Modal triggers
+        const modal = document.getElementById('settingsModal');
+        document.getElementById('openSettingsBtn').addEventListener('click', () => modal.classList.add('active'));
+        document.getElementById('closeSettingsBtn').addEventListener('click', () => modal.classList.remove('active'));
+
+        // Handle password sync submit action
+        document.getElementById('passwordResetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = localStorage.getItem('portalUser');
+            const oldPassword = document.getElementById('oldPass').value;
+            const newPassword = document.getElementById('newPass').value;
+            const confirmPassword = document.getElementById('confirmPass').value;
+            const btn = document.getElementById('modalSubmitBtn');
+
+            if (newPassword.length < 6) {
+                launchToast("New password must be at least 6 characters.", "error");
+                return;
+            }
+            if (newPassword !== confirmPassword) {
+                launchToast("Confirmation verification mismatch.", "error");
+                return;
+            }
+
+            btn.innerText = "Synchronizing Spreadsheet Matrix...";
+            btn.disabled = true;
+
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: "changePassword",
+                    email: email,
+                    oldPassword: oldPassword,
+                    newPassword: newPassword
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success") {
+                    launchToast("Success! Password updated in core database rows.", "success");
+                    document.getElementById('passwordResetForm').reset();
+                    setTimeout(() => { modal.classList.remove('active'); }, 1500);
+                } else {
+                    launchToast(data.message, "error");
+                }
+                btn.innerText = "Commit Password Update";
+                btn.disabled = false;
+            })
+            .catch(err => {
+                launchToast("Network array timeout. Validation synchronization failed.", "error");
+                btn.innerText = "Commit Password Update";
+                btn.disabled = false;
+            });
+        });
+
         document.getElementById('logoutBtn').addEventListener('click', function() {
-            localStorage.removeItem('portalUser');
-            alert("Logged out securely.");
+            localStorage.clear();
             window.location.href = 'login.html';
         });
     </script>
