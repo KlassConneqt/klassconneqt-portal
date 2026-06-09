@@ -394,7 +394,6 @@
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbzLXleZ8Y_Spd8XIwmmW7rsKG3t4KsX2THdr48t3SOe5TmNU4Qi_2Qq0n0bWIX9LQJQmw/exec';
 
-        // Custom notification box module
         function launchToast(msg, type) {
             const toast = document.getElementById('toastEngine');
             const icon = document.getElementById('toastIcon');
@@ -407,7 +406,6 @@
             setTimeout(() => { toast.classList.remove('active'); }, 4000);
         }
 
-        // Forgot Password Window Toggle Events
         const forgotModal = document.getElementById('forgotModal');
         document.getElementById('openForgotBtn').addEventListener('click', () => forgotModal.classList.add('active'));
         document.getElementById('closeForgotBtn').addEventListener('click', () => forgotModal.classList.remove('active'));
@@ -427,22 +425,25 @@
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ action: "login", email: email, password: password })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === "success") {
-                    localStorage.setItem('portalUser', data.email);
-                    localStorage.setItem('portalUserName', data.name);
+            .then(res => res.text()) // Read raw token output safely bypassing CORS blocks
+            .then(responseText => {
+                const parts = responseText.split('|');
+                
+                if (parts[0] === "LOGIN_SUCCESS") {
+                    localStorage.setItem('portalUser', parts[2]);
+                    localStorage.setItem('portalUserName', parts[1]);
                     
                     launchToast("Access Authorized! Routing...", "success");
                     setTimeout(() => { window.location.href = 'hub-selection.html'; }, 1500);
                 } else {
-                    launchToast(data.message, "error");
+                    const errorMsg = parts[1] || "Authentication rejected.";
+                    launchToast(errorMsg, "error");
                     submitBtn.innerText = "Secure Log In";
                     submitBtn.disabled = false;
                 }
             })
             .catch(err => {
-                launchToast("Database system timeout connection failure.", "error");
+                launchToast("Database system connectivity error.", "error");
                 submitBtn.innerText = "Secure Log In";
                 submitBtn.disabled = false;
             });
