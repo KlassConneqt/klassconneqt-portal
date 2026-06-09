@@ -228,7 +228,8 @@
                 btn.disabled = false;
             })
             .catch(err => {
-                launchToast("Network system routing failure. Please retry.", "error");
+                console.error("REAL ERROR TRACE:", err);
+                launchToast("System Error: " + err.message, "error");
                 btn.innerText = "Commit Password Update";
                 btn.disabled = false;
             });
