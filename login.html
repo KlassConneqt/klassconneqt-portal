@@ -37,6 +37,28 @@
             color: inherit;
         }
 
+        /* PREMIUM FLOATING TOAST NOTIFICATION */
+        .toast-notification {
+            position: fixed;
+            top: -100px;
+            right: 20px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 5px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            z-index: 2000;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .toast-notification.active { top: 20px; }
+        .toast-success { border-left-color: #10b981; color: #065f46; }
+        .toast-error { border-left-color: #ef4444; color: #991b1b; }
+
         /* NAVIGATION BAR */
         nav {
             background-color: var(--primary-dark);
@@ -174,14 +196,8 @@
             margin-top: 10px;
         }
 
-        .btn-submit:hover {
-            background-color: #0284c7;
-        }
-
-        .btn-submit:disabled {
-            background-color: #94a3b8;
-            cursor: not-allowed;
-        }
+        .btn-submit:hover { background-color: #0284c7; }
+        .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
 
         .login-footer-text {
             text-align: center;
@@ -221,87 +237,31 @@
             margin-bottom: 15px;
         }
 
-        .footer-brand .footer-logo img {
-            height: 45px;
-            width: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .footer-brand p {
-            color: #cbd5e1;
-            line-height: 1.6;
-            font-size: 0.85rem;
-            max-width: 250px;
-            margin-top: 10px;
-        }
-
-        .footer-col h4 {
-            color: var(--text-light);
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .footer-col ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-col ul li {
-            margin-bottom: 12px;
-            color: #cbd5e1;
-            transition: color 0.3s;
-        }
-
-        .footer-col ul li a:hover {
-            color: var(--accent-blue);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #334155;
-            padding-top: 20px;
-            text-align: center;
-            color: #94a3b8;
-            font-size: 0.85rem;
-        }
+        .footer-brand .footer-logo img { height: 45px; width: 45px; border-radius: 50%; object-fit: cover; }
+        .footer-brand p { color: #cbd5e1; line-height: 1.6; font-size: 0.85rem; max-width: 250px; margin-top: 10px; }
+        .footer-col h4 { color: var(--text-light); margin-bottom: 20px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-col ul { list-style: none; padding: 0; }
+        .footer-col ul li { margin-bottom: 12px; color: #cbd5e1; transition: color 0.3s; }
+        .footer-col ul li a:hover { color: var(--accent-blue); }
+        .footer-bottom { border-top: 1px solid #334155; padding-top: 20px; text-align: center; color: #94a3b8; font-size: 0.85rem; }
 
         @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px 5%;
-                text-align: center;
-            }
-            .logo-container {
-                flex-direction: column;
-                gap: 5px;
-            }
-            .logo-container img {
-                height: 60px;
-                width: 60px;
-            }
-            .logo-title {
-                font-size: 1.5rem;
-            }
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 10px;
-                width: 100%;
-            }
-            .nav-links a {
-                margin: 5px;
-                font-size: 0.95rem;
-            }
-            .login-card {
-                padding: 30px 20px;
-            }
+            nav { flex-direction: column; gap: 15px; text-align: center; }
+            .logo-container { flex-direction: column; gap: 5px; }
+            .logo-container img { height: 60px; width: 60px; }
+            .logo-title { font-size: 1.5rem; }
+            .nav-links { flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; }
+            .nav-links a { margin: 5px; font-size: 0.95rem; }
+            .login-card { padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
+
+    <div id="toastEngine" class="toast-notification">
+        <span id="toastIcon"></span>
+        <span id="toastMessage"></span>
+    </div>
 
     <nav>
         <div class="logo-container">
@@ -355,18 +315,18 @@
             <div class="footer-col">
                 <h4>Academic Excellence</h4>
                 <ul>
-                    <li><a href="https://klassconneqt.github.io/index.html" style="color: #cbd5e1; transition: color 0.3s; text-decoration: none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#cbd5e1'">Mathematics Mastery</a></li>
-                    <li><a href="https://klassconneqt.github.io/index.html" style="color: #cbd5e1; transition: color 0.3s; text-decoration: none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#cbd5e1'">Conceptual Physics</a></li>
-                    <li><a href="https://klassconneqt.github.io/index.html" style="color: #cbd5e1; transition: color 0.3s; text-decoration: none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#cbd5e1'">Advanced Chemistry</a></li>
-                    <li><a href="https://klassconneqt.github.io/index.html" style="color: #cbd5e1; transition: color 0.3s; text-decoration: none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#cbd5e1'">Inspirational Biology</a></li>
+                    <li><a href="https://klassconneqt.github.io/index.html">Mathematics Mastery</a></li>
+                    <li><a href="https://klassconneqt.github.io/index.html">Conceptual Physics</a></li>
+                    <li><a href="https://klassconneqt.github.io/index.html">Advanced Chemistry</a></li>
+                    <li><a href="https://klassconneqt.github.io/index.html">Inspirational Biology</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>Professional Track</h4>
                 <ul>
-                    <li><a href="https://klassconneqt.github.io/index.html" style="color: #cbd5e1; transition: color 0.3s; text-decoration: none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#cbd5e1'">CCNA Bootcamp</a></li>
-                    <li><a href="https://klassconneqt.github.io/index.html" style="color: #cbd5e1; transition: color 0.3s; text-decoration: none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#cbd5e1'">Placement Aptitude</a></li>
-                    <li><a href="https://klassconneqt.github.io/index.html" style="color: #cbd5e1; transition: color 0.3s; text-decoration: none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#cbd5e1'">Japanese Language</a></li>
+                    <li><a href="https://klassconneqt.github.io/index.html">CCNA Bootcamp</a></li>
+                    <li><a href="https://klassconneqt.github.io/index.html">Placement Aptitude</a></li>
+                    <li><a href="https://klassconneqt.github.io/index.html">Japanese Language</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -378,13 +338,23 @@
                 </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            &copy; 2026 KlassConneqt. All Rights Reserved.
-        </div>
+        <div class="footer-bottom">&copy; 2026 KlassConneqt. All Rights Reserved.</div>
     </footer>
 
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbzLXleZ8Y_Spd8XIwmmW7rsKG3t4KsX2THdr48t3SOe5TmNU4Qi_2Qq0n0bWIX9LQJQmw/exec';
+
+        function launchToast(msg, type) {
+            const toast = document.getElementById('toastEngine');
+            const icon = document.getElementById('toastIcon');
+            const text = document.getElementById('toastMessage');
+            
+            text.innerText = msg;
+            toast.className = "toast-notification active " + (type === "success" ? "toast-success" : "toast-error");
+            icon.innerText = type === "success" ? "✅" : "❌";
+            
+            setTimeout(() => { toast.classList.remove('active'); }, 4000);
+        }
 
         document.getElementById('portalLoginForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -393,37 +363,30 @@
             const password = document.getElementById('studentPassword').value;
             const submitBtn = this.querySelector('.btn-submit');
             
-            // Set loading state
-            submitBtn.innerText = "Verifying Credentials...";
+            submitBtn.innerText = "Validating Database Keys...";
             submitBtn.disabled = true;
 
-            // Transmit validation handshake payload without preflight blocks
             fetch(API_URL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8' // Prevents CORS preflight failures on Google redirection
-                },
-                body: JSON.stringify({ email: email, password: password })
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: "login", email: email, password: password })
             })
-            .then(response => response.json()) // Parse the real database response
+            .then(res => res.json())
             .then(data => {
                 if (data.status === "success") {
-                    // Save real verified data to browser session memory
                     localStorage.setItem('portalUser', data.email);
                     localStorage.setItem('portalUserName', data.name);
                     
-                    alert("Access Granted! Welcome back, " + data.name + ".");
-                    window.location.href = 'hub-selection.html';
+                    launchToast("Access Authorized! Routing...", "success");
+                    setTimeout(() => { window.location.href = 'hub-selection.html'; }, 1500);
                 } else {
-                    // Throw the exact error message coming from your Google Sheet rows
-                    alert("Authentication Failed: " + data.message);
+                    launchToast(data.message, "error");
                     submitBtn.innerText = "Secure Log In";
                     submitBtn.disabled = false;
                 }
             })
-            .catch(error => {
-                console.error('Handshake Error:', error);
-                alert("Database connection timeout or unrecognized user token.");
+            .catch(err => {
+                launchToast("Database system timeout connection failure.", "error");
                 submitBtn.innerText = "Secure Log In";
                 submitBtn.disabled = false;
             });
