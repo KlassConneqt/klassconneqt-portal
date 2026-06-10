@@ -87,7 +87,9 @@
     </div>
 
     <script>
+        // ⚠️ ENSEURE YOUR CHOSEN EXEC MASTER URL IS PASTED HERE
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec';
+        
         const userEmail = localStorage.getItem('portalUser');
         if (!userEmail) window.location.href = 'login.html';
 
@@ -96,7 +98,7 @@
             fetchTickets();
         }
 
-        // 🌟 UNIQUE NOTIFICATION FUNCTION
+        // 🌟 UNIQUE NOTIFICATION TOAST SYSTEM
         function showNotification(msg, color="#0284c7") {
             const toast = document.getElementById('toast');
             toast.innerText = msg;
@@ -105,11 +107,15 @@
             setTimeout(() => { toast.style.display = 'none'; }, 4000);
         }
 
-        // 📋 FETCH CATEGORIES FROM SPREADSHEET TAB DYNAMICALLY
+        // 📋 FIXED: NOW SENDS A CORRECT POST REQUEST TO THE BACKEND
         function loadCategories() {
-            fetch(SCRIPT_URL + "?action=getCategories")
-            .then(r => r.json())
-            .then(data => {
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "getCategories" })
+            })
+            .then(r => r.text())
+            .then(text => {
+                let data = JSON.parse(text);
                 if(data.status === "success") {
                     const select = document.getElementById('category');
                     select.innerHTML = "";
@@ -117,6 +123,9 @@
                         select.innerHTML += `<option value="${cat}">${cat}</option>`;
                     });
                 }
+            }).catch(e => {
+                console.error("Category load error:", e);
+                document.getElementById('category').innerHTML = "<option>Error loading categories</option>";
             });
         }
 
@@ -125,8 +134,9 @@
                 method: 'POST',
                 body: JSON.stringify({ action: "getMyTickets", email: userEmail })
             })
-            .then(r => r.json())
-            .then(data => {
+            .then(r => r.text())
+            .then(text => {
+                let data = JSON.parse(text);
                 if(data.status === "success") {
                     const tbody = document.getElementById('ticketBody');
                     tbody.innerHTML = "";
@@ -150,7 +160,7 @@
                         `;
                     });
                 }
-            });
+            }).catch(e => console.error("History fetch error:", e));
         }
 
         function processTicket() {
@@ -182,8 +192,9 @@
             };
 
             fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
-            .then(r => r.json())
-            .then(data => {
+            .then(r => r.text())
+            .then(text => {
+                let data = JSON.parse(text);
                 if(data.status === "success") {
                     showNotification(`✅ Ticket ${data.ticketId} Saved to Core System!`, "#059669");
                     document.getElementById('description').value = "";
