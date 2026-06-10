@@ -66,14 +66,17 @@
             <table id="adminTable" style="display:none;">
                 <thead>
                     <tr>
-                        <th>Ticket ID</th>
-                        <th>User Mail</th>
-                        <th>Category</th>
-                        <th>Description Context</th>
-                        <th>Evidence Link</th>
-                        <th>Current Status</th>
-                        <th>Action Workspace Control Panel</th>
-                    </tr>
+    <th>Ticket ID</th>
+    <th>Student ID</th>
+    <th>Student Name</th>
+    <th>Mobile</th>
+    <th>User Mail</th>
+    <th>Category</th>
+    <th>Description</th>
+    <th>Evidence Link</th>
+    <th>Status</th>
+    <th>Actions</th>
+</tr>
                 </thead>
                 <tbody id="adminBody"></tbody>
             </table>
@@ -117,10 +120,12 @@
                         let pillClass = rawStatus.replace(/\s+/g, '-');
 
                         tbody.innerHTML += `
-                            <tr>
-                                <td><b>${t.id}</b></td>
-                                <td>${t.email}</td>
-                                <td><small>${t.category}</small></td>
+<tr>
+    <td><b>${t.id}</b></td>
+    <td>${t.studentId}</td>
+    <td>${t.studentName}</td>
+    <td>${t.mobile}</td>
+    <td>${t.email}</td>        <td><small>${t.category}</small></td>
                                 <td style="max-width:250px; word-wrap:break-word;">${t.desc}</td>
                                 <td>${linkSnippet}</td>
                                 <td><span class="status-pill pill-${pillClass}">${rawStatus}</span></td>
