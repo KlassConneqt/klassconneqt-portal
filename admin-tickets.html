@@ -81,14 +81,22 @@
     </div>
 
     <script>
+        // ⚠️ ENSURE THIS MATCHES YOUR MASTER DEPLOYMENT EXEC URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec';
 
         window.onload = function() { loadMasterQueue(); }
 
+        // 📋 FIXED: SWITCHED FROM GET TO POST WITH ANTI-CRASH PROTECTION
         function loadMasterQueue() {
-            fetch(SCRIPT_URL + "?action=getAllTickets")
-            .then(r => r.json())
-            .then(data => {
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "getAllTickets" })
+            })
+            .then(r => r.text()) // Read as text first to bypass proxy walls
+            .then(text => {
+                console.log("Raw Admin Feed:", text);
+                let data = JSON.parse(text);
+                
                 if (data.status === "success") {
                     document.getElementById('loaderStatus').style.display = 'none';
                     document.getElementById('adminTable').style.display = 'table';
@@ -99,12 +107,14 @@
                     let counts = { total: data.tickets.length, open: 0, progress: 0, resolved: 0 };
 
                     data.tickets.forEach(t => {
-                        if (t.status === "Open") counts.open++;
-                        else if (t.status === "In Progress") counts.progress++;
-                        else if (t.status === "Resolved") counts.resolved++;
+                        // Normalize status values for metric counters
+                        let rawStatus = String(t.status).trim();
+                        if (rawStatus === "Open") counts.open++;
+                        else if (rawStatus === "In Progress") counts.progress++;
+                        else if (rawStatus === "Resolved") counts.resolved++;
 
-                        let linkSnippet = t.fileUrl !== "None" ? `<a class="btn-link" href="${t.fileUrl}" target="_blank">📄 View Attachment</a>` : "<i>None Given</i>";
-                        let pillClass = t.status.replace(/\s+/g, '-');
+                        let linkSnippet = t.fileUrl !== "None" ? `<a class="btn-link" href="${t.fileUrl}" target="_blank">📄 View Screenshot</a>` : "<i>No Media</i>";
+                        let pillClass = rawStatus.replace(/\s+/g, '-');
 
                         tbody.innerHTML += `
                             <tr>
@@ -113,13 +123,13 @@
                                 <td><small>${t.category}</small></td>
                                 <td style="max-width:250px; word-wrap:break-word;">${t.desc}</td>
                                 <td>${linkSnippet}</td>
-                                <td><span class="status-pill pill-${pillClass}">${t.status}</span></td>
+                                <td><span class="status-pill pill-${pillClass}">${rawStatus}</span></td>
                                 <td>
                                     <div class="action-container">
                                         <select id="status_${t.rowIndex}">
-                                            <option value="Open" ${t.status === 'Open' ? 'selected' : ''}>Open</option>
-                                            <option value="In Progress" ${t.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                                            <option value="Resolved" ${t.status === 'Resolved' ? 'selected' : ''}>Resolved</option>
+                                            <option value="Open" ${rawStatus === 'Open' ? 'selected' : ''}>Open</option>
+                                            <option value="In Progress" ${rawStatus === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                                            <option value="Resolved" ${rawStatus === 'Resolved' ? 'selected' : ''}>Resolved</option>
                                         </select>
                                         <input type="text" id="reply_${t.rowIndex}" value="${t.reply === 'Pending Review' ? '' : t.reply}" placeholder="Type resolution details...">
                                         <button class="btn-update" onclick="commitUpdate(${t.rowIndex})">Save</button>
@@ -129,18 +139,25 @@
                         `;
                     });
 
-                    // Render Counts
+                    // Update Top Analytics Counters Dynamically
                     document.getElementById('mTotal').innerText = counts.total;
                     document.getElementById('mOpen').innerText = counts.open;
                     document.getElementById('mProgress').innerText = counts.progress;
                     document.getElementById('mResolved').innerText = counts.resolved;
                 }
+            }).catch(e => {
+                document.getElementById('loaderStatus').innerText = "❌ Security or Network Pipeline Error.";
+                console.error(e);
             });
         }
 
         function commitUpdate(rowIndex) {
             const chosenStatus = document.getElementById(`status_${rowIndex}`).value;
-            const textReply = document.getElementById(`reply_${rowIndex}`).value || "Issue addressed by tech desk operations.";
+            const textReply = document.getElementById(`reply_${rowIndex}`).value || "Issue addressed by tech support operations.";
+            const saveBtn = document.querySelector(`button[onclick="commitUpdate(${rowIndex})"]`);
+            
+            saveBtn.innerText = "Syncing...";
+            saveBtn.disabled = true;
 
             fetch(SCRIPT_URL, {
                 method: 'POST',
@@ -151,12 +168,17 @@
                     reply: textReply
                 })
             })
-            .then(r => r.json())
-            .then(data => {
+            .then(r => r.text())
+            .then(text => {
+                let data = JSON.parse(text);
                 if (data.status === "success") {
-                    alert("⚙️ System State Table Entry Successfully Adjusted!");
-                    loadMasterQueue(); // Dynamically update counts and table values!
+                    alert("⚙️ System Database Row Updated Successfully!");
+                    loadMasterQueue(); // Reload workflow feed to sync counters instantly
                 }
+            }).catch(e => {
+                alert("Error updates failed to deploy.");
+                saveBtn.innerText = "Save";
+                saveBtn.disabled = false;
             });
         }
     </script>
