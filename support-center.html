@@ -170,8 +170,12 @@
             const desc = document.getElementById('description').value;
             const fileInput = document.getElementById('attachment');
             
-            const sMobile = document.getElementById('studentMobile').value;
-if(sMobile.trim() === "") { showNotification("⚠️ Mobile Number is required!", "#b91c1c"); return; }
+            const sMobile = document.getElementById('studentMobile').value.trim();
+
+if (!/^[0-9]{10}$/.test(sMobile)) {
+    showNotification("⚠️ Enter a valid 10-digit mobile number.", "#b91c1c");
+    return;
+}
 if(desc.trim() === "") { showNotification("⚠️ Please type an issue description.", "#b91c1c"); return; }
             
             btn.innerText = "Encoding & Syncing App...";
