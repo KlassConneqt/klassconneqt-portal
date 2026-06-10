@@ -55,6 +55,8 @@
             <h2>Raise a Support Ticket</h2>
             <p>Our admin desk will review and respond to your request shortly.</p>
             
+           <label>Mobile Number (Compulsory for Contact) <span style="color:red;">*</span></label>
+<input type="text" id="studentMobile" placeholder="Enter your mobile number">
             <label>Issue Category</label>
             <select id="category"><option>Loading options...</option></select>
 
@@ -168,7 +170,9 @@
             const desc = document.getElementById('description').value;
             const fileInput = document.getElementById('attachment');
             
-            if(desc.trim() === "") { showNotification("⚠️ Please type an issue description.", "#b91c1c"); return; }
+            const sMobile = document.getElementById('studentMobile').value;
+if(sMobile.trim() === "") { showNotification("⚠️ Mobile Number is required!", "#b91c1c"); return; }
+if(desc.trim() === "") { showNotification("⚠️ Please type an issue description.", "#b91c1c"); return; }
             
             btn.innerText = "Encoding & Syncing App...";
             btn.disabled = true;
@@ -184,13 +188,13 @@
 
         function sendData(fileBase64) {
             const payload = {
-                action: "submitTicket",
-                email: userEmail,
-                category: document.getElementById('category').value,
-                description: document.getElementById('description').value,
-                fileUrl: fileBase64
-            };
-
+    action: "submitTicket",
+    email: userEmail,
+    mobile: document.getElementById('studentMobile').value, // 🌟 ADD THIS LINE
+    category: document.getElementById('category').value,
+    description: document.getElementById('description').value,
+    fileUrl: fileBase64
+};
             fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
             .then(r => r.text()) // 🛡️ READ AS TEXT FIRST TO PREVENT SILENT FREEZES
             .then(text => {
