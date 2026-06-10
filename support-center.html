@@ -192,9 +192,11 @@
             };
 
             fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
-            .then(r => r.text())
+            .then(r => r.text()) // 🛡️ READ AS TEXT FIRST TO PREVENT SILENT FREEZES
             .then(text => {
+                console.log("Raw Sync Response:", text);
                 let data = JSON.parse(text);
+                
                 if(data.status === "success") {
                     showNotification(`✅ Ticket ${data.ticketId} Saved to Core System!`, "#059669");
                     document.getElementById('description').value = "";
@@ -202,10 +204,15 @@
                     document.getElementById('submitBtn').innerText = "Submit Ticket to Admin";
                     document.getElementById('submitBtn').disabled = false;
                     fetchTickets(); 
+                } else {
+                    showNotification("❌ System Error: " + data.message, "#b91c1c");
+                    document.getElementById('submitBtn').disabled = false;
+                    document.getElementById('submitBtn').innerText = "Submit Ticket to Admin";
                 }
             }).catch(e => {
                 showNotification("❌ Network delivery error.", "#b91c1c");
                 document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').innerText = "Submit Ticket to Admin";
             });
         }
     </script>
