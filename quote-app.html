@@ -10,13 +10,19 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .preview-pane { background: #f1f5f9; }
-        /* Ultra precision standard A4 aspect mapping */
+        
+        /* Ultra precision standard A4 aspect mapping with optimized print spacing */
         .print-document {
             width: 210mm;
-            min-height: 297mm;
             background: white;
             color: #0f172a;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Forces elements to stay grouped together during print breakdown splits */
+        .avoid-page-split {
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
     </style>
 </head>
@@ -81,9 +87,9 @@
                 <h3 class="text-xs font-bold uppercase tracking-widest text-indigo-400">2. Custom Project Overview Context</h3>
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Summary Paragraph Copy</label>
-                    <textarea id="input-overview" rows="6" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500 leading-relaxed">Development of a premium, modern, and highly responsive multi-page web platform for Wehive. The underlying system architecture is uniquely engineered utilizing an industry-grade Zero-Cost Tech Stack. This specialized blueprint guarantees that Wehive will incur no ongoing annual or monthly renewal fees for hosting, content databases, or applicant tracking mechanisms.
+                    <textarea id="input-overview" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500 leading-relaxed">Development of a premium, modern, and highly responsive multi-page web platform for Wehive. The underlying system architecture is uniquely engineered utilizing an industry-grade Zero-Cost Tech Stack. This specialized blueprint guarantees that Wehive will incur no ongoing annual or monthly renewal fees for hosting, content databases, or applicant tracking mechanisms.
 
-The platform features an automated client-managed content dashboard fully powered by Google Sheets. This enables your non-technical team to instantly update live training programs, adjust structural metrics, and manage your student portfolios on-the-fly without changing backend code or re-deploying to GitHub.</textarea>
+The platform features an automated client-managed content dashboard fully powered by Google Sheets. This enables your non-technical team to instantly update live training programs on-the-fly without changing backend code.</textarea>
                 </div>
             </div>
 
@@ -144,56 +150,56 @@ The platform features an automated client-managed content dashboard fully powere
 
         <section class="w-full lg:w-[58%] preview-pane p-8 overflow-y-auto max-h-[calc(100vh-69px)] flex justify-center items-start">
             
-            <div id="print-document-root" class="print-document p-12 relative flex flex-col justify-between">
+            <div id="print-document-root" class="print-document py-8 px-10 relative flex flex-col justify-between">
                 
                 <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
 
                 <div>
-                    <div class="flex justify-between items-center border-b-2 border-slate-100 pb-6 mb-8">
+                    <div class="flex justify-between items-center border-b-2 border-slate-100 pb-4 mb-4">
                         <div class="flex items-center gap-3">
-                            <img src="logo.png" alt="Logo" onerror="this.style.opacity='0'; this.style.width='0px'; this.style.margin='0px';" style="height: 65px; width: auto;" class="object-contain">
+                            <img src="logo.png" alt="Logo" onerror="this.style.opacity='0'; this.style.width='0px'; this.style.margin='0px';" style="height: 55px; width: auto;" class="object-contain">
                             <div>
                                 <h2 class="text-2xl font-black text-indigo-950 tracking-tight leading-none">KlassConneqt</h2>
-                                <p class="text-[11px] text-slate-500 font-medium tracking-wide italic mt-1.5">Seamless Learning, Anytime, Anywhere</p>
+                                <p class="text-[11px] text-slate-500 font-medium tracking-wide italic mt-1">Seamless Learning, Anytime, Anywhere</p>
                             </div>
                         </div>
                         <div class="text-right">
-                            <span class="inline-block bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white font-black text-[10px] tracking-widest uppercase px-4 py-1.5 rounded-full mb-2 shadow-sm">
+                            <span class="inline-block bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white font-black text-[10px] tracking-widest uppercase px-3 py-1 rounded-full mb-1 shadow-sm">
                                 Project Quotation
                             </span>
                             <p class="text-xs font-bold text-slate-900">Date Issued: <span id="view-date" class="font-medium text-slate-600">June 9, 2026</span></p>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-6 bg-slate-50 p-5 rounded-xl border border-slate-100 mb-8">
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
                         <div>
-                            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Prepared For:</span>
+                            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-0.5">Prepared For:</span>
                             <h4 id="view-client-org" class="text-xs font-extrabold text-slate-800 leading-snug">Management Team, Wehive IT Training & Placement Consultancy</h4>
                             <p id="view-client-addr" class="text-[11px] font-semibold text-slate-500 mt-0.5">Koranguchavadi, Salem</p>
                         </div>
                         <div>
-                            <span class="text-[9px] font-bold text-purple-600 uppercase tracking-widest block mb-1">Project Classification:</span>
+                            <span class="text-[9px] font-bold text-purple-600 uppercase tracking-widest block mb-0.5">Project Classification:</span>
                             <h4 id="view-project-name" class="text-xs font-extrabold text-slate-900 leading-snug">Dynamic Corporate Website & Enquiry System</h4>
-                            <p class="text-[11px] text-slate-600 mt-1.5 flex items-center gap-1.5 font-medium">
+                            <p class="text-[11px] text-slate-600 mt-1 flex items-center gap-1.5 font-medium">
                                 <span class="inline-block h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
                                 Core Base Stack: <span id="view-architecture" class="text-indigo-950 font-bold">Zero-Maintenance Server Tech Stack</span>
                             </p>
                         </div>
                     </div>
 
-                    <div class="mb-8">
-                        <h3 class="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2">Project Structural Overview</h3>
+                    <div class="mb-4">
+                        <h3 class="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-1">Project Structural Overview</h3>
                         <div id="view-project-overview" class="text-xs leading-relaxed text-slate-600 whitespace-pre-wrap text-justify">
                             </div>
                     </div>
 
-                    <div class="mb-8">
-                        <h3 class="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-3">Financial & Deliverable Scope Breakdown</h3>
+                    <div class="mb-4">
+                        <h3 class="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-1.5">Financial & Deliverable Scope Breakdown</h3>
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white">
-                                    <th class="py-3 px-4 rounded-l-lg text-xs font-bold tracking-wider uppercase w-[75%]">Phase / Main Project Core Deliverables</th>
-                                    <th class="py-3 px-4 rounded-r-lg text-xs font-bold tracking-wider uppercase text-right w-[25%]">Price (INR)</th>
+                                    <th class="py-2 px-3 rounded-l-lg text-xs font-bold tracking-wider uppercase w-[75%]">Phase / Main Project Core Deliverables</th>
+                                    <th class="py-2 px-3 rounded-r-lg text-xs font-bold tracking-wider uppercase text-right w-[25%]">Price (INR)</th>
                                 </tr>
                             </thead>
                             <tbody id="view-table-body-target" class="divide-y divide-slate-100 text-xs">
@@ -201,44 +207,44 @@ The platform features an automated client-managed content dashboard fully powere
                         </table>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-4 border-t border-slate-100 pt-6 mb-8">
-                        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-100">
-                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Advance Booking (40%)</span>
-                            <div id="milestone-calc-1" class="text-sm font-black text-slate-800 font-mono">₹0.00</div>
-                            <span class="text-[9px] text-slate-500 mt-0.5 block leading-normal">Initiates architecture layouts, design blueprints & wireframe loops.</span>
+                    <div class="grid grid-cols-3 gap-3 border-t border-slate-100 pt-4 mb-4 avoid-page-split">
+                        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Advance Booking (40%)</span>
+                            <div id="milestone-calc-1" class="text-xs font-black text-slate-800 font-mono">₹0.00</div>
+                            <span class="text-[9px] text-slate-500 mt-0.5 block leading-tight">Initiates design blueprints & setup templates.</span>
                         </div>
-                        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-100">
-                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Mid-Verification (30%)</span>
-                            <div id="milestone-calc-2" class="text-sm font-black text-slate-800 font-mono">₹0.00</div>
-                            <span class="text-[9px] text-slate-500 mt-0.5 block leading-normal">Payable upon live field testing, secure automation setup & verification checks.</span>
+                        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Mid-Verification (30%)</span>
+                            <div id="milestone-calc-2" class="text-xs font-black text-slate-800 font-mono">₹0.00</div>
+                            <span class="text-[9px] text-slate-500 mt-0.5 block leading-tight">Payable upon operational validation & testing check logic.</span>
                         </div>
-                        <div class="p-3.5 bg-slate-50/80 rounded-xl border border-indigo-100/50 bg-indigo-50/10">
-                            <span class="text-[9px] font-bold text-indigo-500 uppercase tracking-wider block mb-1">Final Deployment (30%)</span>
-                            <div id="milestone-calc-3" class="text-sm font-black text-indigo-600 font-mono">₹0.00</div>
-                            <span class="text-[9px] text-indigo-600/80 mt-0.5 block leading-normal">Settled following server optimization handoff & custom asset configurations.</span>
+                        <div class="p-2.5 bg-slate-50/80 rounded-xl border border-indigo-100/50 bg-indigo-50/10">
+                            <span class="text-[9px] font-bold text-indigo-500 uppercase tracking-wider block mb-0.5">Final Deployment (30%)</span>
+                            <div id="milestone-calc-3" class="text-xs font-black text-indigo-600 font-mono">₹0.00</div>
+                            <span class="text-[9px] text-indigo-600/80 mt-0.5 block leading-tight">Settled following asset handoff & final deployment script mapping.</span>
                         </div>
                     </div>
 
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-[10px] text-slate-500 space-y-1.5 leading-relaxed">
-                        <p class="font-bold text-slate-800 text-xs mb-1 uppercase tracking-wider">Terms & Engagement Standards</p>
-                        <p>• Any secondary system parameters, visual layout adjustments, or database changes requested outside this designated roadmap schedule will process under custom feature addendum contracts.</p>
-                        <p>• External assets such as domain configuration acquisition metrics remain separate from this standard structural blueprint portfolio.</p>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-[10px] text-slate-500 space-y-1 leading-relaxed avoid-page-split mb-4">
+                        <p class="font-bold text-slate-800 text-[11px] mb-0.5 uppercase tracking-wider">Terms & Engagement Standards</p>
+                        <p>• Any secondary system parameters or layout adjustments requested outside this roadmap schedule process under addendum feature contracts.</p>
+                        <p>• External assets such as custom premium domain fees remain separate from this standard structural tech blueprint framework.</p>
                         <p>• Quotation validation thresholds expire exactly <span id="view-validity-term-node" class="font-bold text-slate-700">30 Days from date of issue</span>.</p>
                     </div>
                 </div>
 
-                <div class="mt-8 border-t border-slate-100 pt-6 flex justify-between items-end">
+                <div class="border-t border-slate-100 pt-4 flex justify-between items-end avoid-page-split">
                     <div class="text-[10px] text-slate-400 font-medium max-w-[60%]">
                         <p>Thank you for partnering with KlassConneqt. Engineering your gateway to digital scale.</p>
-                        <p class="font-bold tracking-widest text-indigo-500 uppercase mt-1">KlassConneqt Private Blueprint</p>
+                        <p class="font-bold tracking-widest text-indigo-500 uppercase mt-0.5">KlassConneqt Private Blueprint</p>
                     </div>
                     
-                    <div class="relative flex flex-col items-center justify-center text-center px-4 py-2 min-w-[200px] overflow-visible">
-                        <img src="KlassConneqt_Seal.png" alt="KlassConneqt Seal Stamp" class="absolute w-28 h-28 opacity-15 pointer-events-none transform -rotate-12 select-none z-0 mix-blend-multiply">
+                    <div class="relative flex flex-col items-center justify-center text-center px-4 py-1 min-w-[180px] overflow-visible">
+                        <img src="KlassConneqt_Seal.png" alt="KlassConneqt Seal Stamp" class="absolute w-24 h-24 opacity-15 pointer-events-none transform -rotate-12 select-none z-0 mix-blend-multiply">
                         
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider z-10">Prepared by</p>
-                        <p class="text-[12px] font-black text-indigo-600 tracking-tight uppercase z-10">KlassConneqt Team</p>
-                        <div class="w-24 border-b border-dashed border-slate-300 mt-5"></div>
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider z-10">Prepared by</p>
+                        <p class="text-[11px] font-black text-indigo-600 tracking-tight uppercase z-10">KlassConneqt Team</p>
+                        <div class="w-20 border-b border-dashed border-slate-300 mt-4"></div>
                         <p class="text-[8px] text-slate-400 uppercase tracking-widest mt-1 z-10">Authorized Digital Identity</p>
                     </div>
                 </div>
@@ -316,8 +322,8 @@ The platform features an automated client-managed content dashboard fully powere
                 const rowElement = document.createElement('tr');
                 rowElement.className = 'border-b border-slate-100 hover:bg-slate-50/40 transition duration-150';
                 rowElement.innerHTML = `
-                    <td class="py-3 px-4 font-semibold text-slate-700 leading-snug">${deliverableTitle}</td>
-                    <td class="py-3 px-4 text-right font-bold text-slate-900 font-mono">₹${deliverableCost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                    <td class="py-2.5 px-3 font-semibold text-slate-700 leading-snug">${deliverableTitle}</td>
+                    <td class="py-2.5 px-3 text-right font-bold text-slate-900 font-mono">₹${deliverableCost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 `;
                 previewTableBody.appendChild(rowElement);
             });
@@ -326,8 +332,8 @@ The platform features an automated client-managed content dashboard fully powere
             const summaryTotalRow = document.createElement('tr');
             summaryTotalRow.className = 'bg-slate-50 font-bold border-t-2 border-slate-200';
             summaryTotalRow.innerHTML = `
-                <td class="py-3.5 px-4 text-slate-900 uppercase tracking-widest text-right font-black text-[10px]">Net Calculated Total (INR):</td>
-                <td class="py-3.5 px-4 text-right text-indigo-600 text-sm font-black font-mono">₹${rollingSumTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                <td class="py-2.5 px-3 text-slate-900 uppercase tracking-widest text-right font-black text-[10px]">Net Calculated Total (INR):</td>
+                <td class="py-2.5 px-3 text-right text-indigo-600 text-sm font-black font-mono">₹${rollingSumTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
             `;
             previewTableBody.appendChild(summaryTotalRow);
 
@@ -342,7 +348,7 @@ The platform features an automated client-managed content dashboard fully powere
             const sanitizedClientHeader = document.getElementById('input-client-org').value.split(',')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase();
             
             const renderingParameters = {
-                margin: 0,
+                margin: [4, 0, 4, 0], // Safe dynamic print top/bottom margins
                 filename: `klassconneqt_proposal_${sanitizedClientHeader}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 3, useCORS: true, letterRendering: true },
