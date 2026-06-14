@@ -12,8 +12,8 @@
 </head>
 <body class="text-slate-100 min-h-screen flex flex-col justify-between">
 
-
-        <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec" class="w-full sm:w-[550px] bg-slate-950 border border-slate-700 rounded px-3 py-1 text-white text-xs font-mono focus:outline-none focus:border-indigo-500">
+    <div class="hidden">
+        <input type="text" id="api-url-input" value="https://script.google.com/macros/s/AKfycbzPLuiYPtDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec">
     </div>
 
     <main class="flex-1 flex items-center justify-center p-6">
@@ -144,142 +144,142 @@
     </footer>
 
     <script>
-    // System core background routing network configurations
-    const ACCESSIBLE_API_URL = "https://script.google.com/macros/s/AKfycbzPLuiYPtDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec"; 
+        // Core Web App API Link Hardcoded Permanently
+        const ACCESSIBLE_API_URL = "https://script.google.com/macros/s/AKfycbzPLuiYPtDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec"; 
 
-    let currentAuthenticatedUser = null;
+        let currentAuthenticatedUser = null;
 
-    // Core View States Controller Array Matrix
-    function switchViewState(targetViewId) {
-        ['view-login', 'view-forgot', 'view-reset', 'view-dashboard'].forEach(viewId => {
-            document.getElementById(viewId).classList.add('hidden');
-        });
-        document.getElementById(targetViewId).classList.remove('hidden');
-    }
-
-    // Returns your saved Web App URL directly to system components
-    function getApiUrl() {
-        return ACCESSIBLE_API_URL;
-    }
-
-    async function makeApiCall(payload) {
-        const endpoint = getApiUrl();
-        if(!endpoint) return null;
-
-        try {
-            // Use standard cross-origin handling metrics
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                mode: 'cors',
-                headers: { 'Content-Type': 'text/plain' }, // Avoids pre-flight CORS prechecks
-                body: JSON.stringify(payload)
+        // Core View States Controller Array Matrix
+        function switchViewState(targetViewId) {
+            ['view-login', 'view-forgot', 'view-reset', 'view-dashboard'].forEach(viewId => {
+                document.getElementById(viewId).classList.add('hidden');
             });
-            return await response.json();
-        } catch(e) {
-            alert("Database Connection Failed: Network error or invalid deployment execution link parameters.");
-            return null;
-        }
-    }
-
-    // CONTROL SUBMIT: AUTHORIZE STANDARD LOG-IN MATCH
-    async function handleLoginSubmit() {
-        const user = document.getElementById('login-username').value.trim();
-        const pass = document.getElementById('login-password').value.trim();
-
-        if(!user || !pass) {
-            alert("Fields entry requirement alert: Input verification username and key inputs.");
-            return;
+            document.getElementById(targetViewId).classList.remove('hidden');
         }
 
-        const res = await makeApiCall({ action: "login", username: user, password: pass });
-        if(res && res.success) {
-            currentAuthenticatedUser = res.user;
-            document.getElementById('current-user-tag').innerText = currentAuthenticatedUser;
-            switchViewState('view-dashboard');
-            // Persist access credentials natively for navigation loops
-            sessionStorage.setItem("kc_auth_user", currentAuthenticatedUser);
-        } else if (res) {
-            alert(res.message);
-        }
-    }
-
-    // CONTROL SUBMIT: SEND FORGOT TOKEN EMAIL CODE
-    async function handleForgotSubmit() {
-        const emailInput = document.getElementById('forgot-email').value.trim();
-        if(!emailInput) {
-            alert("Input verified email registration identity link parameters.");
-            return;
+        // Returns your saved Web App URL directly to system components
+        function getApiUrl() {
+            return ACCESSIBLE_API_URL;
         }
 
-        const res = await makeApiCall({ action: "forgot", email: emailInput });
-        if(res && res.success) {
-            alert(res.message);
-            switchViewState('view-reset');
-        } else if (res) {
-            alert(res.message);
+        async function makeApiCall(payload) {
+            const endpoint = getApiUrl();
+            if(!endpoint) return null;
+
+            try {
+                // Use standard cross-origin handling metrics
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain' }, // Avoids pre-flight CORS prechecks
+                    body: JSON.stringify(payload)
+                });
+                return await response.json();
+            } catch(e) {
+                alert("Database Connection Failed: Network error or invalid deployment execution link parameters.");
+                return null;
+            }
         }
-    }
 
-    // CONTROL SUBMIT: PROCESS DISPATCHED RESET CODE & PASSWORD OVERWRITE
-    async function handleResetSubmit() {
-        const tokenCode = document.getElementById('reset-token').value.trim();
-        const newPass = document.getElementById('reset-new-password').value.trim();
+        // CONTROL SUBMIT: AUTHORIZE STANDARD LOG-IN MATCH
+        async function handleLoginSubmit() {
+            const user = document.getElementById('login-username').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
 
-        if(!tokenCode || !newPass) {
-            alert("Security mandate alert: Please fill both tracking parameters.");
-            return;
+            if(!user || !pass) {
+                alert("Fields entry requirement alert: Input verification username and key inputs.");
+                return;
+            }
+
+            const res = await makeApiCall({ action: "login", username: user, password: pass });
+            if(res && res.success) {
+                currentAuthenticatedUser = res.user;
+                document.getElementById('current-user-tag').innerText = currentAuthenticatedUser;
+                switchViewState('view-dashboard');
+                // Persist access credentials natively for navigation loops
+                sessionStorage.setItem("kc_auth_user", currentAuthenticatedUser);
+            } else if (res) {
+                alert(res.message);
+            }
         }
 
-        const res = await makeApiCall({ action: "reset", token: tokenCode, newPassword: newPass });
-        if(res && res.success) {
-            alert(res.message);
+        // CONTROL SUBMIT: SEND FORGOT TOKEN EMAIL CODE
+        async function handleForgotSubmit() {
+            const emailInput = document.getElementById('forgot-email').value.trim();
+            if(!emailInput) {
+                alert("Input verified email registration identity link parameters.");
+                return;
+            }
+
+            const res = await makeApiCall({ action: "forgot", email: emailInput });
+            if(res && res.success) {
+                alert(res.message);
+                switchViewState('view-reset');
+            } else if (res) {
+                alert(res.message);
+            }
+        }
+
+        // CONTROL SUBMIT: PROCESS DISPATCHED RESET CODE & PASSWORD OVERWRITE
+        async function handleResetSubmit() {
+            const tokenCode = document.getElementById('reset-token').value.trim();
+            const newPass = document.getElementById('reset-new-password').value.trim();
+
+            if(!tokenCode || !newPass) {
+                alert("Security mandate alert: Please fill both tracking parameters.");
+                return;
+            }
+
+            const res = await makeApiCall({ action: "reset", token: tokenCode, newPassword: newPass });
+            if(res && res.success) {
+                alert(res.message);
+                switchViewState('view-login');
+            } else if (res) {
+                alert(res.message);
+            }
+        }
+
+        // MODULE ROUTING NAVIGATION WRAPPER WITH TRACKING HOOKS
+        async function navigateModule(htmlFileName) {
+            if(!currentAuthenticatedUser) {
+                alert("Session context failure: Security validation check expired. Return to core sign-in.");
+                switchViewState('view-login');
+                return;
+            }
+
+            // Fire and forget operational trace audit metric to tracking sheet using the internal variable route
+            const endpoint = getApiUrl();
+            if(endpoint) {
+                fetch(endpoint, {
+                    method: 'POST',
+                    mode: 'cors',
+                    body: JSON.stringify({ action: "logActivity", username: currentAuthenticatedUser, module: htmlFileName })
+                });
+            }
+
+            // Smooth redirection pipeline trigger to local sibling file layout paths
+            window.location.href = htmlFileName;
+        }
+
+        function handleLogout() {
+            currentAuthenticatedUser = null;
+            sessionStorage.removeItem("kc_auth_user");
+            document.getElementById('login-password').value = "";
             switchViewState('view-login');
-        } else if (res) {
-            alert(res.message);
-        }
-    }
-
-    // MODULE ROUTING NAVIGATION WRAPPER WITH TRACKING HOOKS
-    async function navigateModule(htmlFileName) {
-        if(!currentAuthenticatedUser) {
-            alert("Session context failure: Security validation check expired. Return to core sign-in.");
-            switchViewState('view-login');
-            return;
         }
 
-        // Fire and forget operational trace audit metric to tracking sheet using the internal variable route
-        const endpoint = getApiUrl();
-        if(endpoint) {
-            fetch(endpoint, {
-                method: 'POST',
-                mode: 'cors',
-                body: JSON.stringify({ action: "logActivity", username: currentAuthenticatedUser, module: htmlFileName })
-            });
+        // Boot-Up Restore Dynamic Parameters Setup 
+        window.onload = () => {
+            // Automatically inject the verified URL address into shared browser memory segments
+            sessionStorage.setItem("kc_api_url", ACCESSIBLE_API_URL);
+
+            const savedUser = sessionStorage.getItem("kc_auth_user");
+            if(savedUser) {
+                currentAuthenticatedUser = savedUser;
+                document.getElementById('current-user-tag').innerText = currentAuthenticatedUser;
+                switchViewState('view-dashboard');
+            }
         }
-
-        // Smooth redirection pipeline trigger to local sibling file layout paths
-        window.location.href = htmlFileName;
-    }
-
-    function handleLogout() {
-        currentAuthenticatedUser = null;
-        sessionStorage.removeItem("kc_auth_user");
-        document.getElementById('login-password').value = "";
-        switchViewState('view-login');
-    }
-
-    // Boot-Up Restore Dynamic Parameters Setup 
-    window.onload = () => {
-        // Automatically inject the verified URL address into shared browser memory segments
-        sessionStorage.setItem("kc_api_url", ACCESSIBLE_API_URL);
-
-        const savedUser = sessionStorage.getItem("kc_auth_user");
-        if(savedUser) {
-            currentAuthenticatedUser = savedUser;
-            document.getElementById('current-user-tag').innerText = currentAuthenticatedUser;
-            switchViewState('view-dashboard');
-        }
-    }
-</script>
+    </script>
 </body>
 </html>
