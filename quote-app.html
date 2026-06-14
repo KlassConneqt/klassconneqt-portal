@@ -3,75 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KlassConneqt Elite Quotation Engine</title>
+    <title>KlassConneqt - Core Document Generation Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .preview-pane { background: #f8fafc; }
-        /* Precision print layout configurations */
+        .preview-pane { background: #f1f5f9; }
+        /* Ultra precision standard A4 aspect mapping */
         .print-document {
             width: 210mm;
             min-height: 297mm;
             background: white;
-            color: #1e293b;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            color: #0f172a;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col overflow-x-hidden">
 
-    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+    <header class="border-b border-slate-800 bg-slate-900 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         <div class="flex items-center gap-3">
-            <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center font-bold text-white tracking-wider shadow-lg shadow-indigo-500/20">
+            <div class="h-9 w-9 rounded-lg bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center font-black text-white text-sm tracking-tighter">
                 KC
             </div>
             <div>
-                <h1 class="text-lg font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">KlassConneqt Admin</h1>
-                <p class="text-xs text-indigo-400 font-medium tracking-wide">Automated Document Generation Core v2.0</p>
+                <h1 class="text-md font-bold text-white tracking-tight">KlassConneqt Workstation</h1>
+                <p class="text-xs text-slate-400">Dynamic Enterprise Document Engineering</p>
             </div>
         </div>
-        <div class="flex items-center gap-2 bg-slate-800/80 rounded-full px-4 py-1.5 border border-slate-700 text-xs font-semibold text-slate-300">
-            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span> Dynamic Mode Active
+        <div class="flex items-center gap-2 bg-slate-800 rounded-full px-4 py-1 border border-slate-700 text-xs font-semibold text-indigo-400">
+            <span class="h-2 w-2 rounded-full bg-indigo-400 animate-pulse"></span> App Node Ready
         </div>
     </header>
 
     <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
         
-        <section class="w-full lg:w-[45%] bg-slate-900 p-6 border-r border-slate-800 overflow-y-auto max-h-[calc(100vh-73px)] space-y-6">
+        <section class="w-full lg:w-[42%] bg-slate-900 p-6 border-r border-slate-800 overflow-y-auto max-h-[calc(100vh-69px)] space-y-6">
             <div class="border-b border-slate-800 pb-4">
-                <h2 class="text-xl font-bold text-white">Active Content Manipulation</h2>
-                <p class="text-sm text-slate-400">Modify inputs here to dynamically inject data patterns directly into the template.</p>
+                <h2 class="text-lg font-bold text-white">Dynamic Manipulation Console</h2>
+                <p class="text-xs text-slate-400">Update parameters here to automatically re-render the A4 high-contrast document model.</p>
             </div>
 
             <div class="space-y-4">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-400">1. Document Metadata</h3>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-indigo-400">1. Core Metadata Parameters</h3>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Quote Date</label>
-                        <input type="date" id="input-date" value="2026-06-09" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Quotation Issue Date</label>
+                        <input type="date" id="input-date" value="2026-06-09" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Valid Until</label>
-                        <input type="text" id="input-validity" value="30 Days from date of issue" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Validity Threshold</label>
+                        <input type="text" id="input-validity" value="30 Days from date of issue" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Client Title / Organization</label>
-                    <input type="text" id="input-client-org" value="Management Team, Wehive IT Training & Placement Consultancy" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Client Business/Organization Entity</label>
+                    <input type="text" id="input-client-org" value="Management Team, Wehive IT Training & Placement Consultancy" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Client Address / Location</label>
-                    <input type="text" id="input-client-addr" value="Koranguchavadi, Salem" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Client Address Configuration</label>
+                    <input type="text" id="input-client-addr" value="Koranguchavadi, Salem" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Project Name</label>
-                    <input type="text" id="input-project-name" value="Dynamic Corporate Website & Enquiry System" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Target Application Project Scope Name</label>
+                    <input type="text" id="input-project-name" value="Dynamic Corporate Website & Enquiry System" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">System Architecture Stack</label>
-                    <input type="text" id="input-architecture" value="Zero-Maintenance, Free Server Tech Stack Blueprint" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs font-medium text-slate-400 mb-1">System Infrastructure Tech Blueprint</label>
+                    <input type="text" id="input-architecture" value="Zero-Maintenance, Free Server Tech Stack Blueprint" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-indigo-400">2. Custom Project Overview Context</h3>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Summary Paragraph Copy</label>
+                    <textarea id="input-overview" rows="6" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500 leading-relaxed">Development of a premium, modern, and highly responsive multi-page web platform for Wehive. The underlying system architecture is uniquely engineered utilizing an industry-grade Zero-Cost Tech Stack. This specialized blueprint guarantees that Wehive will incur no ongoing annual or monthly renewal fees for hosting, content databases, or applicant tracking mechanisms.
+
+The platform features an automated client-managed content dashboard fully powered by Google Sheets. This enables your non-technical team to instantly update live training programs, adjust structural metrics, and manage your student portfolios on-the-fly without changing backend code or re-deploying to GitHub.</textarea>
                 </div>
             </div>
 
@@ -79,44 +91,44 @@
 
             <div class="space-y-4">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-400">2. Financial Breakup Rows</h3>
-                    <button onclick="addRow()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-3 py-1.5 rounded-md transition flex items-center gap-1">
-                        [ + ] Add Row
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-indigo-400">3. Financial Breakdown Matrix</h3>
+                    <button onclick="addNewItemRow()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-[11px] px-3 py-1.5 rounded-md transition duration-200">
+                        [ + ] Add Deliverable Line
                     </button>
                 </div>
                 
-                <div id="item-rows-container" class="space-y-3">
-                    <div class="item-row bg-slate-800/50 p-3 rounded-lg border border-slate-700/50 space-y-2">
+                <div id="dynamic-item-rows-root" class="space-y-3">
+                    <div class="proposal-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-bold text-slate-400 tracking-wide index-label">Row #1</span>
-                            <button onclick="deleteRow(this)" class="text-xs text-rose-400 hover:text-rose-300 font-semibold">[ - ] Remove</button>
+                            <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Deliverable Phase #1</span>
+                            <button onclick="removeTargetItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
                         </div>
-                        <input type="text" placeholder="Phase/Deliverable Title" value="UI/UX Design & Frontend Setup (Layout config for Home, About, Services)" class="row-title w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white">
-                        <input type="number" placeholder="Cost (INR)" value="5500" oninput="calculateFinancialTotals()" class="row-price w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono">
+                        <input type="text" placeholder="Title / Phase Scope Text" value="UI/UX Design & Frontend Setup (Layout configuration for Home, About Us, Services, and Target Audience grids)" class="item-scope-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                        <input type="number" placeholder="Cost (INR)" value="5500" oninput="runFinancialCalculationEngine()" class="item-scope-cost w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white font-mono">
                     </div>
-                    <div class="item-row bg-slate-800/50 p-3 rounded-lg border border-slate-700/50 space-y-2">
+                    <div class="proposal-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-bold text-slate-400 tracking-wide index-label">Row #2</span>
-                            <button onclick="deleteRow(this)" class="text-xs text-rose-400 hover:text-rose-300 font-semibold">[ - ] Remove</button>
+                            <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Deliverable Phase #2</span>
+                            <button onclick="removeTargetItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
                         </div>
-                        <input type="text" placeholder="Phase/Deliverable Title" value="Dynamic Content Architecture (Google Sheets Automation Integration)" class="row-title w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white">
-                        <input type="number" placeholder="Cost (INR)" value="4500" oninput="calculateFinancialTotals()" class="row-price w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono">
+                        <input type="text" placeholder="Title / Phase Scope Text" value="Dynamic Content Architecture (Google Sheets automation data mapping for dynamic non-tech admin controls)" class="item-scope-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                        <input type="number" placeholder="Cost (INR)" value="4500" oninput="runFinancialCalculationEngine()" class="item-scope-cost w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white font-mono">
                     </div>
-                    <div class="item-row bg-slate-800/50 p-3 rounded-lg border border-slate-700/50 space-y-2">
+                    <div class="proposal-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-bold text-slate-400 tracking-wide index-label">Row #3</span>
-                            <button onclick="deleteRow(this)" class="text-xs text-rose-400 hover:text-rose-300 font-semibold">[ - ] Remove</button>
+                            <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Deliverable Phase #3</span>
+                            <button onclick="removeTargetItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
                         </div>
-                        <input type="text" placeholder="Phase/Deliverable Title" value="Automated Lead Capture & Contact Database Pipelines via EmailJS" class="row-title w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white">
-                        <input type="number" placeholder="Cost (INR)" value="4000" oninput="calculateFinancialTotals()" class="row-price w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono">
+                        <input type="text" placeholder="Title / Phase Scope Text" value="Automated Lead Capture & Contact Database Pipelines via secure API/EmailJS bindings" class="item-scope-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                        <input type="number" placeholder="Cost (INR)" value="4000" oninput="runFinancialCalculationEngine()" class="item-scope-cost w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white font-mono">
                     </div>
-                    <div class="item-row bg-slate-800/50 p-3 rounded-lg border border-slate-700/50 space-y-2">
+                    <div class="proposal-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-bold text-slate-400 tracking-wide index-label">Row #4</span>
-                            <button onclick="deleteRow(this)" class="text-xs text-rose-400 hover:text-rose-300 font-semibold">[ - ] Remove</button>
+                            <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Deliverable Phase #4</span>
+                            <button onclick="removeTargetItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
                         </div>
-                        <input type="text" placeholder="Phase/Deliverable Title" value="Domain Mapping, Core Web Vitals Optimization & Staff Dashboard Training" class="row-title w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white">
-                        <input type="number" placeholder="Cost (INR)" value="6000" oninput="calculateFinancialTotals()" class="row-price w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono">
+                        <input type="text" placeholder="Title / Phase Scope Text" value="Domain Mapping, Core Web Vitals Optimization, public deployment & administrator staff training" class="item-scope-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                        <input type="number" placeholder="Cost (INR)" value="6000" oninput="runFinancialCalculationEngine()" class="item-scope-cost w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white font-mono">
                     </div>
                 </div>
             </div>
@@ -124,213 +136,214 @@
             <hr class="border-slate-800">
 
             <div class="pt-2">
-                <button onclick="triggerPdfExport()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-extrabold text-sm py-4 rounded-xl transition duration-300 shadow-xl shadow-emerald-500/10 tracking-wider flex items-center justify-center gap-2 uppercase">
-                    📄 Compile Input Data & Generate Secure Official PDF Document
+                <button onclick="executeDocumentPdfCompilation()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-xs py-4 rounded-xl transition duration-300 tracking-widest flex items-center justify-center gap-2 uppercase shadow-xl shadow-emerald-500/10">
+                    📄 Compile System Input Data & Generate Secure Official PDF Document
                 </button>
             </div>
         </section>
 
-        <section class="w-full lg:w-[55%] preview-pane p-8 overflow-y-auto max-h-[calc(100vh-73px)] flex justify-center items-start">
+        <section class="w-full lg:w-[58%] preview-pane p-8 overflow-y-auto max-h-[calc(100vh-69px)] flex justify-center items-start">
             
-            <div id="pdf-master-canvas" class="print-document p-12 relative flex flex-col justify-between">
+            <div id="print-document-root" class="print-document p-12 relative flex flex-col justify-between">
                 
                 <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
 
                 <div>
-                    <div class="flex justify-between items-start border-b-2 border-slate-100 pb-6 mb-8">
+                    <div class="flex justify-between items-center border-b-2 border-slate-100 pb-6 mb-8">
                         <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="h-6 w-6 rounded-md bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-white text-xs">KC</span>
-                                <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">KlassConneqt</h1>
-                            </div>
-                            <p class="text-xs text-slate-500 font-medium tracking-wide italic">Seamless Learning, Anytime, Anywhere</p>
+                            <img src="logo.png" alt="KlassConneqt Logo" onerror="this.style.display='none'; document.getElementById('logo-fallback-title').style.display='block';" class="h-12 w-auto object-contain mb-1">
+                            <h2 id="logo-fallback-title" class="hidden text-xl font-black text-indigo-950 tracking-tighter">KlassConneqt</h2>
+                            <p class="text-[11px] text-slate-500 font-medium tracking-wide italic mt-1">Seamless Learning, Anytime, Anywhere</p>
                         </div>
                         <div class="text-right">
-                            <span class="inline-block bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-[10px] tracking-widest uppercase px-3 py-1 rounded-full mb-2 shadow-sm">
+                            <span class="inline-block bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white font-black text-[10px] tracking-widest uppercase px-4 py-1.5 rounded-full mb-2 shadow-sm">
                                 Project Quotation
                             </span>
-                            <p class="text-xs font-bold text-slate-800">Date: <span id="view-date" class="font-medium text-slate-600">June 9, 2026</span></p>
+                            <p class="text-xs font-bold text-slate-900">Date Issued: <span id="view-date" class="font-medium text-slate-600">June 9, 2026</span></p>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-6 bg-slate-50 p-5 rounded-xl border border-slate-100 mb-8">
                         <div>
-                            <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest block mb-1">Prepared For</span>
+                            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Prepared For:</span>
                             <h4 id="view-client-org" class="text-xs font-extrabold text-slate-800 leading-snug">Management Team, Wehive IT Training & Placement Consultancy</h4>
-                            <p id="view-client-addr" class="text-xs font-medium text-slate-500 mt-0.5">Koranguchavadi, Salem</p>
+                            <p id="view-client-addr" class="text-[11px] font-semibold text-slate-500 mt-0.5">Koranguchavadi, Salem</p>
                         </div>
                         <div>
-                            <span class="text-[10px] font-bold text-purple-500 uppercase tracking-widest block mb-1">Project Blueprint Matrix</span>
-                            <h4 id="view-project-name" class="text-xs font-extrabold text-indigo-950 leading-snug">Dynamic Corporate Website & Enquiry System</h4>
-                            <p class="text-[11px] text-slate-600 mt-1 flex items-center gap-1 font-medium">
-                                <span class="inline-block h-1.5 w-1.5 rounded-full bg-purple-500"></span>
-                                Architecture: <span id="view-architecture" class="text-slate-700 font-semibold">Zero-Maintenance Server Tech Stack</span>
+                            <span class="text-[9px] font-bold text-purple-600 uppercase tracking-widest block mb-1">Project Classification:</span>
+                            <h4 id="view-project-name" class="text-xs font-extrabold text-slate-900 leading-snug">Dynamic Corporate Website & Enquiry System</h4>
+                            <p class="text-[11px] text-slate-600 mt-1.5 flex items-center gap-1.5 font-medium">
+                                <span class="inline-block h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
+                                Core Base Stack: <span id="view-architecture" class="text-indigo-950 font-bold">Zero-Maintenance Server Tech Stack</span>
                             </p>
                         </div>
                     </div>
 
                     <div class="mb-8">
-                        <h3 class="text-xs font-extrabold tracking-wider uppercase text-slate-400 mb-2">Project Overview</h3>
-                        <p class="text-xs leading-relaxed text-slate-600 align-justify">
-                            Development of a premium, modern, and highly responsive multi-page web platform. The underlying system architecture is uniquely engineered utilizing an industry-grade Zero-Cost Tech Stack. This specialized blueprint guarantees that the client will incur <span class="font-semibold text-indigo-600">no ongoing annual or monthly renewal fees</span> for cloud hosting, content databases, or applicant trackers. The platform integrates an automated client-managed content dashboard driven securely via Google Sheets mapping.
-                        </p>
+                        <h3 class="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2">Project Structural Overview</h3>
+                        <div id="view-project-overview" class="text-xs leading-relaxed text-slate-600 whitespace-pre-wrap text-justify">
+                            </div>
                     </div>
 
                     <div class="mb-8">
-                        <h3 class="text-xs font-extrabold tracking-wider uppercase text-slate-400 mb-3">Financial & Deliverable Breakdown</h3>
+                        <h3 class="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-3">Financial & Deliverable Scope Breakdown</h3>
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-gradient-to-r from-slate-800 to-indigo-950 text-white">
-                                    <th class="py-2.5 px-4 rounded-l-lg text-xs font-bold tracking-wider uppercase w-[75%]">Phase / Core Deliverable</th>
-                                    <th class="py-2.5 px-4 rounded-r-lg text-xs font-bold tracking-wider uppercase text-right w-[25%]">Price (INR)</th>
+                                <tr class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white">
+                                    <th class="py-3 px-4 rounded-l-lg text-xs font-bold tracking-wider uppercase w-[75%]">Phase / Main Project Core Deliverables</th>
+                                    <th class="py-3 px-4 rounded-r-lg text-xs font-bold tracking-wider uppercase text-right w-[25%]">Price (INR)</th>
                                 </tr>
                             </thead>
-                            <tbody id="view-table-body" class="divide-y divide-slate-100 text-xs">
+                            <tbody id="view-table-body-target" class="divide-y divide-slate-100 text-xs">
                                 </tbody>
                         </table>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-4 border-t-2 border-slate-100 pt-6 mb-8">
-                        <div class="p-3 bg-slate-50 rounded-lg border border-slate-100/80">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Advance Booking (40%)</span>
-                            <div id="milestone-1" class="text-sm font-extrabold text-slate-800 font-mono">₹0.00</div>
-                            <span class="text-[9px] text-slate-500 mt-0.5 block leading-tight">Architecture blueprints & repo setups.</span>
+                    <div class="grid grid-cols-3 gap-4 border-t border-slate-100 pt-6 mb-8">
+                        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Advance Booking (40%)</span>
+                            <div id="milestone-calc-1" class="text-sm font-black text-slate-800 font-mono">₹0.00</div>
+                            <span class="text-[9px] text-slate-500 mt-0.5 block leading-normal">Initiates architecture layouts, design blueprints & wireframe loops.</span>
                         </div>
-                        <div class="p-3 bg-slate-50 rounded-lg border border-slate-100/80">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Mid-Verification (30%)</span>
-                            <div id="milestone-2" class="text-sm font-extrabold text-slate-800 font-mono">₹0.00</div>
-                            <span class="text-[9px] text-slate-500 mt-0.5 block leading-tight">Live fields, EmailJS bindings & logs.</span>
+                        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Mid-Verification (30%)</span>
+                            <div id="milestone-calc-2" class="text-sm font-black text-slate-800 font-mono">₹0.00</div>
+                            <span class="text-[9px] text-slate-500 mt-0.5 block leading-normal">Payable upon live field testing, secure automation setup & verification checks.</span>
                         </div>
-                        <div class="p-3 bg-slate-50 rounded-lg border border-slate-100/80">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Final Launch (30%)</span>
-                            <div id="milestone-3" class="text-sm font-extrabold text-indigo-600 font-mono">₹0.00</div>
-                            <span class="text-[9px] text-slate-500 mt-0.5 block leading-tight">Public deployment & staff handoff.</span>
+                        <div class="p-3.5 bg-slate-50/80 rounded-xl border border-indigo-100/50 bg-indigo-50/10">
+                            <span class="text-[9px] font-bold text-indigo-500 uppercase tracking-wider block mb-1">Final Deployment (30%)</span>
+                            <div id="milestone-calc-3" class="text-sm font-black text-indigo-600 font-mono">₹0.00</div>
+                            <span class="text-[9px] text-indigo-600/80 mt-0.5 block leading-normal">Settled following server optimization handoff & custom asset configurations.</span>
                         </div>
                     </div>
 
-                    <div class="bg-slate-50/50 p-4 rounded-lg border border-slate-100 text-[10px] text-slate-500 space-y-1.5 leading-relaxed">
-                        <p class="font-bold text-slate-700 text-xs mb-1 uppercase tracking-wider">Terms & Conditions</p>
-                        <p>• Any additional parameters, asset revisions, or change pipelines outside this scope will process under standard addendum fees.</p>
-                        <p>• External assets such as custom domain purchases or external specialty premium hosting outside the free stack limits are borne by client ecosystem portfolios.</p>
-                        <p>• Quotation validation thresholds expire exactly <span id="view-validity-term" class="font-semibold text-slate-700">30 Days from date of issue</span>.</p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-[10px] text-slate-500 space-y-1.5 leading-relaxed">
+                        <p class="font-bold text-slate-800 text-xs mb-1 uppercase tracking-wider">Terms & Engagement Standards</p>
+                        <p>• Any secondary system parameters, visual layout adjustments, or database changes requested outside this designated roadmap schedule will process under custom feature addendum contracts.</p>
+                        <p>• External assets such as domain configuration acquisition metrics or unique proprietary premium plugin costs remain separate from this standard structural blueprint portfolio.</p>
+                        <p>• Quotation validation thresholds expire exactly <span id="view-validity-term-node" class="font-bold text-slate-700">30 Days from date of issue</span>.</p>
                     </div>
                 </div>
 
                 <div class="border-t border-slate-100 pt-4 mt-8 flex justify-between items-center text-[10px] text-slate-400 font-medium">
-                    <p>Thank you for choosing KlassConneqt. Engineering your gateway to digital excellence.</p>
-                    <p class="font-bold tracking-widest text-indigo-500 uppercase">KlassConneqt Confidential</p>
+                    <p>Thank you for partnering with KlassConneqt. Engineering your gateway to digital scale.</p>
+                    <p class="font-bold tracking-widest text-indigo-600 uppercase">KlassConneqt Private Blueprint</p>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // Bind dynamic element updating patterns
-        const inputFields = [
-            { id: 'input-date', targetId: 'view-date', transform: v => new Date(v).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) },
-            { id: 'input-validity', targetId: 'view-validity-term' },
+        // Array map matrix containing dynamic direct input bindings
+        const reactiveFieldsRegistry = [
+            { id: 'input-date', targetId: 'view-date', transform: val => new Date(val).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) },
+            { id: 'input-validity', targetId: 'view-validity-term-node' },
             { id: 'input-client-org', targetId: 'view-client-org' },
             { id: 'input-client-addr', targetId: 'view-client-addr' },
             { id: 'input-project-name', targetId: 'view-project-name' },
-            { id: 'input-architecture', targetId: 'view-architecture' }
+            { id: 'input-architecture', targetId: 'view-architecture' },
+            { id: 'input-overview', targetId: 'view-project-overview' }
         ];
 
-        function initSyncListeners() {
-            inputFields.forEach(field => {
-                const el = document.getElementById(field.id);
-                el.addEventListener('input', () => {
-                    document.getElementById(field.targetId).innerText = field.transform ? field.transform(el.value) : el.value;
+        function initializeSyncFramework() {
+            reactiveFieldsRegistry.forEach(node => {
+                const triggerElement = document.getElementById(node.id);
+                const displayTarget = document.getElementById(node.targetId);
+                
+                triggerElement.addEventListener('input', () => {
+                    displayTarget.innerText = node.transform ? node.transform(triggerElement.value) : triggerElement.value;
                 });
-                // Initialize defaults
-                document.getElementById(field.targetId).innerText = field.transform ? field.transform(el.value) : el.value;
+                // Initialize fallback seed defaults instantly
+                displayTarget.innerText = node.transform ? node.transform(triggerElement.value) : triggerElement.value;
             });
         }
 
-        function addRow() {
-            const container = document.getElementById('item-rows-container');
-            const rowCount = container.getElementsByClassName('item-row').length + 1;
+        function addNewItemRow() {
+            const rootContainer = document.getElementById('dynamic-item-rows-root');
+            const totalActiveCards = rootContainer.getElementsByClassName('proposal-item-card').length + 1;
             
-            const newRow = document.createElement('div');
-            newRow.className = 'item-row bg-slate-800/50 p-3 rounded-lg border border-slate-700/50 space-y-2';
-            newRow.innerHTML = `
+            const cardMarkupNode = document.createElement('div');
+            cardMarkupNode.className = 'proposal-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2';
+            cardMarkupNode.innerHTML = `
                 <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-400 tracking-wide index-label">Row #${rowCount}</span>
-                    <button onclick="deleteRow(this)" class="text-xs text-rose-400 hover:text-rose-300 font-semibold">[ - ] Remove</button>
+                    <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Deliverable Phase #${totalActiveCards}</span>
+                    <button onclick="removeTargetItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
                 </div>
-                <input type="text" placeholder="Phase/Deliverable Title" class="row-title w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white">
-                <input type="number" placeholder="Cost (INR)" value="0" oninput="calculateFinancialTotals()" class="row-price w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono">
+                <input type="text" placeholder="Title / Phase Scope Text" class="item-scope-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                <input type="number" placeholder="Cost (INR)" value="0" oninput="runFinancialCalculationEngine()" class="item-scope-cost w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white font-mono">
             `;
-            container.appendChild(newRow);
-            calculateFinancialTotals();
+            rootContainer.appendChild(cardMarkupNode);
+            runFinancialCalculationEngine();
         }
 
-        function deleteRow(button) {
-            button.closest('.item-row').remove();
-            // Re-index remaining row labels
-            const rows = document.querySelectorAll('#item-rows-container .item-row');
-            rows.forEach((row, i) => {
-                row.querySelector('.index-label').innerText = `Row #${i + 1}`;
-            });
-            calculateFinancialTotals();
-        }
-
-        function calculateFinancialTotals() {
-            const rows = document.querySelectorAll('#item-rows-container .item-row');
-            const viewTableBody = document.getElementById('view-table-body');
-            viewTableBody.innerHTML = '';
+        function removeTargetItemRow(buttonInstance) {
+            buttonInstance.closest('.proposal-item-card').remove();
             
-            let totalAmount = 0;
+            // Recalibrate item text numbers cleanly
+            const currentRows = document.querySelectorAll('#dynamic-item-rows-root .proposal-item-card');
+            currentRows.forEach((row, offset) => {
+                row.querySelector('.identification-label').innerText = `Deliverable Phase #${offset + 1}`;
+            });
+            runFinancialCalculationEngine();
+        }
 
-            rows.forEach(row => {
-                const title = row.querySelector('.row-title').value || 'Untitled Deliverable Phase';
-                const price = parseFloat(row.querySelector('.row-price').value) || 0;
-                totalAmount += price;
+        function runFinancialCalculationEngine() {
+            const itemRows = document.querySelectorAll('#dynamic-item-rows-root .proposal-item-card');
+            const previewTableBody = document.getElementById('view-table-body-target');
+            previewTableBody.innerHTML = '';
+            
+            let rollingSumTotal = 0;
 
-                // Append node row elements directly onto the printable document view
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-slate-100 hover:bg-slate-50/50 transition';
-                tr.innerHTML = `
-                    <td class="py-3 px-4 font-medium text-slate-700 leading-snug">${title}</td>
-                    <td class="py-3 px-4 text-right font-bold text-slate-900 font-mono">₹${price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+            itemRows.forEach(row => {
+                const deliverableTitle = row.querySelector('.item-scope-title').value || 'Custom Project Scope Parameter';
+                const deliverableCost = parseFloat(row.querySelector('.item-scope-cost').value) || 0;
+                rollingSumTotal += deliverableCost;
+
+                // Build structural template view table rows
+                const rowElement = document.createElement('tr');
+                rowElement.className = 'border-b border-slate-100 hover:bg-slate-50/40 transition duration-150';
+                rowElement.innerHTML = `
+                    <td class="py-3 px-4 font-semibold text-slate-700 leading-snug">${deliverableTitle}</td>
+                    <td class="py-3 px-4 text-right font-bold text-slate-900 font-mono">₹${deliverableCost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 `;
-                viewTableBody.appendChild(tr);
+                previewTableBody.appendChild(rowElement);
             });
 
-            // Append Final Summary Net Total Matrix Row
-            const totalTr = document.createElement('tr');
-            totalTr.className = 'bg-gradient-to-r from-slate-50 to-indigo-50/30 font-bold';
-            totalTr.innerHTML = `
-                <td class="py-3 px-4 text-slate-900 uppercase tracking-wider text-right font-extrabold text-[11px]">Net Calculated Total (INR):</td>
-                <td class="py-3 px-4 text-right text-indigo-600 text-sm font-extrabold font-mono">₹${totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+            // Inject the calculated summary total row onto document baseline
+            const summaryTotalRow = document.createElement('tr');
+            summaryTotalRow.className = 'bg-slate-50 font-bold border-t-2 border-slate-200';
+            summaryTotalRow.innerHTML = `
+                <td class="py-3.5 px-4 text-slate-900 uppercase tracking-widest text-right font-black text-[10px]">Net Calculated Total (INR):</td>
+                <td class="py-3.5 px-4 text-right text-indigo-600 text-sm font-black font-mono">₹${rollingSumTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
             `;
-            viewTableBody.appendChild(totalTr);
+            previewTableBody.appendChild(summaryTotalRow);
 
-            // Compute Milestone Splitting (40% - 30% - 30%)
-            document.getElementById('milestone-1').innerText = `₹${(totalAmount * 0.4).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
-            document.getElementById('milestone-2').innerText = `₹${(totalAmount * 0.3).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
-            document.getElementById('milestone-3').innerText = `₹${(totalAmount * 0.3).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            // Dynamically calculate individual milestones (40% / 30% / 30%)
+            document.getElementById('milestone-calc-1').innerText = `₹${(rollingSumTotal * 0.40).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            document.getElementById('milestone-calc-2').innerText = `₹${(rollingSumTotal * 0.30).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            document.getElementById('milestone-calc-3').innerText = `₹${(rollingSumTotal * 0.30).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
         }
 
-        function triggerPdfExport() {
-            const element = document.getElementById('pdf-master-canvas');
-            const clientName = document.getElementById('input-client-org').value.split(',')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        function executeDocumentPdfCompilation() {
+            const documentTargetNode = document.getElementById('print-document-root');
+            const sanitizedClientHeader = document.getElementById('input-client-org').value.split(',')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase();
             
-            const printOptions = {
+            const renderingParameters = {
                 margin: 0,
-                filename: `klassconneqt_quotation_${clientName}.pdf`,
+                filename: `klassconneqt_proposal_${sanitizedClientHeader}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 3, useCORS: true, letterRendering: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // Compile sequence execution
-            html2pdf().set(printOptions).from(element).save();
+            // Process secure runtime compile sequence
+            html2pdf().set(renderingParameters).from(documentTargetNode).save();
         }
 
-        // Boot-Up Automation Sequence Initialization
+        // Boot-Up Automation Initialization hook
         window.onload = () => {
-            initSyncListeners();
-            calculateFinancialTotals();
+            initializeSyncFramework();
+            runFinancialCalculationEngine();
         };
     </script>
 </body>
