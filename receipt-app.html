@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KlassConneqt - Student Fee Receipt Station</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .preview-pane { background: #f1f5f9; }
+        
+        /* Ultra precision standard A4 aspect mapping with optimized print spacing */
+        .print-document {
+            width: 210mm;
+            background: white;
+            color: #0f172a;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Forces elements to stay grouped together during print breakdown splits */
+        .avoid-page-split {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col overflow-x-hidden">
+
+    <header class="border-b border-slate-800 bg-slate-900 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="h-9 w-9 rounded-lg bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-500 flex items-center justify-center font-black text-white text-sm tracking-tighter">
+                KC
+            </div>
+            <div>
+                <h1 class="text-md font-bold text-white tracking-tight">KlassConneqt Receipt Hub</h1>
+                <p class="text-xs text-slate-400">Dynamic Academic Ledger Management</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-800 rounded-full px-4 py-1 border border-slate-700 text-xs font-semibold text-emerald-400">
+            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span> Receipt Engine Active
+        </div>
+    </header>
+
+    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        
+        <section class="w-full lg:w-[42%] bg-slate-900 p-6 border-r border-slate-800 overflow-y-auto max-h-[calc(100vh-69px)] space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-lg font-bold text-white">Receipt Data Entry Terminal</h2>
+                <p class="text-xs text-slate-400">Modify properties below to dynamically render and recompute the high-contrast A4 official receipt copy.</p>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-emerald-400">1. Administrative Parameters</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Receipt Reference ID</label>
+                        <input type="text" id="input-receipt-id" value="KC-REC-2026-4891" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Payment Date</label>
+                        <input type="date" id="input-date" value="2026-06-14" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Payment Mode Channel</label>
+                        <select id="input-payment-mode" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <option value="Razorpay / UPI Payment">Razorpay / UPI Payment</option>
+                            <option value="Google Pay / PhonePe">Google Pay / PhonePe</option>
+                            <option value="Direct Bank Transfer">Direct Bank Transfer</option>
+                            <option value="Cash Disbursement">Cash Disbursement</option>
+                            <option value="Credit / Debit Card">Credit / Debit Card</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Transaction Ref Number</label>
+                        <input type="text" id="input-transaction-id" value="TXN_98721643209A" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-emerald-400">2. Beneficiary Student Profile</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Student Full Name</label>
+                        <input type="text" id="input-student-name" value="Rahul Krishnan" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Student ID / Roll No</label>
+                        <input type="text" id="input-student-id" value="KC-2026-ST905" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Enrolled Course / Program Track</label>
+                    <input type="text" id="input-course-name" value="Advanced Full-Stack Web Engineering & Cloud Automation Infrastructure" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Batch Code Allocation</label>
+                        <input type="text" id="input-batch-code" value="Batch-W14 (Wehive Corporate Track)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Contact Reference / Email</label>
+                        <input type="text" id="input-student-contact" value="rahul.k@wehive.edu" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Outstanding Balance Remaining (INR)</label>
+                    <input type="number" id="input-balance" value="12000" oninput="updateBalanceView()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-emerald-400">3. Fee Distribution Matrix</h3>
+                    <button onclick="addNewReceiptRow()" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-extrabold text-[11px] px-3 py-1.5 rounded-md transition duration-200">
+                        [ + ] Add Allocation Line
+                    </button>
+                </div>
+                
+                <div id="dynamic-receipt-rows-root" class="space-y-3">
+                    <div class="receipt-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Allocation Element #1</span>
+                            <button onclick="removeReceiptItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
+                        </div>
+                        <input type="text" placeholder="Fee Component Description" value="Core Professional Training Fees - Module 1 (UI/UX Engineering & Dynamic Frontend setups)" class="item-desc-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                        <input type="number" placeholder="Disbursed Sum (INR)" value="6500" oninput="runFinancialCalculationEngine()" class="item-desc-cost w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white font-mono">
+                    </div>
+                    <div class="receipt-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Allocation Element #2</span>
+                            <button onclick="removeReceiptItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
+                        </div>
+                        <input type="text" placeholder="Fee Component Description" value="Academic Lab infrastructure fees, server automation workspace provisioning & platform access setup" class="item-desc-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                        <input type="number" placeholder="Disbursed Sum (INR)" value="2000" oninput="runFinancialCalculationEngine()" class="item-scope-cost item-desc-cost w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white font-mono">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <div class="pt-2">
+                <button onclick="executeDocumentPdfCompilation()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-xs py-4 rounded-xl transition duration-300 tracking-widest flex items-center justify-center gap-2 uppercase shadow-xl shadow-emerald-500/10">
+                    📄 Compile Receipt Data & Generate Official PDF Document
+                </button>
+            </div>
+        </section>
+
+        <section class="w-full lg:w-[58%] preview-pane p-8 overflow-y-auto max-h-[calc(100vh-69px)] flex justify-center items-start">
+            
+            <div id="print-document-root" class="print-document py-8 px-10 relative flex flex-col justify-between">
+                
+                <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-500"></div>
+
+                <div>
+                    <div class="flex justify-between items-center border-b-2 border-slate-100 pb-4 mb-4">
+                        <div class="flex items-center gap-3">
+                            <img src="logo.png" alt="Logo" onerror="this.style.opacity='0'; this.style.width='0px'; this.style.margin='0px';" style="height: 55px; width: auto;" class="object-contain">
+                            <div>
+                                <h2 class="text-2xl font-black text-indigo-950 tracking-tight leading-none">KlassConneqt</h2>
+                                <p class="text-[11px] text-slate-500 font-medium tracking-wide italic mt-1">Seamless Learning, Anytime, Anywhere</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-block bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 text-white font-black text-[10px] tracking-widest uppercase px-3 py-1 rounded-full mb-1 shadow-sm">
+                                Payment Receipt
+                            </span>
+                            <p class="text-xs font-bold text-slate-900">Receipt No: <span id="view-receipt-id" class="font-bold text-emerald-600 font-mono">KC-REC-2026-4891</span></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
+                        <div>
+                            <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-0.5">Student Allocation Beneficiary:</span>
+                            <h4 id="view-student-name" class="text-xs font-extrabold text-slate-800 leading-snug">Rahul Krishnan</h4>
+                            <p class="text-[11px] font-semibold text-slate-500 mt-0.5">ID Ref: <span id="view-student-id" class="font-bold text-slate-700 font-mono">KC-2026-ST905</span></p>
+                            <p class="text-[11px] font-medium text-slate-400 mt-0.5">Contact: <span id="view-student-contact" class="text-slate-600">rahul.k@wehive.edu</span></p>
+                        </div>
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">Academic Track Details:</span>
+                            <h4 id="view-course-name" class="text-xs font-extrabold text-slate-900 leading-snug">Advanced Full-Stack Web Engineering & Cloud Automation Infrastructure</h4>
+                            <p class="text-[11px] text-slate-600 mt-1 flex items-center gap-1.5 font-medium">
+                                <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                Allocated Segment: <span id="view-batch-code" class="text-indigo-950 font-bold">Batch-W14 (Wehive Corporate Track)</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 border-y border-slate-100 py-3 mb-4 text-xs">
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Transaction Date:</span>
+                            <span id="view-date" class="font-bold text-slate-700">June 14, 2026</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Payment Channel:</span>
+                            <span id="view-payment-mode" class="font-bold text-slate-700">Razorpay / UPI Payment</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Gateway ID / Ref:</span>
+                            <span id="view-transaction-id" class="font-bold text-slate-700 font-mono">TXN_98721643209A</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-1.5">Disbursed Fee Structure Ledger</h3>
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white">
+                                    <th class="py-2 px-3 rounded-l-lg text-xs font-bold tracking-wider uppercase w-[75%]">Fee Allocation Element Description</th>
+                                    <th class="py-2 px-3 rounded-r-lg text-xs font-bold tracking-wider uppercase text-right w-[25%]">Amount Paid (INR)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="view-table-body-target" class="divide-y divide-slate-100 text-xs">
+                                </tbody>
+                        </table>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4 mb-4 avoid-page-split">
+                        <div class="p-3 bg-emerald-50/20 rounded-xl border border-emerald-100/50 flex justify-between items-center">
+                            <div>
+                                <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-wider block">Net Disbursed Amount (INR)</span>
+                                <span class="text-[10px] text-slate-500 leading-tight">Total transaction funds processed securely.</span>
+                            </div>
+                            <div id="summary-total-paid" class="text-lg font-black text-emerald-600 font-mono">₹0.00</div>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex justify-between items-center">
+                            <div>
+                                <span class="text-[9px] font-bold text-rose-500 uppercase tracking-wider block">Pending Balance Arrears</span>
+                                <span class="text-[10px] text-slate-500 leading-tight">Remaining contract course capital due.</span>
+                            </div>
+                            <div id="summary-balance-due" class="text-lg font-black text-slate-700 font-mono">₹0.00</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-[10px] text-slate-500 space-y-1 leading-relaxed avoid-page-split mb-4">
+                        <p class="font-bold text-slate-800 text-[11px] mb-0.5 uppercase tracking-wider">Declarations & Receipt Acknowledgements</p>
+                        <p>• All transaction collections are mapped inside our automated central ledger registry system connected dynamically via Google Sheets hooks.</p>
+                        <p>• Tuition fee disbursements remain non-refundable outside standard student onboarding institutional enrollment policy clauses.</p>
+                        <p>• This digital document acts as an immediate, valid validation proof of academic program asset funding clearance.</p>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-4 flex justify-between items-end avoid-page-split">
+                    <div class="text-[10px] text-slate-400 font-medium max-w-[60%]">
+                        <p>Thank you for choosing KlassConneqt. Engineering your gateway to elite knowledge scale.</p>
+                        <p class="font-bold tracking-widest text-emerald-600 uppercase mt-0.5">KlassConneqt Financial Node</p>
+                    </div>
+                    
+                    <div class="relative flex flex-col items-center justify-center text-center px-4 py-1 min-w-[180px] overflow-visible">
+                        <img src="KlassConneqt_Seal.png" alt="KlassConneqt Seal Stamp" class="absolute w-24 h-24 opacity-15 pointer-events-none transform -rotate-12 select-none z-0 mix-blend-multiply">
+                        
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider z-10">Prepared by</p>
+                        <p class="text-[11px] font-black text-emerald-600 tracking-tight uppercase z-10">KlassConneqt Team</p>
+                        <div class="w-20 border-b border-dashed border-slate-300 mt-4"></div>
+                        <p class="text-[8px] text-slate-400 uppercase tracking-widest mt-1 z-10">Authorized Digital Identity</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Array map matrix containing dynamic direct input bindings
+        const reactiveFieldsRegistry = [
+            { id: 'input-receipt-id', targetId: 'view-receipt-id' },
+            { id: 'input-date', targetId: 'view-date', transform: val => new Date(val).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) },
+            { id: 'input-payment-mode', targetId: 'view-payment-mode' },
+            { id: 'input-transaction-id', targetId: 'view-transaction-id' },
+            { id: 'input-student-name', targetId: 'view-student-name' },
+            { id: 'input-student-id', targetId: 'view-student-id' },
+            { id: 'input-course-name', targetId: 'view-course-name' },
+            { id: 'input-batch-code', targetId: 'view-batch-code' },
+            { id: 'input-student-contact', targetId: 'view-student-contact' }
+        ];
+
+        function initializeSyncFramework() {
+            reactiveFieldsRegistry.forEach(node => {
+                const triggerElement = document.getElementById(node.id);
+                const displayTarget = document.getElementById(node.targetId);
+                
+                triggerElement.addEventListener('input', () => {
+                    displayTarget.innerText = node.transform ? node.transform(triggerElement.value) : triggerElement.value;
+                });
+                // Initialize defaults instantly
+                displayTarget.innerText = node.transform ? node.transform(triggerElement.value) : triggerElement.value;
+            });
+            updateBalanceView();
+        }
+
+        function updateBalanceView() {
+            const rawBalance = parseFloat(document.getElementById('input-balance').value) || 0;
+            document.getElementById('summary-balance-due').innerText = `₹${rawBalance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+        }
+
+        function addNewReceiptRow() {
+            const rootContainer = document.getElementById('dynamic-receipt-rows-root');
+            const totalActiveCards = rootContainer.getElementsByClassName('receipt-item-card').length + 1;
+            
+            const cardMarkupNode = document.createElement('div');
+            cardMarkupNode.className = 'receipt-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2';
+            cardMarkupNode.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Allocation Element #${totalActiveCards}</span>
+                    <button onclick="removeReceiptItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
+                </div>
+                <input type="text" placeholder="Fee Component Description" class="item-desc-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                <input type="number" placeholder="Disbursed Sum (INR)" value="0" oninput="runFinancialCalculationEngine()" class="item-desc-cost w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white font-mono">
+            `;
+            rootContainer.appendChild(cardMarkupNode);
+            runFinancialCalculationEngine();
+        }
+
+        function removeReceiptItemRow(buttonInstance) {
+            buttonInstance.closest('.receipt-item-card').remove();
+            
+            // Recalibrate item text numbers cleanly
+            const currentRows = document.querySelectorAll('#dynamic-receipt-rows-root .receipt-item-card');
+            currentRows.forEach((row, offset) => {
+                row.querySelector('.identification-label').innerText = `Allocation Element #${offset + 1}`;
+            });
+            runFinancialCalculationEngine();
+        }
+
+        function runFinancialCalculationEngine() {
+            const itemRows = document.querySelectorAll('#dynamic-receipt-rows-root .receipt-item-card');
+            const previewTableBody = document.getElementById('view-table-body-target');
+            previewTableBody.innerHTML = '';
+            
+            let rollingSumTotal = 0;
+
+            itemRows.forEach(row => {
+                const allocatedTitle = row.querySelector('.item-desc-title').value || 'Custom Fee Component Entry';
+                const allocatedCost = parseFloat(row.querySelector('.item-desc-cost').value) || 0;
+                rollingSumTotal += allocatedCost;
+
+                // Build structural template view table rows
+                const rowElement = document.createElement('tr');
+                rowElement.className = 'border-b border-slate-100 hover:bg-slate-50/40 transition duration-150';
+                rowElement.innerHTML = `
+                    <td class="py-2.5 px-3 font-semibold text-slate-700 leading-snug">${allocatedTitle}</td>
+                    <td class="py-2.5 px-3 text-right font-bold text-slate-900 font-mono">₹${allocatedCost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                `;
+                previewTableBody.appendChild(rowElement);
+            });
+
+            // Inject the calculated summary total row onto document baseline
+            const summaryTotalRow = document.createElement('tr');
+            summaryTotalRow.className = 'bg-slate-50 font-bold border-t-2 border-slate-200';
+            summaryTotalRow.innerHTML = `
+                <td class="py-2.5 px-3 text-slate-900 uppercase tracking-widest text-right font-black text-[10px]">Net Transaction Total (INR):</td>
+                <td class="py-2.5 px-3 text-right text-emerald-600 text-sm font-black font-mono">₹${rollingSumTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+            `;
+            previewTableBody.appendChild(summaryTotalRow);
+
+            // Dynamically synchronize primary net summary counter widget
+            document.getElementById('summary-total-paid').innerText = `₹${rollingSumTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+        }
+
+        function executeDocumentPdfCompilation() {
+            const documentTargetNode = document.getElementById('print-document-root');
+            const sanitizedStudentHeader = document.getElementById('input-student-name').value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            
+            const renderingParameters = {
+                margin: [4, 0, 4, 0], // Optimized layout margins
+                filename: `klassconneqt_receipt_${sanitizedStudentHeader}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 3, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Process secure runtime compile sequence
+            html2pdf().set(renderingParameters).from(documentTargetNode).save();
+        }
+
+        // Boot-Up Automation Initialization hook
+        window.onload = () => {
+            initializeSyncFramework();
+            runFinancialCalculationEngine();
+            // Bind remaining balance dynamic watcher
+            document.getElementById('input-balance').addEventListener('input', updateBalanceView);
+        };
+    </script>
+</body>
+</html>
