@@ -6,8 +6,52 @@
     <title>KlassConneqt - Core Management Gateway</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; }
+        
+        /* Custom Toast Notification Styling */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .kc-toast {
+            min-width: 300px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+        }
+        .kc-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        /* Loader Animation */
+        .spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-left-color: #ffffff;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen flex flex-col justify-between">
@@ -16,6 +60,8 @@
         <input type="text" id="api-url-input" value="https://script.google.com/macros/s/AKfycbzPLuiYPtDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec">
     </div>
 
+    <div id="toast-container"></div>
+    
     <main class="flex-1 flex items-center justify-center p-6">
         
         <div id="view-login" class="w-full max-w-md bg-slate-900/60 backdrop-blur-xl p-8 rounded-2xl border border-slate-800 shadow-2xl space-y-6">
@@ -149,6 +195,41 @@
 
     let currentAuthenticatedUser = null;
 
+    // --- NEW: Custom Toast Notification Engine ---
+    function showToast(message, type = 'info', duration = 3000) {
+        const container = document.getElementById('toast-container');
+        if(!container) return null;
+        
+        const toast = document.createElement('div');
+        toast.className = 'kc-toast';
+
+        let iconHTML = '';
+        if (type === 'loading') {
+            iconHTML = '<div class="spinner border-indigo-400 border-left-transparent"></div>';
+        } else if (type === 'success') {
+            iconHTML = '<span style="color: #10b981; font-size: 1.2rem;">✔</span>';
+            toast.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        } else if (type === 'error') {
+            iconHTML = '<span style="color: #f43f5e; font-size: 1.2rem;">✖</span>';
+            toast.style.borderColor = 'rgba(244, 63, 94, 0.3)';
+        } else {
+            iconHTML = '<span style="color: #60a5fa; font-size: 1.2rem;">ℹ</span>';
+        }
+
+        toast.innerHTML = `${iconHTML} <span>${message}</span>`;
+        container.appendChild(toast);
+
+        setTimeout(() => toast.classList.add('show'), 10);
+
+        if (type !== 'loading') {
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400); 
+            }, duration);
+        }
+        return toast; 
+    }
+
     function switchViewState(targetViewId) {
         ['view-login', 'view-forgot', 'view-reset', 'view-dashboard'].forEach(viewId => {
             document.getElementById(viewId).classList.add('hidden');
@@ -182,7 +263,7 @@
             return await response.json();
         } catch(e) {
             console.error("API Fetch Error:", e);
-            alert("Database Connection Failed: " + e.message);
+            showToast("Database Connection Failed: " + e.message, 'error', 5000);
             return null;
         }
     }
@@ -192,34 +273,59 @@
         const pass = document.getElementById('login-password').value.trim();
 
         if(!user || !pass) {
-            alert("Fields entry requirement alert: Input verification username and key inputs.");
+            showToast("Input verification username and key required.", 'error');
             return;
         }
 
+        // Lock button and show loading toast
+        const btn = document.querySelector('button[onclick="handleLoginSubmit()"]');
+        const originalText = btn.innerText;
+        btn.innerText = "Verifying Credentials...";
+        btn.disabled = true;
+        const loaderToast = showToast("Authenticating with database...", 'loading');
+
         const res = await makeApiCall({ action: "login", username: user, password: pass });
+        
+        // Remove Loader
+        if(loaderToast) {
+            loaderToast.classList.remove('show');
+            setTimeout(() => loaderToast.remove(), 400);
+        }
+        btn.innerText = originalText;
+        btn.disabled = false;
+
         if(res && res.success) {
+            showToast("Access Granted. Welcome to Workspace.", 'success');
             currentAuthenticatedUser = res.user;
             document.getElementById('current-user-tag').innerText = currentAuthenticatedUser;
-            switchViewState('view-dashboard');
+            setTimeout(() => switchViewState('view-dashboard'), 600); // slight delay for visual smoothness
             sessionStorage.setItem("kc_auth_user", currentAuthenticatedUser);
         } else if (res) {
-            alert(res.message);
+            showToast(res.message, 'error');
         }
     }
 
     async function handleForgotSubmit() {
         const emailInput = document.getElementById('forgot-email').value.trim();
         if(!emailInput) {
-            alert("Input verified email registration identity link parameters.");
+            showToast("Input verified email registration identity link parameters.", 'error');
             return;
         }
 
+        const loaderToast = showToast("Generating secure token...", 'loading');
+
         const res = await makeApiCall({ action: "forgot", email: emailInput });
+        
+        if(loaderToast) {
+            loaderToast.classList.remove('show');
+            setTimeout(() => loaderToast.remove(), 400);
+        }
+
         if(res && res.success) {
-            alert(res.message);
+            showToast(res.message, 'success', 4000);
             switchViewState('view-reset');
         } else if (res) {
-            alert(res.message);
+            showToast(res.message, 'error');
         }
     }
 
@@ -228,26 +334,32 @@
         const newPass = document.getElementById('reset-new-password').value.trim();
 
         if(!tokenCode || !newPass) {
-            alert("Security mandate alert: Please fill both tracking parameters.");
+            showToast("Security mandate alert: Please fill both tracking parameters.", 'error');
             return;
         }
+
+        const loaderToast = showToast("Updating security credentials...", 'loading');
 
         const res = await makeApiCall({ action: "reset", token: tokenCode, newPassword: newPass });
+        
+        if(loaderToast) {
+            loaderToast.classList.remove('show');
+            setTimeout(() => loaderToast.remove(), 400);
+        }
+
         if(res && res.success) {
-            alert(res.message);
+            showToast(res.message, 'success');
             switchViewState('view-login');
         } else if (res) {
-            alert(res.message);
+            showToast(res.message, 'error');
         }
     }
-
     async function navigateModule(htmlFileName) {
         if(!currentAuthenticatedUser) {
-            alert("Session context failure: Security validation check expired. Return to core sign-in.");
+            showToast("Session context failure: Security validation check expired. Return to core sign-in.", 'error');
             switchViewState('view-login');
             return;
         }
-
         const endpoint = getApiUrl();
         if(endpoint) {
             fetch(endpoint, {
@@ -265,9 +377,9 @@
         currentAuthenticatedUser = null;
         sessionStorage.removeItem("kc_auth_user");
         document.getElementById('login-password').value = "";
+        showToast("Session Terminated Safely.", 'info');
         switchViewState('view-login');
     }
-
     window.onload = () => {
         sessionStorage.setItem("kc_api_url", ACCESSIBLE_API_URL);
 
