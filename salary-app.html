@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KlassConneqt - Tutor Payroll & Salary Slip Station</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .preview-pane { background: #f1f5f9; }
+        
+        /* Ultra precision standard A4 aspect mapping with optimized print spacing */
+        .print-document {
+            width: 210mm;
+            background: white;
+            color: #0f172a;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Forces elements to stay grouped together during print breakdown splits */
+        .avoid-page-split {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col overflow-x-hidden">
+
+    <header class="border-b border-slate-800 bg-slate-900 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="h-9 w-9 rounded-lg bg-gradient-to-tr from-purple-500 via-indigo-500 to-pink-500 flex items-center justify-center font-black text-white text-sm tracking-tighter">
+                KC
+            </div>
+            <div>
+                <h1 class="text-md font-bold text-white tracking-tight">KlassConneqt Payroll Hub</h1>
+                <p class="text-xs text-slate-400">Dynamic Employee Ledger Management</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-800 rounded-full px-4 py-1 border border-slate-700 text-xs font-semibold text-purple-400">
+            <span class="h-2 w-2 rounded-full bg-purple-400 animate-pulse"></span> Payroll Engine Active
+        </div>
+    </header>
+
+    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        
+        <section class="w-full lg:w-[42%] bg-slate-900 p-6 border-r border-slate-800 overflow-y-auto max-h-[calc(100vh-69px)] space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-lg font-bold text-white">Salary Slip Data Entry Terminal</h2>
+                <p class="text-xs text-slate-400">Modify properties below to dynamically render and recompute the high-contrast A4 official payroll statement.</p>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-purple-400">1. Administrative Parameters</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Payslip Slip Number</label>
+                        <input type="text" id="input-slip-id" value="KC-EMP-2026-06" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Payout Disbursal Date</label>
+                        <input type="date" id="input-date" value="2026-06-01" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Target Pay Period / Month</label>
+                        <input type="text" id="input-pay-period" value="May 1, 2026 – May 31, 2026" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Destination Bank Account</label>
+                        <input type="text" id="input-account" value="HDFC Bank (Mxd: *******4821)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-purple-400">2. Employee Beneficiary Profile</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Tutor / Faculty Name</label>
+                        <input type="text" id="input-tutor-name" value="Srinivasan Ramanujan" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Employee ID Ref</label>
+                        <input type="text" id="input-tutor-id" value="KC-FAC-948" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Professional Designation</label>
+                        <input type="text" id="input-designation" value="Lead Full-Stack Instructor" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Total Batches Closed</label>
+                        <input type="text" id="input-batches" value="4 Active Batches Completed" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-purple-400">3. Earnings & Deductions Distribution</h3>
+                    <button onclick="addNewPayrollRow()" class="bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-[11px] px-3 py-1.5 rounded-md transition duration-200">
+                        [ + ] Add Breakdown Line
+                    </button>
+                </div>
+                
+                <div id="dynamic-payroll-rows-root" class="space-y-3">
+                    <div class="payroll-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Payroll Component #1</span>
+                            <button onclick="removePayrollItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
+                        </div>
+                        <input type="text" placeholder="Description Description" value="Base Core Retainer Salary (Fixed monthly instructional fee package allocation)" class="payroll-desc-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                        <div class="grid grid-cols-2 gap-2">
+                            <select onchange="runFinancialCalculationEngine()" class="payroll-desc-type bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white">
+                                <option value="EARNING" selected>Earning (+)</option>
+                                <option value="DEDUCTION">Deduction (-)</option>
+                            </select>
+                            <input type="number" placeholder="Value (INR)" value="35000" oninput="runFinancialCalculationEngine()" class="payroll-desc-cost w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono">
+                        </div>
+                    </div>
+                    <div class="payroll-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Payroll Component #2</span>
+                            <button onclick="removePayrollItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
+                        </div>
+                        <input type="text" placeholder="Description Description" value="Batch Completion Milestone Incentive (Bonus payout for successfully closing Wehive IT Training)" class="payroll-desc-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                        <div class="grid grid-cols-2 gap-2">
+                            <select onchange="runFinancialCalculationEngine()" class="payroll-desc-type bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white">
+                                <option value="EARNING" selected>Earning (+)</option>
+                                <option value="DEDUCTION">Deduction (-)</option>
+                            </select>
+                            <input type="number" placeholder="Value (INR)" value="5000" oninput="runFinancialCalculationEngine()" class="payroll-desc-cost w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono">
+                        </div>
+                    </div>
+                    <div class="payroll-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Payroll Component #3</span>
+                            <button onclick="removePayrollItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
+                        </div>
+                        <input type="text" placeholder="Description Description" value="Deductions (Unapproved instructional leaves holdbacks / Professional Tax adjustments)" class="payroll-desc-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                        <div class="grid grid-cols-2 gap-2">
+                            <select onchange="runFinancialCalculationEngine()" class="payroll-desc-type bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white">
+                                <option value="EARNING">Earning (+)</option>
+                                <option value="DEDUCTION" selected>Deduction (-)</option>
+                            </select>
+                            <input type="number" placeholder="Value (INR)" value="1000" oninput="runFinancialCalculationEngine()" class="payroll-desc-cost w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <div class="pt-2">
+                <button onclick="executeDocumentPdfCompilation()" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500 text-white font-black text-xs py-4 rounded-xl transition duration-300 tracking-widest flex items-center justify-center gap-2 uppercase shadow-xl shadow-purple-500/10">
+                    📄 Compile Payroll Data & Generate Secure Official PDF Document
+                </button>
+            </div>
+        </section>
+
+        <section class="w-full lg:w-[58%] preview-pane p-8 overflow-y-auto max-h-[calc(100vh-69px)] flex justify-center items-start">
+            
+            <div id="print-document-root" class="print-document py-8 px-10 relative flex flex-col justify-between">
+                
+                <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-purple-500 via-indigo-500 to-pink-500"></div>
+
+                <div>
+                    <div class="flex justify-between items-center border-b-2 border-slate-100 pb-4 mb-4">
+                        <div class="flex items-center gap-3">
+                            <img src="logo.png" alt="Logo" onerror="this.style.opacity='0'; this.style.width='0px'; this.style.margin='0px';" style="height: 55px; width: auto;" class="object-contain">
+                            <div>
+                                <h2 class="text-2xl font-black text-indigo-950 tracking-tight leading-none">KlassConneqt</h2>
+                                <p class="text-[11px] text-slate-500 font-medium tracking-wide italic mt-1">Seamless Learning, Anytime, Anywhere</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-block bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-600 text-white font-black text-[10px] tracking-widest uppercase px-3 py-1 rounded-full mb-1 shadow-sm">
+                                Salary Payslip
+                            </span>
+                            <p class="text-xs font-bold text-slate-900">Payslip No: <span id="view-slip-id" class="font-bold text-purple-600 font-mono">KC-EMP-2026-06</span></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
+                        <div>
+                            <span class="text-[9px] font-bold text-purple-600 uppercase tracking-widest block mb-0.5">Employee Beneficiary:</span>
+                            <h4 id="view-tutor-name" class="text-xs font-extrabold text-slate-800 leading-snug">Srinivasan Ramanujan</h4>
+                            <p class="text-[11px] font-semibold text-slate-500 mt-0.5">Designation: <span id="view-designation" class="text-slate-700">Lead Full-Stack Instructor</span></p>
+                            <p class="text-[11px] font-medium text-slate-400 mt-0.5">Staff ID Ref: <span id="view-tutor-id" class="font-bold text-slate-600 font-mono">KC-FAC-948</span></p>
+                        </div>
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">Payroll Tracking Summary:</span>
+                            <h4 class="text-xs font-extrabold text-slate-900 leading-snug">Pay Period: <span id="view-pay-period" class="font-semibold text-slate-600">May 1, 2026 – May 31, 2026</span></h4>
+                            <p id="view-batches" class="text-[11px] font-semibold text-purple-600 mt-0.5">4 Active Batches Completed</p>
+                            <p class="text-[11px] text-slate-500 mt-0.5 font-medium">Disbursal Gate: <span id="view-account" class="text-slate-600 font-semibold">HDFC Bank (Mxd: *******4821)</span></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 border-y border-slate-100 py-2.5 mb-4 text-xs">
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Disbursal Ref Settlement Date:</span>
+                            <span id="view-date" class="font-bold text-slate-700">June 1, 2026</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Transaction Status:</span>
+                            <span class="inline-flex items-center gap-1 font-bold text-emerald-600">
+                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Transferred Successfully (NEFT/IMPS)
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-1.5">Payroll Component Item Breakdown</h3>
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white">
+                                    <th class="py-2 px-3 rounded-l-lg text-xs font-bold tracking-wider uppercase w-[60%]">Payroll Allocation Component Description</th>
+                                    <th class="py-2 px-3 text-xs font-bold tracking-wider uppercase w-[20%]">Classification</th>
+                                    <th class="py-2 px-3 rounded-r-lg text-xs font-bold tracking-wider uppercase text-right w-[20%]">Amount (INR)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="view-table-body-target" class="divide-y divide-slate-100 text-xs">
+                                </tbody>
+                        </table>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 border-t border-slate-100 pt-4 mb-4 avoid-page-split">
+                        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Gross Earnings (+)</span>
+                            <div id="summary-gross-earnings" class="text-xs font-black text-slate-800 font-mono">₹0.00</div>
+                            <span class="text-[8px] text-slate-500 mt-0.5 block leading-tight">Total dynamic base retainer fees and milestone rewards.</span>
+                        </div>
+                        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-[9px] font-bold text-rose-500 uppercase tracking-wider block mb-0.5">Gross Deductions (-)</span>
+                            <div id="summary-gross-deductions" class="text-xs font-black text-rose-600 font-mono">₹0.00</div>
+                            <span class="text-[8px] text-slate-500 mt-0.5 block leading-tight">Tax allocations, insurance holdbacks, or leave metrics.</span>
+                        </div>
+                        <div class="p-2.5 bg-purple-50/20 rounded-xl border border-purple-100/50 bg-purple-50/10">
+                            <span class="text-[9px] font-bold text-purple-600 uppercase tracking-wider block mb-0.5">Net Take-Home Salary</span>
+                            <div id="summary-net-disbursed" class="text-sm font-black text-purple-600 font-mono">₹0.00</div>
+                            <span class="text-[8px] text-purple-600/80 mt-0.5 block leading-tight">Final disbursed liquidity transferred into target bank route.</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-[10px] text-slate-500 space-y-1 leading-relaxed avoid-page-split mb-4">
+                        <p class="font-bold text-slate-800 text-[11px] mb-0.5 uppercase tracking-wider">Confidential Declarations Notice</p>
+                        <p>• This payroll ledger report document contains highly confidential, locked compensation information managed by KlassConneqt corporate governance.</p>
+                        <p>• All income statistics and tax withholding data indices are computed in full compliance with localized employment registry criteria parameters.</p>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-4 flex justify-between items-end avoid-page-split">
+                    <div class="text-[10px] text-slate-400 font-medium max-w-[60%]">
+                        <p>KlassConneqt Private HR Node — Generated securely via Automated Corporate Architecture.</p>
+                        <p class="font-bold tracking-widest text-purple-500 uppercase mt-0.5">KlassConneqt HR & Operations</p>
+                    </div>
+                    
+                    <div class="relative flex flex-col items-center justify-center text-center px-4 py-1 min-w-[180px] overflow-visible">
+                        <img src="KlassConneqt_Seal.png" alt="KlassConneqt Seal Stamp" class="absolute w-24 h-24 opacity-15 pointer-events-none transform -rotate-12 select-none z-0 mix-blend-multiply">
+                        
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider z-10">Prepared by</p>
+                        <p class="text-[11px] font-black text-purple-600 tracking-tight uppercase z-10">KlassConneqt Team</p>
+                        <div class="w-20 border-b border-dashed border-slate-300 mt-4"></div>
+                        <p class="text-[8px] text-slate-400 uppercase tracking-widest mt-1 z-10">Authorized Digital Identity</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Array map matrix containing dynamic direct input bindings
+        const reactiveFieldsRegistry = [
+            { id: 'input-slip-id', targetId: 'view-slip-id' },
+            { id: 'input-date', targetId: 'view-date', transform: val => new Date(val).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) },
+            { id: 'input-pay-period', targetId: 'view-pay-period' },
+            { id: 'input-account', targetId: 'view-account' },
+            { id: 'input-tutor-name', targetId: 'view-tutor-name' },
+            { id: 'input-tutor-id', targetId: 'view-tutor-id' },
+            { id: 'input-designation', targetId: 'view-designation' },
+            { id: 'input-batches', targetId: 'view-batches' }
+        ];
+
+        function initializeSyncFramework() {
+            reactiveFieldsRegistry.forEach(node => {
+                const triggerElement = document.getElementById(node.id);
+                const displayTarget = document.getElementById(node.targetId);
+                
+                triggerElement.addEventListener('input', () => {
+                    displayTarget.innerText = node.transform ? node.transform(triggerElement.value) : triggerElement.value;
+                });
+                // Initialize defaults instantly
+                displayTarget.innerText = node.transform ? node.transform(triggerElement.value) : triggerElement.value;
+            });
+            runFinancialCalculationEngine();
+        }
+
+        function addNewPayrollRow() {
+            const rootContainer = document.getElementById('dynamic-payroll-rows-root');
+            const totalActiveCards = rootContainer.getElementsByClassName('payroll-item-card').length + 1;
+            
+            const cardMarkupNode = document.createElement('div');
+            cardMarkupNode.className = 'payroll-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2';
+            cardMarkupNode.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-bold text-slate-500 tracking-wider identification-label">Payroll Component #${totalActiveCards}</span>
+                    <button onclick="removePayrollItemRow(this)" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
+                </div>
+                <input type="text" placeholder="Description Description" class="payroll-desc-title w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white">
+                <div class="grid grid-cols-2 gap-2">
+                    <select onchange="runFinancialCalculationEngine()" class="payroll-desc-type bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white">
+                        <option value="EARNING" selected>Earning (+)</option>
+                        <option value="DEDUCTION">Deduction (-)</option>
+                    </select>
+                    <input type="number" placeholder="Value (INR)" value="0" oninput="runFinancialCalculationEngine()" class="payroll-desc-cost w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono">
+                </div>
+            `;
+            rootContainer.appendChild(cardMarkupNode);
+            runFinancialCalculationEngine();
+        }
+
+        function removePayrollItemRow(buttonInstance) {
+            buttonInstance.closest('.payroll-item-card').remove();
+            
+            // Recalibrate item text numbers cleanly
+            const currentRows = document.querySelectorAll('#dynamic-payroll-rows-root .payroll-item-card');
+            currentRows.forEach((row, offset) => {
+                row.querySelector('.identification-label').innerText = `Payroll Component #${offset + 1}`;
+            });
+            runFinancialCalculationEngine();
+        }
+
+        function runFinancialCalculationEngine() {
+            const itemRows = document.querySelectorAll('#dynamic-payroll-rows-root .payroll-item-card');
+            const previewTableBody = document.getElementById('view-table-body-target');
+            previewTableBody.innerHTML = '';
+            
+            let totalEarnings = 0;
+            let totalDeductions = 0;
+
+            itemRows.forEach(row => {
+                const titleText = row.querySelector('.payroll-desc-title').value || 'Unnamed Payroll Element';
+                const componentType = row.querySelector('.payroll-desc-type').value;
+                const valueCost = parseFloat(row.querySelector('.payroll-desc-cost').value) || 0;
+
+                let displayType = "Earning";
+                let typeColor = "text-emerald-600 font-semibold";
+                let prefix = "+ ";
+
+                if (componentType === "EARNING") {
+                    totalEarnings += valueCost;
+                } else {
+                    totalDeductions += valueCost;
+                    displayType = "Deduction";
+                    typeColor = "text-rose-500 font-semibold";
+                    prefix = "- ";
+                }
+
+                // Build structural table rows view dynamically
+                const rowElement = document.createElement('tr');
+                rowElement.className = 'border-b border-slate-100 hover:bg-slate-50/40 transition duration-150';
+                rowElement.innerHTML = `
+                    <td class="py-2.5 px-3 font-medium text-slate-700 leading-snug">${titleText}</td>
+                    <td class="py-2.5 px-3 text-xs ${typeColor}">${displayType}</td>
+                    <td class="py-2.5 px-3 text-right font-bold text-slate-900 font-mono">${prefix}₹${valueCost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                `;
+                previewTableBody.appendChild(rowElement);
+            });
+
+            let netTakeHome = totalEarnings - totalDeductions;
+
+            // Inject the calculated summary total row onto document baseline
+            const summaryTotalRow = document.createElement('tr');
+            summaryTotalRow.className = 'bg-slate-50 font-bold border-t-2 border-slate-200';
+            summaryTotalRow.innerHTML = `
+                <td colspan="2" class="py-2.5 px-3 text-slate-900 uppercase tracking-widest text-right font-black text-[10px]">Net Take-Home Salary (INR):</td>
+                <td class="py-2.5 px-3 text-right text-purple-600 text-sm font-black font-mono">₹${netTakeHome.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+            `;
+            previewTableBody.appendChild(summaryTotalRow);
+
+            // Synchronize counters widgets values inside the layout boxes
+            document.getElementById('summary-gross-earnings').innerText = `₹${totalEarnings.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            document.getElementById('summary-gross-deductions').innerText = `₹${totalDeductions.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            document.getElementById('summary-net-disbursed').innerText = `₹${netTakeHome.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+        }
+
+        function executeDocumentPdfCompilation() {
+            const documentTargetNode = document.getElementById('print-document-root');
+            const sanitizedTutorHeader = document.getElementById('input-tutor-name').value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            
+            const renderingParameters = {
+                margin: [4, 0, 4, 0], // Optimized print layout margins to block 2-page splits
+                filename: `klassconneqt_payslip_${sanitizedTutorHeader}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 3, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Process secure runtime compile sequence
+            html2pdf().set(renderingParameters).from(documentTargetNode).save();
+        }
+
+        // Boot-Up Automation Initialization hook
+        window.onload = () => {
+            initializeSyncFramework();
+        };
+    </script>
+</body>
+</html>
