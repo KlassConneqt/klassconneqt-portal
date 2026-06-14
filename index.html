@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KlassConneqt - Core Management Gateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <div class="bg-slate-900 border-b border-slate-800 px-6 py-2 flex flex-col sm:flex-row justify-between items-center gap-2 z-50 text-xs">
+        <div class="flex items-center gap-2">
+            <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
+            <span class="text-slate-400 font-bold tracking-wider uppercase">Database Pipeline URL Configuration:</span>
+        </div>
+        <input type="text" id="api-url-input" placeholder="Paste your deployed Google Apps Script Web App URL here..." class="w-full sm:w-[550px] bg-slate-950 border border-slate-700 rounded px-3 py-1 text-white text-xs font-mono focus:outline-none focus:border-indigo-500">
+    </div>
+
+    <main class="flex-1 flex items-center justify-center p-6">
+        
+        <div id="view-login" class="w-full max-w-md bg-slate-900/60 backdrop-blur-xl p-8 rounded-2xl border border-slate-800 shadow-2xl space-y-6">
+            <div class="text-center">
+                <img src="logo.png" alt="Logo" class="mx-auto h-16 w-auto object-contain mb-3" onerror="this.style.display='none';">
+                <h1 class="text-2xl font-black tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-400 bg-clip-text text-transparent">KlassConneqt Workstation</h1>
+                <p class="text-xs text-slate-400 mt-1">Seamless Learning, Anytime, Anywhere</p>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Username Reference</label>
+                    <input type="text" id="login-username" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+                </div>
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Password Key</label>
+                        <button onclick="switchViewState('view-forgot')" class="text-xs font-bold text-indigo-400 hover:text-indigo-300">Forgot Code?</button>
+                    </div>
+                    <input type="password" id="login-password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+                </div>
+                <button onclick="handleLoginSubmit()" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-extrabold text-xs py-3.5 rounded-xl transition uppercase tracking-widest shadow-xl shadow-indigo-500/10">
+                    Authorize Security Verification
+                </button>
+            </div>
+        </div>
+
+        <div id="view-forgot" class="hidden w-full max-w-md bg-slate-900/60 backdrop-blur-xl p-8 rounded-2xl border border-slate-800 shadow-2xl space-y-6">
+            <div>
+                <h2 class="text-xl font-black text-white tracking-tight">Security Access Recovery</h2>
+                <p class="text-xs text-slate-400 mt-1">Submit your registered system email configuration to process a validation token routing path.</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">System Verified Email Address</label>
+                    <input type="email" id="forgot-email" placeholder="name@klassconneqt.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <button onclick="handleForgotSubmit()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-3 rounded-xl transition uppercase tracking-widest">
+                    Dispatch Verification Code
+                </button>
+                <div class="border-t border-slate-800 pt-4 text-center">
+                    <button onclick="switchViewState('view-login')" class="text-xs font-bold text-slate-400 hover:text-white">← Return to Login Core</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-reset" class="hidden w-full max-w-md bg-slate-900/60 backdrop-blur-xl p-8 rounded-2xl border border-slate-800 shadow-2xl space-y-6">
+            <div>
+                <h2 class="text-xl font-black text-white tracking-tight">Configure New Passkey</h2>
+                <p class="text-xs text-slate-400 mt-1">Input the 6-digit email notification verification token code to rewrite credentials.</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Verification Token Code</label>
+                    <input type="text" id="reset-token" placeholder="Enter 6-Digit Code" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white font-mono tracking-widest focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">New System Secure Password</label>
+                    <input type="password" id="reset-new-password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <button onclick="handleResetSubmit()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black text-xs py-3 rounded-xl transition uppercase tracking-widest">
+                    Confirm Credential Update
+                </button>
+            </div>
+        </div>
+
+        <div id="view-dashboard" class="hidden w-full max-w-4xl space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/40 p-6 rounded-2xl border border-slate-800 backdrop-blur-md">
+                <div class="flex items-center gap-3">
+                    <img src="logo.png" alt="Logo" class="h-10 w-auto object-contain" onerror="this.style.display='none';">
+                    <div>
+                        <h2 class="text-xl font-black tracking-tight">System Core Hub</h2>
+                        <p class="text-xs text-slate-400">Authenticated Active Operative Node: <span id="current-user-tag" class="text-indigo-400 font-bold font-mono">None</span></p>
+                    </div>
+                </div>
+                <button onclick="handleLogout()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 px-4 py-2 rounded-xl text-xs font-bold transition uppercase tracking-wider">
+                    Terminated Session (Logout)
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-indigo-500/50 transition duration-300 group">
+                    <div>
+                        <div class="h-10 w-10 bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold rounded-xl mb-4 group-hover:scale-110 transition duration-200">🎟️</div>
+                        <h3 class="text-md font-bold text-white mb-1">Support Tickets Panel</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Review student inquiries, track support registers, and manage institutional routing workflows.</p>
+                    </div>
+                    <button onclick="navigateModule('admin-tickets.html')" class="mt-6 w-full bg-slate-800 hover:bg-indigo-600 font-bold text-xs py-2.5 rounded-xl transition tracking-wide text-slate-200 hover:text-white">Open Tickets Management Module →</button>
+                </div>
+
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-purple-500/50 transition duration-300 group">
+                    <div>
+                        <div class="h-10 w-10 bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold rounded-xl mb-4 group-hover:scale-110 transition duration-200">📄</div>
+                        <h3 class="text-md font-bold text-white mb-1">Corporate Quote Compiler</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Dynamically configure scope parameters and compile high-contrast business proposals with automated milestone matrix splitting.</p>
+                    </div>
+                    <button onclick="navigateModule('quote-app.html')" class="mt-6 w-full bg-slate-800 hover:bg-purple-600 font-bold text-xs py-2.5 rounded-xl transition tracking-wide text-slate-200 hover:text-white">Open Proposal Generation Node →</button>
+                </div>
+
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/50 transition duration-300 group">
+                    <div>
+                        <div class="h-10 w-10 bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold rounded-xl mb-4 group-hover:scale-110 transition duration-200">💚</div>
+                        <h3 class="text-md font-bold text-white mb-1">Student Fee Receipt Station</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Disburse custom structured transaction proofs with automated pending arrears logging checks.</p>
+                    </div>
+                    <button onclick="navigateModule('receipt-app.html')" class="mt-6 w-full bg-slate-800 hover:bg-emerald-600 font-bold text-xs py-2.5 rounded-xl transition tracking-wide text-slate-200 hover:text-white">Open Fee Ledger Station →</button>
+                </div>
+
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-pink-500/50 transition duration-300 group">
+                    <div>
+                        <div class="h-10 w-10 bg-pink-500/10 text-pink-400 flex items-center justify-center font-bold rounded-xl mb-4 group-hover:scale-110 transition duration-200">💰</div>
+                        <h3 class="text-md font-bold text-white mb-1">Faculty Salary Payroll Hub</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Calculate monthly retainers, balance dynamic additions against deductions, and output clean take-home slips.</p>
+                    </div>
+                    <button onclick="navigateModule('salary-app.html')" class="mt-6 w-full bg-slate-800 hover:bg-pink-600 font-bold text-xs py-2.5 rounded-xl transition tracking-wide text-slate-200 hover:text-white">Open Payroll Hub Module →</button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center py-4 text-[10px] text-slate-500 font-medium border-t border-slate-900">
+        <p>© 2026 KlassConneqt. All rights reserved. Authorized administrative core framework node infrastructure.</p>
+    </footer>
+
+    <script>
+        let currentAuthenticatedUser = null;
+
+        // Core View States Controller Array Matrix
+        function switchViewState(targetViewId) {
+            ['view-login', 'view-forgot', 'view-reset', 'view-dashboard'].forEach(viewId => {
+                document.getElementById(viewId).classList.add('hidden');
+            });
+            document.getElementById(targetViewId).classList.remove('hidden');
+        }
+
+        function getApiUrl() {
+            const url = document.getElementById('api-url-input').value.trim();
+            if(!url) {
+                alert("Operation blocked: Please verify your Google Apps Script Web App API deployment URL configuration link at the top row.");
+            }
+            return url;
+        }
+
+        async function makeApiCall(payload) {
+            const endpoint = getApiUrl();
+            if(!endpoint) return null;
+
+            try {
+                // Use standard cross-origin handling metrics
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain' }, // Avoids pre-flight CORS prechecks
+                    body: JSON.stringify(payload)
+                });
+                return await response.json();
+            } catch(e) {
+                alert("Database Connection Failed: Network error or invalid deployment execution link parameters.");
+                return null;
+            }
+        }
+
+        // CONTROL SUBMIT: AUTHORIZE STANDARD LOG-IN MATCH
+        async function handleLoginSubmit() {
+            const user = document.getElementById('login-username').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
+
+            if(!user || !pass) {
+                alert("Fields entry requirement alert: Input verification username and key inputs.");
+                return;
+            }
+
+            const res = await makeApiCall({ action: "login", username: user, password: pass });
+            if(res && res.success) {
+                currentAuthenticatedUser = res.user;
+                document.getElementById('current-user-tag').innerText = currentAuthenticatedUser;
+                switchViewState('view-dashboard');
+                // Persist access credentials natively for navigation loops
+                sessionStorage.setItem("kc_auth_user", currentAuthenticatedUser);
+            } else if (res) {
+                alert(res.message);
+            }
+        }
+
+        // CONTROL SUBMIT: SEND FORGOT TOKEN EMAIL CODE
+        async function handleForgotSubmit() {
+            const emailInput = document.getElementById('forgot-email').value.trim();
+            if(!emailInput) {
+                alert("Input verified email registration identity link parameters.");
+                return;
+            }
+
+            const res = await makeApiCall({ action: "forgot", email: emailInput });
+            if(res && res.success) {
+                alert(res.message);
+                switchViewState('view-reset');
+            } else if (res) {
+                alert(res.message);
+            }
+        }
+
+        // CONTROL SUBMIT: PROCESS DISPATCHED RESET CODE & PASSWORD OVERWRITE
+        async function handleResetSubmit() {
+            const tokenCode = document.getElementById('reset-token').value.trim();
+            const newPass = document.getElementById('reset-new-password').value.trim();
+
+            if(!tokenCode || !newPass) {
+                alert("Security mandate alert: Please fill both tracking parameters.");
+                return;
+            }
+
+            const res = await makeApiCall({ action: "reset", token: tokenCode, newPassword: newPass });
+            if(res && res.success) {
+                alert(res.message);
+                switchViewState('view-login');
+            } else if (res) {
+                alert(res.message);
+            }
+        }
+
+        // MODULE ROUTING NAVIGATION WRAPPER WITH TRACKING HOOKS
+        async function navigateModule(htmlFileName) {
+            if(!currentAuthenticatedUser) {
+                alert("Session context failure: Security validation check expired. Return to core sign-in.");
+                switchViewState('view-login');
+                return;
+            }
+
+            // Fire and forget operational trace audit metric to tracking sheet
+            const endpoint = document.getElementById('api-url-input').value.trim();
+            if(endpoint) {
+                fetch(endpoint, {
+                    method: 'POST',
+                    mode: 'cors',
+                    body: JSON.stringify({ action: "logActivity", username: currentAuthenticatedUser, module: htmlFileName })
+                });
+            }
+
+            // Smooth redirection pipeline trigger to local sibling file layout paths
+            window.location.href = htmlFileName;
+        }
+
+        function handleLogout() {
+            currentAuthenticatedUser = null;
+            sessionStorage.removeItem("kc_auth_user");
+            document.getElementById('login-password').value = "";
+            switchViewState('view-login');
+        }
+
+        // Boot-Up Restore Dynamic Parameters Setup 
+        window.onload = () => {
+            const savedUser = sessionStorage.getItem("kc_auth_user");
+            if(savedUser) {
+                currentAuthenticatedUser = savedUser;
+                document.getElementById('current-user-tag').innerText = currentAuthenticatedUser;
+                switchViewState('view-dashboard');
+            }
+        }
+    </script>
+</body>
+</html>
