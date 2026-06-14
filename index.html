@@ -144,12 +144,11 @@
     </footer>
 
     <script>
-    // System core background routing network configurations
+    // Paste your LIVE URL here. If you did a New Deployment, it must be the new link.
     const ACCESSIBLE_API_URL = "https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec"; 
 
     let currentAuthenticatedUser = null;
 
-    // Core View States Controller Array Matrix
     function switchViewState(targetViewId) {
         ['view-login', 'view-forgot', 'view-reset', 'view-dashboard'].forEach(viewId => {
             document.getElementById(viewId).classList.add('hidden');
@@ -157,44 +156,37 @@
         document.getElementById(targetViewId).classList.remove('hidden');
     }
 
-    // Returns your saved Web App URL directly to system components
     function getApiUrl() {
         return ACCESSIBLE_API_URL;
     }
 
     async function makeApiCall(payload) {
         const endpoint = getApiUrl();
-        if(!endpoint || endpoint === "https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec") {
-            alert("Please paste your Google Apps Script URL into the HTML file.");
-            return null;
-        }
+        if(!endpoint) return null;
 
         try {
-            console.log("Attempting to connect to:", endpoint);
-            console.log("Sending payload:", payload);
-            
+            // Using text/plain prevents the browser from sending an OPTIONS preflight request
             const response = await fetch(endpoint, {
                 method: 'POST',
                 mode: 'cors',
-                headers: { 
-                    'Content-Type': 'text/plain;charset=utf-8' 
-                }, 
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
                 body: JSON.stringify(payload)
             });
 
-            if(!response.ok){
-               throw new Error("HTTP " + response.status + " - " + response.statusText);
+            if(!response.ok) {
+               throw new Error("HTTP Error " + response.status);
             }
 
             return await response.json();
         } catch(e) {
-            console.error("CRITICAL API ERROR:", e);
-            alert("Database Connection Failed\n\nError: " + e.message + "\n\nPress F12 and check your browser Console for the exact CORS or 403 Permission error.");
+            console.error("API Fetch Error:", e);
+            alert("Database Connection Failed: " + e.message);
             return null;
         }
     }
 
-    // CONTROL SUBMIT: AUTHORIZE STANDARD LOG-IN MATCH
     async function handleLoginSubmit() {
         const user = document.getElementById('login-username').value.trim();
         const pass = document.getElementById('login-password').value.trim();
@@ -215,7 +207,6 @@
         }
     }
 
-    // CONTROL SUBMIT: SEND FORGOT TOKEN EMAIL CODE
     async function handleForgotSubmit() {
         const emailInput = document.getElementById('forgot-email').value.trim();
         if(!emailInput) {
@@ -232,7 +223,6 @@
         }
     }
 
-    // CONTROL SUBMIT: PROCESS DISPATCHED RESET CODE & PASSWORD OVERWRITE
     async function handleResetSubmit() {
         const tokenCode = document.getElementById('reset-token').value.trim();
         const newPass = document.getElementById('reset-new-password').value.trim();
@@ -251,7 +241,6 @@
         }
     }
 
-    // MODULE ROUTING NAVIGATION WRAPPER WITH TRACKING HOOKS
     async function navigateModule(htmlFileName) {
         if(!currentAuthenticatedUser) {
             alert("Session context failure: Security validation check expired. Return to core sign-in.");
@@ -260,7 +249,7 @@
         }
 
         const endpoint = getApiUrl();
-        if(endpoint && endpoint !== "https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec") {
+        if(endpoint) {
             fetch(endpoint, {
                 method: 'POST',
                 mode: 'cors',
