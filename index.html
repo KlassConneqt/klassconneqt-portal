@@ -145,7 +145,7 @@
 
     <script>
     // System core background routing network configurations
-    const ACCESSIBLE_API_URL = "https://script.google.com/macros/s/AKfycbzPLuiYPtDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec"; 
+    const ACCESSIBLE_API_URL = "https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec"; 
 
     let currentAuthenticatedUser = null;
 
@@ -164,7 +164,10 @@
 
     async function makeApiCall(payload) {
         const endpoint = getApiUrl();
-        if(!endpoint) return null;
+        if(!endpoint || endpoint === "https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec") {
+            alert("Please paste your Google Apps Script URL into the HTML file.");
+            return null;
+        }
 
         try {
             console.log("Attempting to connect to:", endpoint);
@@ -257,7 +260,7 @@
         }
 
         const endpoint = getApiUrl();
-        if(endpoint) {
+        if(endpoint && endpoint !== "https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec") {
             fetch(endpoint, {
                 method: 'POST',
                 mode: 'cors',
