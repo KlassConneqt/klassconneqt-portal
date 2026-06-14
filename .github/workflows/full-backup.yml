@@ -1,0 +1,28 @@
+name: Full Portal Backup
+on:
+  schedule:
+    # Runs at 00:00 UTC on the 14th and 28th of every month
+    - cron: '0 0 14,28 * *'
+  workflow_dispatch: # Allows you to run it manually anytime for testing
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create ZIP of All Files & Images
+        run: |
+          # This zips every file in the repo (including images)
+          zip -r portal-full-backup-$(date +'%Y-%m-%d').zip . -x ".git/*"
+
+      - name: Upload Snapshot as Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: backup-$(date +'%Y-%m-%d')
+          name: Full Portal Backup - $(date +'%Y-%m-%d')
+          files: portal-full-backup-*.zip
+          body: "Automated monthly backup snapshot containing all code, images, and assets."
