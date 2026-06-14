@@ -12,11 +12,7 @@
 </head>
 <body class="text-slate-100 min-h-screen flex flex-col justify-between">
 
-    <div class="bg-slate-900 border-b border-slate-800 px-6 py-2 flex flex-col sm:flex-row justify-between items-center gap-2 z-50 text-xs">
-        <div class="flex items-center gap-2">
-            <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
-            <span class="text-slate-400 font-bold tracking-wider uppercase">Database Pipeline URL Configuration:</span>
-        </div>
+
         <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec" class="w-full sm:w-[550px] bg-slate-950 border border-slate-700 rounded px-3 py-1 text-white text-xs font-mono focus:outline-none focus:border-indigo-500">
     </div>
 
@@ -148,8 +144,8 @@
     </footer>
 
     <script>
-        let currentAuthenticatedUser = null;
-
+        const ACCESSIBLE_API_URL = "https://script.google.com/macros/s/AKfycbzPLuiYPtDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec";
+let currentAuthenticatedUser = null;
         // Core View States Controller Array Matrix
         function switchViewState(targetViewId) {
             ['view-login', 'view-forgot', 'view-reset', 'view-dashboard'].forEach(viewId => {
@@ -159,12 +155,8 @@
         }
 
         function getApiUrl() {
-            const url = document.getElementById('api-url-input').value.trim();
-            if(!url) {
-                alert("Operation blocked: Please verify your Google Apps Script Web App API deployment URL configuration link at the top row.");
-            }
-            return url;
-        }
+    return ACCESSIBLE_API_URL;
+}
 
         async function makeApiCall(payload) {
             const endpoint = getApiUrl();
@@ -252,7 +244,7 @@
             }
 
             // Fire and forget operational trace audit metric to tracking sheet
-            const endpoint = document.getElementById('api-url-input').value.trim();
+            const endpoint = getApiUrl();
             if(endpoint) {
                 fetch(endpoint, {
                     method: 'POST',
@@ -274,7 +266,8 @@
 
         // Boot-Up Restore Dynamic Parameters Setup 
         window.onload = () => {
-            const savedUser = sessionStorage.getItem("kc_auth_user");
+    sessionStorage.setItem("kc_api_url", ACCESSIBLE_API_URL);
+    const savedUser = sessionStorage.getItem("kc_auth_user");
             if(savedUser) {
                 currentAuthenticatedUser = savedUser;
                 document.getElementById('current-user-tag').innerText = currentAuthenticatedUser;
