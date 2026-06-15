@@ -221,10 +221,36 @@
             });
         });
 
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            localStorage.clear();
-            window.location.href = 'login.html';
-        });
+       document.getElementById('logoutBtn').addEventListener('click', function() {
+
+    const email = localStorage.getItem('portalUser');
+
+    fetch(API_URL,{
+        method:'POST',
+        headers:{
+            'Content-Type':'text/plain;charset=utf-8'
+        },
+        body:JSON.stringify({
+            action:'logout',
+            email:email
+        })
+    })
+    .then(() => {
+
+        localStorage.clear();
+
+        window.location.href='login.html';
+
+    })
+    .catch(() => {
+
+        localStorage.clear();
+
+        window.location.href='login.html';
+
+    });
+
+});
     </script>
 </body>
 </html>
