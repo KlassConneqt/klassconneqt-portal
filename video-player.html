@@ -41,7 +41,12 @@ iframe{
 
 <div id="watermark"></div>
 
-<iframe id="videoFrame" allowfullscreen></iframe>
+<iframe
+id="videoFrame"
+allow="autoplay"
+sandbox="allow-scripts allow-same-origin"
+allowfullscreen>
+</iframe>
 
 <script>
 
@@ -71,6 +76,38 @@ document.getElementById(
 'videoFrame'
 ).src =
 `https://drive.google.com/file/d/${fileId}/preview`;
+
+document.addEventListener(
+'contextmenu',
+function(e){
+e.preventDefault();
+}
+);
+    document.addEventListener(
+'keydown',
+function(e){
+
+if(e.keyCode === 123){
+e.preventDefault();
+}
+
+if(
+e.ctrlKey &&
+e.shiftKey &&
+e.key === 'I'
+){
+e.preventDefault();
+}
+
+if(
+e.ctrlKey &&
+e.key === 'u'
+){
+e.preventDefault();
+}
+
+}
+);
 
 </script>
 
