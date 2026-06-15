@@ -167,11 +167,15 @@
 
                     </div>
 
-                    <a href="${item.url}"
-                       target="_blank"
-                       class="btn-open">
-                        Open Material
-                    </a>
+                    <a href="${
+item.fileId
+? `video-player.html?id=${item.fileId}`
+: item.url
+}"
+target="_blank"
+class="btn-open">
+Open Material
+</a>
 
                 </div>
             `;
