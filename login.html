@@ -410,9 +410,8 @@
         document.getElementById('openForgotBtn').addEventListener('click', () => forgotModal.classList.add('active'));
         document.getElementById('closeForgotBtn').addEventListener('click', () => forgotModal.classList.remove('active'));
 
-        document.getElementById('portalLoginForm').addEventListener('submit', function(e) {
+        document.getElementById('portalLoginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
     const email = document.getElementById('studentEmail').value;
     const password = document.getElementById('studentPassword').value;
     const submitBtn = this.querySelector('.btn-submit');
@@ -420,24 +419,27 @@
     submitBtn.innerText = "Securing Connection...";
     submitBtn.disabled = true;
 
-    // 📍 GET LOCATION & DEVICE INFO BEFORE SENDING LOGIN
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                sendLoginData(email, password, pos.coords.latitude, pos.coords.longitude, submitBtn);
-            },
-            () => {
-                // If user blocks location, send "Denied" and proceed
-                sendLoginData(email, password, "Denied", "Denied", submitBtn);
-            }
-        );
-    } else {
-        // If browser doesn't support location
-        sendLoginData(email, password, "N/A", "N/A", submitBtn);
+    try {
+        // 1. Get IP
+        const ipRes = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipRes.json();
+        
+        // 2. Get Location
+        if (!navigator.geolocation) throw new Error("No Geo");
+        
+        navigator.geolocation.getCurrentPosition((pos) => {
+            sendLoginData(email, password, pos.coords.latitude, pos.coords.longitude, ipData.ip, submitBtn);
+        }, () => {
+            launchToast("Location permission is mandatory to access the portal.", "error");
+            submitBtn.innerText = "Secure Log In"; submitBtn.disabled = false;
+        });
+    } catch(err) {
+        launchToast("Location/Browser services unavailable.", "error");
+        submitBtn.innerText = "Secure Log In"; submitBtn.disabled = false;
     }
 });
 
-function sendLoginData(email, password, lat, lon, btn) {
+function sendLoginData(email, password, lat, lon, ip, btn) {
     fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -445,30 +447,21 @@ function sendLoginData(email, password, lat, lon, btn) {
             action: "login", 
             email: email, 
             password: password,
-            lat: lat,
-            lon: lon,
-            device: navigator.userAgent 
+            lat: lat, lon: lon, ip: ip,
+            device: navigator.platform + " | " + navigator.userAgent 
         })
     })
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
         if (data.status === "success") {
             localStorage.setItem('portalUser', data.email);
             localStorage.setItem('portalUserName', data.name);
-            launchToast("Access Authorized! Routing...", "success");
-            setTimeout(() => { window.location.href = 'hub-selection.html'; }, 1500);
+            window.location.href = 'hub-selection.html';
         } else {
             launchToast(data.message, "error");
-            btn.innerText = "Secure Log In";
-            btn.disabled = false;
+            btn.innerText = "Secure Log In"; btn.disabled = false;
         }
-    })
-    .catch(err => {
-        launchToast("System Connectivity Error.", "error");
-        btn.innerText = "Secure Log In";
-        btn.disabled = false;
     });
-} 
-    </script>
+}    </script>
 </body>
 </html>
