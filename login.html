@@ -411,40 +411,64 @@
         document.getElementById('closeForgotBtn').addEventListener('click', () => forgotModal.classList.remove('active'));
 
         document.getElementById('portalLoginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('studentEmail').value;
-            const password = document.getElementById('studentPassword').value;
-            const submitBtn = this.querySelector('.btn-submit');
-            
-            submitBtn.innerText = "Validating Database Keys...";
-            submitBtn.disabled = true;
+    e.preventDefault();
+    
+    const email = document.getElementById('studentEmail').value;
+    const password = document.getElementById('studentPassword').value;
+    const submitBtn = this.querySelector('.btn-submit');
+    
+    submitBtn.innerText = "Securing Connection...";
+    submitBtn.disabled = true;
 
-            fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Prevents CORS preflight
-                body: JSON.stringify({ action: "login", email: email, password: password })
-            })
-            .then(res => res.json()) // NOW WE CORRECTLY EXPECT JSON!
-            .then(data => {
-                if (data.status === "success") {
-                    localStorage.setItem('portalUser', data.email);
-                    localStorage.setItem('portalUserName', data.name);
-                    
-                    launchToast("Access Authorized! Routing...", "success");
-                    setTimeout(() => { window.location.href = 'hub-selection.html'; }, 1500);
-                } else {
-                    launchToast(data.message, "error");
-                    submitBtn.innerText = "Secure Log In";
-                    submitBtn.disabled = false;
-                }
-            })
-            .catch(err => {
-                launchToast("Database system connectivity error.", "error");
-                submitBtn.innerText = "Secure Log In";
-                submitBtn.disabled = false;
-            });
-        });
+    // 📍 GET LOCATION & DEVICE INFO BEFORE SENDING LOGIN
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                sendLoginData(email, password, pos.coords.latitude, pos.coords.longitude, submitBtn);
+            },
+            () => {
+                // If user blocks location, send "Denied" and proceed
+                sendLoginData(email, password, "Denied", "Denied", submitBtn);
+            }
+        );
+    } else {
+        // If browser doesn't support location
+        sendLoginData(email, password, "N/A", "N/A", submitBtn);
+    }
+});
+
+function sendLoginData(email, password, lat, lon, btn) {
+    fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ 
+            action: "login", 
+            email: email, 
+            password: password,
+            lat: lat,
+            lon: lon,
+            device: navigator.userAgent 
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "success") {
+            localStorage.setItem('portalUser', data.email);
+            localStorage.setItem('portalUserName', data.name);
+            launchToast("Access Authorized! Routing...", "success");
+            setTimeout(() => { window.location.href = 'hub-selection.html'; }, 1500);
+        } else {
+            launchToast(data.message, "error");
+            btn.innerText = "Secure Log In";
+            btn.disabled = false;
+        }
+    })
+    .catch(err => {
+        launchToast("System Connectivity Error.", "error");
+        btn.innerText = "Secure Log In";
+        btn.disabled = false;
+    });
+} 
     </script>
 </body>
 </html>
