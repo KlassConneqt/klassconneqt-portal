@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>KlassConneqt PDF Viewer</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#f5f5f5;
+}
+
+#watermark{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) rotate(-30deg);
+
+    font-size:32px;
+    font-weight:bold;
+
+    color:rgba(0,0,0,0.12);
+
+    pointer-events:none;
+
+    z-index:9999;
+}
+
+iframe{
+    width:100%;
+    height:100vh;
+    border:none;
+}
+
+</style>
+
+</head>
+
+<body oncontextmenu="return false;">
+
+<div id="watermark"></div>
+
+<iframe id="pdfFrame"></iframe>
+
+<script>
+
+const userEmail =
+localStorage.getItem('portalUser');
+
+if(!userEmail){
+    window.location.href='login.html';
+}
+
+document.getElementById(
+'watermark'
+).innerText =
+userEmail;
+
+document.addEventListener(
+'contextmenu',
+function(e){
+e.preventDefault();
+}
+);
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const fileId =
+params.get('id');
+
+document.getElementById(
+'pdfFrame'
+).src =
+`https://drive.google.com/file/d/${fileId}/preview`;
+
+</script>
+
+</body>
+</html>
