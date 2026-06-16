@@ -33,7 +33,8 @@ width:100%;
 height:100%;
 z-index:999;
 background:transparent;
-}#controls{
+}
+    #controls{
 
 height:70px;
 
@@ -231,10 +232,18 @@ events:{
 
 onReady:function(){
 
+setTimeout(function(){
+
+console.log(
+'Available Qualities:',
+player.getAvailableQualityLevels()
+);
+
 populateQuality();
 
-}
+},2000);
 
+}
 }
 
 }
@@ -320,9 +329,20 @@ document.createElement(
 option.value =
 level;
 
-option.text =
-level;
+const labels = {
 
+hd2160:'2160p',
+hd1440:'1440p',
+hd1080:'1080p',
+hd720:'720p',
+large:'480p',
+medium:'360p',
+small:'240p'
+
+};
+
+option.text =
+labels[level] || level;
 select.appendChild(
 option
 );
