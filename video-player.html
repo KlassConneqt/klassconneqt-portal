@@ -22,7 +22,7 @@ body{
 
     white-space:pre-line;
 
-    color:rgba(255,255,255,0.45);
+    color:rgba(255,255,255,0.65);
 
     background:rgba(0,0,0,0.25);
 
@@ -52,7 +52,7 @@ iframe{
 <div id="watermark"></div>
 <iframe
 id="videoFrame"
-allow="autoplay"
+allow="autoplay; fullscreen"
 sandbox="allow-scripts allow-same-origin"
 allowfullscreen>
 </iframe>
@@ -185,23 +185,33 @@ function(e){
 
 if(e.keyCode === 123){
 e.preventDefault();
+return false;
 }
 
-if(
-e.ctrlKey &&
-e.shiftKey &&
-e.key === 'I'
-){
+if(e.ctrlKey && e.shiftKey && e.key === 'I'){
 e.preventDefault();
+return false;
 }
 
-if(
-e.ctrlKey &&
-e.key === 'u'
-){
+if(e.ctrlKey && e.shiftKey && e.key === 'J'){
 e.preventDefault();
+return false;
 }
 
+if(e.ctrlKey && e.shiftKey && e.key === 'C'){
+e.preventDefault();
+return false;
+}
+
+if(e.ctrlKey && e.key === 'U'){
+e.preventDefault();
+return false;
+}
+
+if(e.ctrlKey && e.key === 'u'){
+e.preventDefault();
+return false;
+}
 }
 );
 
@@ -215,6 +225,31 @@ document.title =
 }
 );
 
+    setInterval(function(){
+
+const threshold = 100;
+
+if(
+window.outerWidth - window.innerWidth > threshold ||
+window.outerHeight - window.innerHeight > threshold
+){
+
+document.getElementById(
+'videoFrame'
+).style.filter =
+'blur(25px)';
+
+}else{
+
+document.getElementById(
+'videoFrame'
+).style.filter =
+'none';
+
+}
+
+},1000);
+    
 </script>
 </body>
 </html>
