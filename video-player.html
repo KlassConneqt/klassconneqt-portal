@@ -224,31 +224,6 @@ document.title =
 
 }
 );
-
-    setInterval(function(){
-
-const threshold = 100;
-
-if(
-window.outerWidth - window.innerWidth > threshold ||
-window.outerHeight - window.innerHeight > threshold
-){
-
-document.getElementById(
-'videoFrame'
-).style.filter =
-'blur(25px)';
-
-}else{
-
-document.getElementById(
-'videoFrame'
-).style.filter =
-'none';
-
-}
-
-},1000);
     
 </script>
 </body>
