@@ -163,13 +163,28 @@ materialLink =
 `youtube-player.html?id=${item.fileId}`;
 
 }
+else if(
+item.type.toLowerCase() === 'pdf'
+){
+
+materialLink =
+`pdf-viewer.html?id=${item.fileId}`;
+
+}
+else if(
+item.type.toLowerCase() === 'video'
+){
+
+materialLink =
+`video-player.html?id=${item.fileId}`;
+
+}
 else{
 
 materialLink =
 item.url;
 
 }
-
             html += `
                 <div class="material-card">
 
