@@ -234,6 +234,83 @@ console.error(error);
 
 });
 
+  document.addEventListener(
+'keydown',
+function(e){
+
+if(
+
+e.key === 'F12' ||
+
+(
+e.ctrlKey &&
+e.shiftKey &&
+['I','J','C']
+.includes(
+e.key.toUpperCase()
+)
+)
+
+||
+
+(
+e.ctrlKey &&
+e.key.toUpperCase()==='U'
+)
+
+){
+
+e.preventDefault();
+
+e.stopPropagation();
+
+return false;
+
+}
+
+},
+true
+);
+
+
+window.onkeydown =
+function(e){
+
+if(e.keyCode === 123){
+
+return false;
+
+}
+
+if(
+
+e.ctrlKey &&
+e.shiftKey &&
+(
+e.keyCode === 73 ||
+e.keyCode === 74 ||
+e.keyCode === 67
+)
+
+){
+
+return false;
+
+}
+
+if(
+
+e.ctrlKey &&
+e.keyCode === 85
+
+){
+
+return false;
+
+}
+
+};
+  
 </script>
 
 </body>
