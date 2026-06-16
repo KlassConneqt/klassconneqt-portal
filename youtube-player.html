@@ -232,16 +232,15 @@ events:{
 
 onReady:function(){
 
+player.playVideo();
+
 setTimeout(function(){
 
-console.log(
-'Available Qualities:',
-player.getAvailableQualityLevels()
-);
+player.pauseVideo();
 
 populateQuality();
 
-},2000);
+},3000);
 
 }
 }
@@ -309,25 +308,35 @@ true
   function populateQuality(){
 
 const levels =
-
-player
-.getAvailableQualityLevels();
+player.getAvailableQualityLevels();
 
 const select =
-
 document.getElementById(
 'qualitySelect'
 );
+
 select.innerHTML='';
-levels.forEach(level=>{
+
+if(!levels || levels.length===0){
 
 const option =
 document.createElement(
 'option'
 );
 
+option.text =
+'Auto';
+
 option.value =
-level;
+'auto';
+
+select.appendChild(
+option
+);
+
+return;
+
+}
 
 const labels = {
 
@@ -341,8 +350,19 @@ small:'240p'
 
 };
 
+levels.forEach(level=>{
+
+const option =
+document.createElement(
+'option'
+);
+
+option.value =
+level;
+
 option.text =
 labels[level] || level;
+
 select.appendChild(
 option
 );
