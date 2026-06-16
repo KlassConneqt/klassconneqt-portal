@@ -52,9 +52,9 @@ iframe{
 <div id="watermark"></div>
 <iframe
 id="videoFrame"
-allow="autoplay; fullscreen"
-allowfullscreen
-referrerpolicy="no-referrer">
+allow="autoplay"
+sandbox="allow-scripts allow-same-origin"
+allowfullscreen>
 </iframe>
 
 <script>
@@ -127,6 +127,8 @@ const positions = [
 
 ];
 
+let currentPosition = 0;
+
 function moveWatermark(){
 
 const wm =
@@ -134,12 +136,16 @@ document.getElementById(
 'watermark'
 );
 
+currentPosition++;
+
+if(
+currentPosition >= positions.length
+){
+currentPosition = 0;
+}
+
 const pos =
-positions[
-Math.floor(
-Math.random()*positions.length
-)
-];
+positions[currentPosition];
 
 wm.style.top='';
 wm.style.bottom='';
