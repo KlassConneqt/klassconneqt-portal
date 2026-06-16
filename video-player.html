@@ -17,8 +17,10 @@ body{
     left:50%;
     transform:translate(-50%,-50%) rotate(-30deg);
 
-    font-size:32px;
+    font-size:24px;
     font-weight:bold;
+
+    white-space:pre-line;
 
     color:rgba(255,255,255,0.15);
 
@@ -59,10 +61,51 @@ if(!userEmail){
 
 }
 
+async function loadWatermark(){
+
+let ip = "Hidden";
+
+try{
+
+const response =
+await fetch(
+'https://api.ipify.org?format=json'
+);
+
+const data =
+await response.json();
+
+ip = data.ip;
+
+}catch(err){}
+
+const now =
+new Date();
+
 document.getElementById(
 'watermark'
 ).innerText =
-userEmail;
+
+userEmail +
+
+'\n' +
+
+now.toLocaleString()
+
++
+
+'\n' +
+
+ip;
+
+}
+
+loadWatermark();
+
+setInterval(
+loadWatermark,
+60000
+);
 
 const params =
 new URLSearchParams(
