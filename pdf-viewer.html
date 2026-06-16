@@ -4,8 +4,7 @@
 
 <title>KlassConneqt PDF Viewer</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 
 body{
@@ -63,6 +62,14 @@ user-select:none;
 
 <script>
 
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+console.log(
+'PDF.js Loaded:',
+pdfjsLib
+);  
+  
 const userEmail =
 localStorage.getItem(
 'portalUser'
@@ -94,8 +101,8 @@ const fileId =
 params.get('id');
 
 const pdfUrl =
-`https://drive.google.com/uc?export=download&id=${fileId}`;
-
+`https://drive.google.com/uc?export=view&id=${fileId}`;
+  
 pdfjsLib
 .getDocument(pdfUrl)
 .promise
@@ -120,7 +127,7 @@ pageNum
 
 const viewport =
 page.getViewport({
-scale:1.5
+scale:2
 });
 
 const canvas =
