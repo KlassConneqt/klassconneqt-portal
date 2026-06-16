@@ -149,6 +149,26 @@
                 item.type.toLowerCase() === 'video'
                     ? 'badge-video'
                     : 'badge-pdf';
+            let materialLink = '';
+
+if(
+item.type.toLowerCase() === 'video' &&
+(
+(item.url || '').includes('youtube') ||
+(item.url || '').includes('youtu.be')
+)
+){
+
+materialLink =
+`youtube-player.html?id=${item.fileId}`;
+
+}
+else{
+
+materialLink =
+item.url;
+
+}
 
             html += `
                 <div class="material-card">
@@ -167,7 +187,7 @@
 
                     </div>
 
-                    <a href="${item.url}"
+                    <a href="${materialLink}"
 target="_blank"
 class="btn-open">
 Open Material
