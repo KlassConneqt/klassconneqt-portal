@@ -100,14 +100,52 @@ window.location.search
 const fileId =
 params.get('id');
 
-const pdfUrl =
-`https://drive.google.com/uc?export=view&id=${fileId}`;
-  
-pdfjsLib
-.getDocument(pdfUrl)
-.promise
-.then(
+const SCRIPT_URL =
+'https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec';
 
+fetch(
+SCRIPT_URL,
+{
+method:'POST',
+body:JSON.stringify({
+action:'getPdf',
+fileId:fileId
+})
+}
+)
+
+.then(response=>response.text())
+
+.then(base64=>{
+
+const binary =
+atob(base64);
+
+const bytes =
+new Uint8Array(
+binary.length
+);
+
+for(
+let i=0;
+i<binary.length;
+i++
+){
+
+bytes[i] =
+binary.charCodeAt(i);
+
+}
+
+return pdfjsLib
+.getDocument({
+data:bytes
+})
+.promise;
+
+})
+
+.then(
 async function(pdf){
 
 for(
