@@ -17,7 +17,7 @@ body{
     top:20px;
     left:20px;
 
-    font-size:14px;
+    font-size:16px;
     font-weight:bold;
 
     white-space:pre-line;
@@ -120,10 +120,23 @@ loadWatermark,
 
 const positions = [
 
-{top:'20px',left:'20px'},
-{top:'20px',right:'20px'},
-{bottom:'20px',left:'20px'},
-{bottom:'20px',right:'20px'}
+{top:'15%',left:'15%'},
+
+{top:'15%',left:'45%'},
+
+{top:'15%',left:'75%'},
+
+{top:'45%',left:'15%'},
+
+{top:'45%',left:'45%'},
+
+{top:'45%',left:'75%'},
+
+{top:'75%',left:'15%'},
+
+{top:'75%',left:'45%'},
+
+{top:'75%',left:'75%'}
 
 ];
 
@@ -148,10 +161,9 @@ const pos =
 positions[currentPosition];
 
 wm.style.top='';
-wm.style.bottom='';
 wm.style.left='';
+wm.style.bottom='';
 wm.style.right='';
-
 Object.assign(
 wm.style,
 pos
@@ -163,7 +175,7 @@ moveWatermark();
 
 setInterval(
 moveWatermark,
-30000
+5000
 );
 
 const params =
