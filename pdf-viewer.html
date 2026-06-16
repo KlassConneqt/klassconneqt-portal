@@ -99,6 +99,10 @@ window.location.search
 
 const fileId =
 params.get('id');
+console.log(
+'FILE ID:',
+fileId
+);  
 
 const SCRIPT_URL =
 'https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec';
@@ -118,6 +122,10 @@ fileId:fileId
 
 .then(base64=>{
 
+  console.log(
+'Base64 Length:',
+base64.length
+);
 const binary =
 atob(base64);
 
@@ -145,9 +153,16 @@ data:bytes
 
 })
 
-.then(
-async function(pdf){
+.then(async function(pdf){
 
+console.log(
+'PDF Loaded Successfully'
+);
+
+console.log(
+'Pages:',
+pdf.numPages
+);
 for(
 
 let pageNum=1;
