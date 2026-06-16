@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>KlassConneqt YouTube Player</title>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<style>
+
+body{
+margin:0;
+background:#000;
+overflow:hidden;
+}
+
+#player{
+width:100%;
+height:calc(100vh - 60px);
+}
+
+#controls{
+
+height:60px;
+
+background:#111;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+gap:10px;
+}
+
+button,
+select{
+
+padding:10px;
+
+font-weight:bold;
+
+cursor:pointer;
+}
+
+#watermark{
+
+position:fixed;
+
+top:50%;
+left:50%;
+
+transform:
+translate(-50%,-50%)
+rotate(-35deg);
+
+font-size:22px;
+
+font-weight:bold;
+
+color:rgba(255,255,255,0.14);
+
+white-space:pre-line;
+
+pointer-events:none;
+
+z-index:9999;
+
+text-align:center;
+}
+
+</style>
+
+</head>
+
+<body oncontextmenu="return false;">
+
+<div id="watermark"></div>
+
+<div id="player"></div>
+
+<div id="controls">
+
+<button onclick="rewindVideo()">
+⏪ 10s
+</button>
+
+<button
+id="playBtn"
+onclick="togglePlay()">
+▶ Play
+</button>
+
+<button onclick="forwardVideo()">
+⏩ 10s
+</button>
+
+<select
+id="qualitySelect"
+onchange="changeQuality()">
+</select>
+
+</div>
+
+<script>
+
+// next step
+
+</script>
+
+</body>
+</html>
