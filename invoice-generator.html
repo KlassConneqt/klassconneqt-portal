@@ -203,7 +203,7 @@
                     </div>
                 </div>
 
-                <div class="mb-6 flex-grow avoid-page-split">
+                <div class="mb-6 flex-grow">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-800 text-white">
@@ -217,7 +217,7 @@
                             </tbody>
                     </table>
 
-                    <div class="flex justify-end mt-4">
+                    <div class="flex justify-end mt-4 avoid-page-split">
                         <div class="w-[55%] bg-slate-50 rounded-lg border border-slate-200 p-4 space-y-2">
                             <div class="flex justify-between text-xs font-bold text-slate-600">
                                 <span>Subtotal:</span>
@@ -362,11 +362,11 @@
             const invNo = document.getElementById('in-inv-no').value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
             
             const opt = {
-                margin: [4, 0, 4, 0],
-                pagebreak: { mode: 'css', before: '.avoid-page-split' }, // Forces clean cuts!
+                margin: [10, 0, 10, 0], 
+                pagebreak: { avoid: '.avoid-page-split' }, 
                 filename: `klassconneqt_invoice_${invNo}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 3, useCORS: true, letterRendering: true, scrollY: 0 },
+                html2canvas: { scale: 3, useCORS: true, scrollY: 0 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             // Generate and restore button
