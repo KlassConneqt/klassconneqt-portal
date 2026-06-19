@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KlassConneqt | Handover Generator</title>
+    <style>
+        :root {
+            --primary-dark: #0f172a;
+            --secondary-dark: #1e293b;
+            --sidebar-bg: #111827;
+            --accent-blue: #0284c7;
+            --accent-green: #10b981;
+            --text-light: #f8fafc;
+            --doc-bg: #ffffff;
+            --doc-text: #334155;
+            --border-color: #cbd5e1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #e2e8f0;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR CONTROLS */
+        .sidebar {
+            width: 350px;
+            background-color: var(--sidebar-bg);
+            color: var(--text-light);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .sidebar h2 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar p.subtitle {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px;}
+        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #334155; background: var(--secondary-dark); color: white; outline: none; transition: border 0.2s; }
+        .control-group input:focus { border-color: var(--accent-blue); }
+
+        .btn-action { width: 100%; padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; margin-top: 10px; color: white; display: flex; align-items: center; justify-content: center; gap: 8px;}
+        .btn-action:hover { opacity: 0.9; }
+        .btn-add { background-color: #334155; border: 1px solid #475569; }
+        .btn-generate { background-color: var(--accent-green); margin-top: 30px; font-size: 1.1rem; padding: 15px;}
+
+        /* DOCUMENT PREVIEW AREA */
+        .preview-container {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .document-page {
+            width: 210mm; /* A4 Width */
+            min-height: 297mm; /* A4 Height */
+            background: var(--doc-bg);
+            padding: 20mm;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            color: var(--doc-text);
+            position: relative;
+        }
+
+        .doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 3px solid var(--primary-dark);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .doc-brand h1 { font-size: 2.2rem; color: var(--primary-dark); font-weight: 900; letter-spacing: -1px; margin-bottom: 5px; }
+        .doc-brand p { font-size: 0.9rem; color: #64748b; font-weight: 600; }
+        
+        .doc-meta { text-align: right; }
+        .doc-meta h2 { font-size: 1.5rem; color: var(--accent-blue); margin-bottom: 5px; text-transform: uppercase; }
+        .doc-meta p { font-size: 0.9rem; margin-bottom: 3px; }
+
+        .client-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .info-box span { display: block; font-size: 0.75rem; color: #64748b; font-weight: bold; text-transform: uppercase; margin-bottom: 3px;}
+        .info-box strong { font-size: 1.1rem; color: var(--primary-dark); }
+
+        .doc-section { margin-bottom: 30px; }
+        .doc-section h3 { font-size: 1.2rem; color: var(--primary-dark); border-bottom: 2px solid var(--accent-blue); padding-bottom: 8px; margin-bottom: 15px; display: inline-block; }
+
+        /* EDITABLE TABLES */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+        th, td { border: 1px solid var(--border-color); padding: 12px; text-align: left; }
+        th { background-color: #f1f5f9; color: var(--primary-dark); font-weight: bold; font-size: 0.9rem; }
+        td { font-size: 0.95rem; }
+        
+        /* Make table cells editable and show subtle hover effect */
+        td[contenteditable="true"] { transition: background 0.2s; outline: none; }
+        td[contenteditable="true"]:hover { background-color: #f8fafc; cursor: text; }
+        td[contenteditable="true"]:focus { background-color: #e0f2fe; border-color: var(--accent-blue); }
+
+        .btn-delete-row { color: #ef4444; background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 0 5px; }
+
+        .support-terms { background: #f0fdf4; border-left: 4px solid var(--accent-green); padding: 15px; font-size: 0.9rem; margin-bottom: 40px; }
+
+        .signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 50px; }
+        .sign-box { border-top: 1px solid #94a3b8; padding-top: 10px; }
+        .sign-box strong { display: block; color: var(--primary-dark); }
+        .sign-box span { font-size: 0.85rem; color: #64748b; }
+
+        /* PRINT STYLES - Hides sidebar and shows ONLY the document perfectly */
+        @media print {
+            body { background: white; height: auto; overflow: auto; display: block; }
+            .sidebar { display: none !important; }
+            .preview-container { padding: 0; display: block; overflow: visible; }
+            .document-page { box-shadow: none; margin: 0; padding: 0; width: 100%; max-width: 100%; min-height: auto; }
+            .btn-delete-row { display: none !important; }
+            td[contenteditable="true"] { border: 1px solid var(--border-color) !important; background: transparent !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <h2>📁 System Gateway</h2>
+        <p class="subtitle">Project Handover Protocol Builder</p>
+
+        <div class="control-group">
+            <label>Project Name</label>
+            <input type="text" id="inProjectName" placeholder="e.g. EduTech Portal v2" value="KlassConneqt Hub">
+        </div>
+        
+        <div class="control-group">
+            <label>Client / Organization</label>
+            <input type="text" id="inClientName" placeholder="Enter Client Name" value="WOS Academy">
+        </div>
+
+        <div class="control-group">
+            <label>Handover Date</label>
+            <input type="date" id="inDate">
+        </div>
+
+        <div class="control-group">
+            <label>Live URL / Domain</label>
+            <input type="text" id="inDomain" placeholder="https://..." value="https://klassconneqt.com">
+        </div>
+
+        <hr style="border-color: #334155; margin: 20px 0;">
+
+        <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 10px;">Document Content Controls</p>
+        <button class="btn-action btn-add" onclick="addDeliverableRow()">➕ Add Deliverable Row</button>
+        <button class="btn-action btn-add" onclick="addCredentialRow()">➕ Add Credential Row</button>
+
+        <button class="btn-action btn-generate" onclick="window.print()">📄 Compile & Generate PDF</button>
+        
+        <p style="font-size: 0.75rem; color: #64748b; margin-top: 15px; text-align: center;">
+            Tip: Click directly on the tables in the document to edit the text!
+        </p>
+    </aside>
+
+    <main class="preview-container">
+        <div class="document-page" id="docPage">
+            
+            <header class="doc-header">
+                <div class="doc-brand">
+                    <h1>KLASSCONNEQT</h1>
+                    <p>Official Project Handover Protocol</p>
+                </div>
+                <div class="doc-meta">
+                    <h2>PROJECT HANDOVER</h2>
+                    <p><strong>Ref ID:</strong> <span id="outRef">#HO-2026-001</span></p>
+                    <p><strong>Date:</strong> <span id="outDate">Select Date</span></p>
+                </div>
+            </header>
+
+            <div class="client-info-grid">
+                <div class="info-box">
+                    <span>Project Name</span>
+                    <strong id="outProjectName">KlassConneqt Hub</strong>
+                </div>
+                <div class="info-box">
+                    <span>Client / Organization</span>
+                    <strong id="outClientName">WOS Academy</strong>
+                </div>
+                <div class="info-box">
+                    <span>Deployed Domain / URL</span>
+                    <strong id="outDomain">https://klassconneqt.com</strong>
+                </div>
+                <div class="info-box">
+                    <span>Handover Status</span>
+                    <strong style="color: var(--accent-green);">100% Completed</strong>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h3>1. System Deliverables</h3>
+                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 10px;">The following assets and systems have been successfully deployed and transferred to the client.</p>
+                <table id="deliverablesTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">Item Category</th>
+                            <th style="width: 60%;">Description / Location</th>
+                            <th style="width: 10%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="deliverablesBody">
+                        <tr>
+                            <td contenteditable="true">Source Code</td>
+                            <td contenteditable="true">Full frontend and backend repository via GitHub.</td>
+                            <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Database</td>
+                            <td contenteditable="true">Google Sheets DB Integration & Automation Scripts.</td>
+                            <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Design Assets</td>
+                            <td contenteditable="true">High-resolution logos, banners, and layout UI assets.</td>
+                            <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="doc-section">
+                <h3>2. Administrative Credentials</h3>
+                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 10px;">Confidential access keys for system management. Please store securely.</p>
+                <table id="credentialsTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Platform</th>
+                            <th style="width: 40%;">Login URL</th>
+                            <th style="width: 25%;">Username / ID</th>
+                            <th style="width: 10%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="credentialsBody">
+                        <tr>
+                            <td contenteditable="true">Domain Registrar</td>
+                            <td contenteditable="true">https://godaddy.com</td>
+                            <td contenteditable="true">admin@wosacademy.com</td>
+                            <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Admin Dashboard</td>
+                            <td contenteditable="true">https://klassconneqt.com/admin</td>
+                            <td contenteditable="true">superadmin</td>
+                            <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 0.8rem; color: #ef4444; margin-top: 5px;">* Note: Passwords have been transmitted securely via encrypted channels.</p>
+            </div>
+
+            <div class="support-terms">
+                <strong>Post-Launch Warranty & Support</strong><br>
+                This handover marks the successful completion of the deployment phase. A standard 30-day technical warranty is included from the date of this document, covering critical bug fixes and deployment errors. Further feature additions will require a separate support retainer.
+            </div>
+
+            <div class="signatures">
+                <div class="sign-box">
+                    <strong>Developer / Agency Sign-off</strong>
+                    <span>Lead Architect, KlassConneqt</span>
+                </div>
+                <div class="sign-box">
+                    <strong>Client Acceptance Sign-off</strong>
+                    <span>Authorized Representative</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Set today's date automatically
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('inDate').value = today;
+        
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+        document.getElementById('outDate').innerText = formatDate(today);
+
+        // Generate a random Reference ID
+        document.getElementById('outRef').innerText = "#HO-" + new Date().getFullYear() + "-" + Math.floor(1000 + Math.random() * 9000);
+
+        // Live Binding for Inputs -> Output
+        const bindInput = (inputId, outputId) => {
+            document.getElementById(inputId).addEventListener('input', function() {
+                document.getElementById(outputId).innerText = this.value || '-';
+            });
+        };
+
+        bindInput('inProjectName', 'outProjectName');
+        bindInput('inClientName', 'outClientName');
+        bindInput('inDomain', 'outDomain');
+
+        document.getElementById('inDate').addEventListener('change', function() {
+            document.getElementById('outDate').innerText = formatDate(this.value);
+        });
+
+        // Dynamic Table Row Functions
+        function addDeliverableRow() {
+            const tbody = document.getElementById('deliverablesBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td contenteditable="true">New Category</td>
+                <td contenteditable="true">Click here to describe the item...</td>
+                <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function addCredentialRow() {
+            const tbody = document.getElementById('credentialsBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td contenteditable="true">Platform Name</td>
+                <td contenteditable="true">https://...</td>
+                <td contenteditable="true">username</td>
+                <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+    </script>
+</body>
+</html>
