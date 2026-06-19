@@ -7,14 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .preview-pane { background: #f1f5f9; }
         
         /* Ultra precision standard A4 aspect mapping */
         .print-document {
             width: 210mm;
-            min-height: 297mm;
+            /* FIXED: Changed from min-height: 297mm to height: auto to stop artificial stretching */
+            height: auto; 
+            min-height: auto;
             background: white;
             color: #0f172a;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -163,7 +165,7 @@
 
         <section class="w-full lg:w-[58%] preview-pane p-8 overflow-y-auto max-h-[calc(100vh-69px)] flex justify-center items-start">
             
-            <div id="print-document-root" class="print-document py-10 px-12 relative flex flex-col">
+            <div id="print-document-root" class="print-document py-10 px-12 relative">
                 
                 <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600"></div>
 
@@ -203,7 +205,7 @@
                     </div>
                 </div>
 
-                <div class="mb-6 flex-grow">
+                <div class="mb-6">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-800 text-white">
@@ -214,7 +216,7 @@
                             </tr>
                         </thead>
                         <tbody id="invoice-table-body" class="text-[11px] text-slate-800">
-                            </tbody>
+                        </tbody>
                     </table>
 
                     <div class="flex justify-end mt-4 avoid-page-split">
@@ -239,7 +241,7 @@
                     </div>
                 </div>
 
-                <div class="mt-auto border-t border-slate-200 pt-6 flex justify-between items-end avoid-page-split">
+                <div class="border-t border-slate-200 pt-6 flex justify-between items-end avoid-page-split">
                     <div class="w-2/3">
                         <h4 class="text-[10px] font-bold uppercase text-slate-500 tracking-widest mb-2 border-b border-slate-200 inline-block pb-0.5">Remittance Details</h4>
                         <div class="text-[10px] text-slate-700 space-y-1">
@@ -263,7 +265,6 @@
     </main>
 
     <script>
-        // --- 1. CORE SYNC ENGINE ---
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('in-date').value = today;
 
@@ -286,8 +287,6 @@
                 const display = document.getElementById(node.targetId);
                 trigger.addEventListener('input', () => {
                     display.innerText = node.transform ? node.transform(trigger.value) : trigger.value;
-                    
-                    // Special styling for Payment Status
                     if(node.id === 'in-status') {
                         if(trigger.value.includes('Paid')) display.className = "text-xs font-black text-emerald-600 uppercase";
                         else if(trigger.value.includes('Pending') || trigger.value.includes('Due')) display.className = "text-xs font-black text-rose-600 uppercase";
@@ -298,12 +297,10 @@
             });
         }
 
-        // --- 2. DYNAMIC TABLE MATH ---
         function addInvoiceRow(desc = 'Web Development Services (Phase 1)', qty = 1, rate = 15000) {
             const tbody = document.getElementById('invoice-table-body');
             const tr = document.createElement('tr');
-            // Added avoid-page-split so rows never cut in half!
-            tr.className = 'border-b border-slate-100 hover:bg-slate-50 relative group avoid-page-split'; 
+            tr.className = 'border-b border-slate-100 hover:bg-slate-50 relative group avoid-page-split';
             tr.innerHTML = `
                 <td contenteditable="true" class="py-2.5 px-3 font-medium border border-transparent focus:border-slate-300">${desc}</td>
                 <td contenteditable="true" class="py-2.5 px-3 text-center row-qty border border-transparent focus:border-slate-300" onblur="calculateTotals()">${qty}</td>
@@ -319,7 +316,6 @@
             let subtotal = 0;
             const rows = document.querySelectorAll('#invoice-table-body tr');
             
-            // Calculate line items
             rows.forEach(row => {
                 const qty = parseFloat(row.querySelector('.row-qty').innerText) || 0;
                 const rate = parseFloat(row.querySelector('.row-rate').innerText) || 0;
@@ -329,7 +325,6 @@
                 subtotal += rowTotal;
             });
 
-            // Gather global variables
             const taxRate = parseFloat(document.getElementById('in-tax-rate').value) || 0;
             const discount = parseFloat(document.getElementById('in-discount').value) || 0;
             
@@ -338,7 +333,6 @@
 
             const formatINR = (num) => '₹' + num.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
-            // Update UI
             document.getElementById('calc-subtotal').innerText = formatINR(subtotal);
             document.getElementById('calc-tax-rate').innerText = taxRate;
             document.getElementById('calc-tax-amount').innerText = formatINR(taxAmount);
@@ -346,37 +340,31 @@
             document.getElementById('calc-net-total').innerText = formatINR(netTotal > 0 ? netTotal : 0);
         }
 
-        // --- 3. STANDALONE PDF ENGINE (NO DATABASE) ---
         function executeInvoiceCompilation() {
             const btn = document.getElementById('compile-btn');
-            
-            // Clean up any weird borders before print calculation
             calculateTotals(); 
 
-            // Visual feedback
             btn.innerText = "⏳ Compiling PDF...";
             btn.classList.add("opacity-50", "cursor-wait");
 
-            // Setup PDF
             const documentTargetNode = document.getElementById('print-document-root');
             const invNo = document.getElementById('in-inv-no').value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
             
             const opt = {
                 margin: [10, 0, 10, 0], 
-                pagebreak: { avoid: '.avoid-page-split' }, 
+                pagebreak: { avoid: '.avoid-page-split' },
                 filename: `klassconneqt_invoice_${invNo}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 3, useCORS: true, scrollY: 0 },
+                html2canvas: { scale: 3, useCORS: true, scrollY: 0 }, 
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            // Generate and restore button
+
             html2pdf().set(opt).from(documentTargetNode).save().then(() => {
                 btn.innerText = "📄 Compile Invoice & Generate PDF";
                 btn.classList.remove("opacity-50", "cursor-wait");
             });
         }
 
-        // --- INIT APP ---
         window.onload = () => {
             initSync();
             addInvoiceRow('Corporate Website Architecture Setup', 1, 25000);
