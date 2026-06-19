@@ -302,7 +302,8 @@
         function addInvoiceRow(desc = 'Web Development Services (Phase 1)', qty = 1, rate = 15000) {
             const tbody = document.getElementById('invoice-table-body');
             const tr = document.createElement('tr');
-            tr.className = 'border-b border-slate-100 hover:bg-slate-50 relative group';
+            // Added avoid-page-split so rows never cut in half!
+            tr.className = 'border-b border-slate-100 hover:bg-slate-50 relative group avoid-page-split'; 
             tr.innerHTML = `
                 <td contenteditable="true" class="py-2.5 px-3 font-medium border border-transparent focus:border-slate-300">${desc}</td>
                 <td contenteditable="true" class="py-2.5 px-3 text-center row-qty border border-transparent focus:border-slate-300" onblur="calculateTotals()">${qty}</td>
@@ -361,17 +362,13 @@
             const invNo = document.getElementById('in-inv-no').value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
             
             const opt = {
-                // 5mm top/bottom margin allows the library to calculate breaks cleanly
-                margin: [5, 0, 5, 0], 
-                // Let the library naturally split the invoice if you add a lot of rows
-                pagebreak: { mode: ['css', 'legacy'] }, 
+                margin: [4, 0, 4, 0],
+                pagebreak: { mode: 'css', before: '.avoid-page-split' }, // Forces clean cuts!
                 filename: `klassconneqt_invoice_${invNo}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                // scrollY: 0 prevents it from capturing blank scroll space
-                html2canvas: { scale: 3, useCORS: true, scrollY: 0 }, 
+                html2canvas: { scale: 3, useCORS: true, letterRendering: true, scrollY: 0 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-
             // Generate and restore button
             html2pdf().set(opt).from(documentTargetNode).save().then(() => {
                 btn.innerText = "📄 Compile Invoice & Generate PDF";
