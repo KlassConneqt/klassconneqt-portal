@@ -372,10 +372,13 @@
             const sanitizedClientHeader = payload.clientOrg.split(',')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase();
             
             const renderingParameters = {
-                margin: 0,
-                pagebreak: { mode: 'avoid-all' },
+                // Add a small 5mm margin to top and bottom so it calculates breaks correctly
+                margin: [5, 0, 5, 0], 
+                // Let the library naturally split the document when it gets too long
+                pagebreak: { mode: ['css', 'legacy'] }, 
                 filename: `klassconneqt_handover_${sanitizedClientHeader}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
+                // Keep scrollY: 0 so it doesn't capture blank scroll areas
                 html2canvas: { scale: 3, useCORS: true, letterRendering: true, scrollY: 0 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
