@@ -372,10 +372,11 @@
             const sanitizedClientHeader = payload.clientOrg.split(',')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase();
             
             const renderingParameters = {
-                margin: [4, 0, 4, 0],
+                margin: 0,
+                pagebreak: { mode: 'avoid-all' },
                 filename: `klassconneqt_handover_${sanitizedClientHeader}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 3, useCORS: true, letterRendering: true },
+                html2canvas: { scale: 3, useCORS: true, letterRendering: true, scrollY: 0 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
