@@ -412,7 +412,10 @@
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            html2pdf().set(renderingParameters).from(documentTargetNode).save();
+            html2pdf()
+    .from(documentTargetNode)
+    .set(renderingParameters)
+    .save();
         }
 
         const signatures = {
