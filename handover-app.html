@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KlassConneqt - Handover Protocol Hub</title>
+    <title>KlassConneqt - Core Document Generation Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -109,8 +109,18 @@
 
             <hr class="border-slate-800">
 
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-emerald-400">4. Warranty & Terms</h3>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Warranty SLA Paragraph</label>
+                    <textarea id="input-warranty" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-500 leading-relaxed">This handover triggers a standard 30-day technical warranty period from the date issued above. This covers resolution of critical bugs or deployment errors native to the original scope. Subsequent feature enhancements or structural changes require a separate retainer agreement.</textarea>
+                </div>
+            </div>
+
+            <hr class="border-slate-800 my-4">
+
             <div class="pt-2 pb-10">
-                <button onclick="executeDocumentPdfCompilation()" class="w-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-slate-950 font-black text-[11px] py-4 rounded-xl transition duration-300 tracking-widest flex items-center justify-center gap-2 uppercase shadow-xl shadow-teal-500/20">
+                <button id="compile-btn" onclick="executeDocumentPdfCompilation()" class="w-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-slate-950 font-black text-[11px] py-4 rounded-xl transition duration-300 tracking-widest flex items-center justify-center gap-2 uppercase shadow-xl shadow-teal-500/20">
                     📄 Compile Protocol & Generate Handover PDF
                 </button>
             </div>
@@ -198,7 +208,7 @@
 
                 <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg mb-12 avoid-page-split mt-auto">
                     <h4 class="text-[10px] font-bold uppercase text-emerald-900 tracking-widest mb-1">Post-Launch Warranty & Support SLA</h4>
-                    <p class="text-[10px] leading-relaxed text-emerald-800">
+                    <p id="view-warranty" class="text-[10px] leading-relaxed text-emerald-800 whitespace-pre-wrap">
                         This handover triggers a standard 30-day technical warranty period from the date issued above. This covers resolution of critical bugs or deployment errors native to the original scope. Subsequent feature enhancements or structural changes require a separate retainer agreement.
                     </p>
                 </div>
@@ -212,7 +222,7 @@
                     </div>
 
                     <div class="absolute left-1/2 bottom-0 transform -translate-x-1/2 flex flex-col items-center justify-center pointer-events-none">
-                        <img src="KlassConneqt_Seal.png" alt="Seal" class="w-28 h-28 opacity-20 transform -rotate-12 mix-blend-multiply">
+                        <img src="KlassConneqt_Seal.png" alt="Seal" onerror="this.style.display='none';" class="w-28 h-28 opacity-20 transform -rotate-12 mix-blend-multiply">
                     </div>
 
                     <div class="w-48 text-right">
@@ -227,13 +237,18 @@
     </main>
 
     <script>
+        // --- 0. GOOGLE SHEETS DB CONNECTION URL ---
+        // Replace this string with your actual Google Apps Script Web App URL
+        const API_URL = 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE';
+
         // --- 1. CORE METADATA SYNC ---
         const registry = [
             { id: 'input-date', targetId: 'view-date', transform: val => new Date(val).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) },
             { id: 'input-ref', targetId: 'view-ref' },
             { id: 'input-client-org', targetId: 'view-client-org' },
             { id: 'input-project-name', targetId: 'view-project-name' },
-            { id: 'input-domain', targetId: 'view-domain' }
+            { id: 'input-domain', targetId: 'view-domain' },
+            { id: 'input-warranty', targetId: 'view-warranty' } // Mapped Warranty Field
         ];
 
         function initMetadataSync() {
@@ -318,10 +333,43 @@
             });
         }
 
-        // --- 4. PDF COMPILATION ENGINE ---
-        function executeDocumentPdfCompilation() {
+        // --- 4. DATABASE SYNC & PDF COMPILATION ENGINE ---
+        async function executeDocumentPdfCompilation() {
+            const btn = document.getElementById('compile-btn');
+            
+            // Gather data for the database
+            const payload = {
+                action: "saveHandover",
+                date: document.getElementById('input-date').value,
+                refId: document.getElementById('input-ref').value,
+                clientOrg: document.getElementById('input-client-org').value,
+                projectName: document.getElementById('input-project-name').value,
+                domain: document.getElementById('input-domain').value,
+                userEmail: localStorage.getItem('portalUser') || "Admin User"
+            };
+
+            // UI feedback
+            btn.innerText = "Syncing to Database...";
+            btn.classList.add("opacity-75");
+
+            try {
+                // Send data to Apps Script
+                await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                console.warn("DB Sync failed, but proceeding with PDF generation.", err);
+            }
+
+            // Restore Button UI
+            btn.innerText = "📄 Compile Protocol & Generate Handover PDF";
+            btn.classList.remove("opacity-75");
+
+            // Generate PDF
             const documentTargetNode = document.getElementById('print-document-root');
-            const sanitizedClientHeader = document.getElementById('input-client-org').value.split(',')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            const sanitizedClientHeader = payload.clientOrg.split(',')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase();
             
             const renderingParameters = {
                 margin: [4, 0, 4, 0],
