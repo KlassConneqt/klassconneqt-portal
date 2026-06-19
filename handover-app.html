@@ -142,7 +142,7 @@
 
         <section class="w-full lg:w-[58%] preview-pane p-8 overflow-y-auto max-h-[calc(100vh-69px)] flex justify-center items-start">
             
-            <div id="print-document-root" class="print-document py-10 px-12 relative flex flex-col">
+            <div id="print-document-root" class="print-document py-10 px-12 relative">
                 
                 <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-teal-500 via-emerald-500 to-cyan-500"></div>
 
@@ -239,7 +239,7 @@
          onerror="this.style.display='none';"
          class="absolute left-1/2 -translate-x-1/2 top-1 w-28 z-20 object-contain">
 
-    <div class="h-16"></div>
+    <div class="h-12"></div>
 
     <div class="border-b border-slate-400 mb-2"></div>
 
@@ -408,7 +408,7 @@
                 filename: `klassconneqt_handover_${sanitizedClientHeader}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 // Keep scrollY: 0 so it doesn't capture blank scroll areas
-                html2canvas: { scale: 3, useCORS: true, letterRendering: true, scrollY: 0 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
