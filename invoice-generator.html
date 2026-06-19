@@ -340,9 +340,13 @@
             document.getElementById('calc-net-total').innerText = formatINR(netTotal > 0 ? netTotal : 0);
         }
 
-        function executeInvoiceCompilation() {
+        async function executeInvoiceCompilation() {
             const btn = document.getElementById('compile-btn');
             calculateTotals(); 
+
+            // 1. ADD THIS: Hide all 'X' buttons before taking the snapshot
+            const dropButtons = document.querySelectorAll('.btn-drop-row');
+            dropButtons.forEach(b => b.style.display = 'none');
 
             btn.innerText = "⏳ Compiling PDF...";
             btn.classList.add("opacity-50", "cursor-wait");
@@ -359,10 +363,13 @@
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            html2pdf().set(opt).from(documentTargetNode).save().then(() => {
-                btn.innerText = "📄 Compile Invoice & Generate PDF";
-                btn.classList.remove("opacity-50", "cursor-wait");
-            });
+            // 2. Generate PDF and restore buttons
+            await html2pdf().set(opt).from(documentTargetNode).save();
+            
+            // 3. RESTORE: Make buttons visible again after download
+            dropButtons.forEach(b => b.style.display = '');
+            btn.innerText = "📄 Compile Invoice & Generate PDF";
+            btn.classList.remove("opacity-50", "cursor-wait");
         }
 
         window.onload = () => {
