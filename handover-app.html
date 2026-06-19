@@ -3,357 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KlassConneqt | Handover Generator</title>
+    <title>KlassConneqt - Handover Protocol Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root {
-            --primary-dark: #0f172a;
-            --secondary-dark: #1e293b;
-            --sidebar-bg: #111827;
-            --accent-blue: #0284c7;
-            --accent-green: #10b981;
-            --text-light: #f8fafc;
-            --doc-bg: #ffffff;
-            --doc-text: #334155;
-            --border-color: #cbd5e1;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-
-        body {
-            display: flex;
-            height: 100vh;
-            background-color: #e2e8f0;
-            overflow: hidden;
-        }
-
-        /* SIDEBAR CONTROLS */
-        .sidebar {
-            width: 350px;
-            background-color: var(--sidebar-bg);
-            color: var(--text-light);
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
-
-        .sidebar h2 {
-            font-size: 1.4rem;
-            margin-bottom: 5px;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar p.subtitle {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #334155;
-        }
-
-        .control-group { margin-bottom: 15px; }
-        .control-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px;}
-        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #334155; background: var(--secondary-dark); color: white; outline: none; transition: border 0.2s; }
-        .control-group input:focus { border-color: var(--accent-blue); }
-
-        .btn-action { width: 100%; padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; margin-top: 10px; color: white; display: flex; align-items: center; justify-content: center; gap: 8px;}
-        .btn-action:hover { opacity: 0.9; }
-        .btn-add { background-color: #334155; border: 1px solid #475569; }
-        .btn-generate { background-color: var(--accent-green); margin-top: 30px; font-size: 1.1rem; padding: 15px;}
-
-        /* DOCUMENT PREVIEW AREA */
-        .preview-container {
-            flex: 1;
-            padding: 40px;
-            overflow-y: auto;
-            display: flex;
-            justify-content: center;
-        }
-
-        .document-page {
-            width: 210mm; /* A4 Width */
-            min-height: 297mm; /* A4 Height */
-            background: var(--doc-bg);
-            padding: 20mm;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            color: var(--doc-text);
-            position: relative;
-        }
-
-        .doc-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 3px solid var(--primary-dark);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .doc-brand h1 { font-size: 2.2rem; color: var(--primary-dark); font-weight: 900; letter-spacing: -1px; margin-bottom: 5px; }
-        .doc-brand p { font-size: 0.9rem; color: #64748b; font-weight: 600; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .preview-pane { background: #f1f5f9; }
         
-        .doc-meta { text-align: right; }
-        .doc-meta h2 { font-size: 1.5rem; color: var(--accent-blue); margin-bottom: 5px; text-transform: uppercase; }
-        .doc-meta p { font-size: 0.9rem; margin-bottom: 3px; }
-
-        .client-info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 30px;
+        /* Ultra precision standard A4 aspect mapping with optimized print spacing */
+        .print-document {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            color: #0f172a;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-
-        .info-box span { display: block; font-size: 0.75rem; color: #64748b; font-weight: bold; text-transform: uppercase; margin-bottom: 3px;}
-        .info-box strong { font-size: 1.1rem; color: var(--primary-dark); }
-
-        .doc-section { margin-bottom: 30px; }
-        .doc-section h3 { font-size: 1.2rem; color: var(--primary-dark); border-bottom: 2px solid var(--accent-blue); padding-bottom: 8px; margin-bottom: 15px; display: inline-block; }
-
-        /* EDITABLE TABLES */
-        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-        th, td { border: 1px solid var(--border-color); padding: 12px; text-align: left; }
-        th { background-color: #f1f5f9; color: var(--primary-dark); font-weight: bold; font-size: 0.9rem; }
-        td { font-size: 0.95rem; }
         
-        /* Make table cells editable and show subtle hover effect */
-        td[contenteditable="true"] { transition: background 0.2s; outline: none; }
-        td[contenteditable="true"]:hover { background-color: #f8fafc; cursor: text; }
-        td[contenteditable="true"]:focus { background-color: #e0f2fe; border-color: var(--accent-blue); }
-
-        .btn-delete-row { color: #ef4444; background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 0 5px; }
-
-        .support-terms { background: #f0fdf4; border-left: 4px solid var(--accent-green); padding: 15px; font-size: 0.9rem; margin-bottom: 40px; }
-
-        .signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 50px; }
-        .sign-box { border-top: 1px solid #94a3b8; padding-top: 10px; }
-        .sign-box strong { display: block; color: var(--primary-dark); }
-        .sign-box span { font-size: 0.85rem; color: #64748b; }
-
-        /* PRINT STYLES - Hides sidebar and shows ONLY the document perfectly */
-        @media print {
-            body { background: white; height: auto; overflow: auto; display: block; }
-            .sidebar { display: none !important; }
-            .preview-container { padding: 0; display: block; overflow: visible; }
-            .document-page { box-shadow: none; margin: 0; padding: 0; width: 100%; max-width: 100%; min-height: auto; }
-            .btn-delete-row { display: none !important; }
-            td[contenteditable="true"] { border: 1px solid var(--border-color) !important; background: transparent !important; }
+        /* Forces elements to stay grouped together during print breakdown splits */
+        .avoid-page-split {
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col overflow-x-hidden">
 
-    <aside class="sidebar">
-        <h2>📁 System Gateway</h2>
-        <p class="subtitle">Project Handover Protocol Builder</p>
-
-        <div class="control-group">
-            <label>Project Name</label>
-            <input type="text" id="inProjectName" placeholder="e.g. EduTech Portal v2" value="KlassConneqt Hub">
+    <header class="border-b border-slate-800 bg-slate-900 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="h-9 w-9 rounded-lg bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center font-black text-white text-sm tracking-tighter shadow-lg shadow-teal-500/20">
+                KC
+            </div>
+            <div>
+                <h1 class="text-md font-bold text-white tracking-tight">KlassConneqt Workstation</h1>
+                <p class="text-xs text-slate-400">Official Project Handover Engine</p>
+            </div>
         </div>
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 px-4 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">← Back to Dashboard</a>
+            <div class="flex items-center gap-2 bg-slate-800 rounded-full px-4 py-1 border border-slate-700 text-xs font-semibold text-teal-400">
+                <span class="h-2 w-2 rounded-full bg-teal-400 animate-pulse"></span> App Node Ready
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
         
-        <div class="control-group">
-            <label>Client / Organization</label>
-            <input type="text" id="inClientName" placeholder="Enter Client Name" value="WOS Academy">
-        </div>
+        <section class="w-full lg:w-[42%] bg-slate-900 p-6 border-r border-slate-800 overflow-y-auto max-h-[calc(100vh-69px)] space-y-6 custom-scrollbar">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-lg font-bold text-white">Handover Configuration</h2>
+                <p class="text-xs text-slate-400">Update project parameters to map deliverables to the official A4 release document.</p>
+            </div>
 
-        <div class="control-group">
-            <label>Handover Date</label>
-            <input type="date" id="inDate">
-        </div>
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-teal-400">1. Core Metadata Parameters</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Handover Date</label>
+                        <input type="date" id="input-date" value="2026-06-25" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Reference / Ticket ID</label>
+                        <input type="text" id="input-ref" value="#KC-HO-8807" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-500 font-mono">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Client Business/Organization Entity</label>
+                    <input type="text" id="input-client-org" value="WOS Academy Management" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Target Application Project Scope Name</label>
+                    <input type="text" id="input-project-name" value="EduTech Student Hub & Portal Phase 1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Live Deployed URL / Domain</label>
+                    <input type="text" id="input-domain" value="https://klassconneqt.com/portal" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-teal-400 font-mono focus:outline-none focus:border-teal-500">
+                </div>
+            </div>
 
-        <div class="control-group">
-            <label>Live URL / Domain</label>
-            <input type="text" id="inDomain" placeholder="https://..." value="https://klassconneqt.com">
-        </div>
+            <hr class="border-slate-800">
 
-        <hr style="border-color: #334155; margin: 20px 0;">
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-teal-400">2. System Deliverables</h3>
+                    <button onclick="addDeliverableRow()" class="bg-teal-600 hover:bg-teal-500 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-md transition duration-200 uppercase tracking-wide">
+                        [ + ] Add Deliverable
+                    </button>
+                </div>
+                <div id="dynamic-deliverables-root" class="space-y-3">
+                    </div>
+            </div>
 
-        <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 10px;">Document Content Controls</p>
-        <button class="btn-action btn-add" onclick="addDeliverableRow()">➕ Add Deliverable Row</button>
-        <button class="btn-action btn-add" onclick="addCredentialRow()">➕ Add Credential Row</button>
+            <hr class="border-slate-800">
 
-        <button class="btn-action btn-generate" onclick="window.print()">📄 Compile & Generate PDF</button>
-        
-        <p style="font-size: 0.75rem; color: #64748b; margin-top: 15px; text-align: center;">
-            Tip: Click directly on the tables in the document to edit the text!
-        </p>
-    </aside>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-amber-400">3. Admin Credentials</h3>
+                    <button onclick="addCredentialRow()" class="bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-md transition duration-200 uppercase tracking-wide">
+                        [ + ] Add Credential
+                    </button>
+                </div>
+                <div id="dynamic-credentials-root" class="space-y-3">
+                    </div>
+            </div>
 
-    <main class="preview-container">
-        <div class="document-page" id="docPage">
+            <hr class="border-slate-800">
+
+            <div class="pt-2 pb-10">
+                <button onclick="executeDocumentPdfCompilation()" class="w-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-slate-950 font-black text-[11px] py-4 rounded-xl transition duration-300 tracking-widest flex items-center justify-center gap-2 uppercase shadow-xl shadow-teal-500/20">
+                    📄 Compile Protocol & Generate Handover PDF
+                </button>
+            </div>
+        </section>
+
+        <section class="w-full lg:w-[58%] preview-pane p-8 overflow-y-auto max-h-[calc(100vh-69px)] flex justify-center items-start">
             
-            <header class="doc-header">
-                <div class="doc-brand">
-                    <h1>KLASSCONNEQT</h1>
-                    <p>Official Project Handover Protocol</p>
-                </div>
-                <div class="doc-meta">
-                    <h2>PROJECT HANDOVER</h2>
-                    <p><strong>Ref ID:</strong> <span id="outRef">#HO-2026-001</span></p>
-                    <p><strong>Date:</strong> <span id="outDate">Select Date</span></p>
-                </div>
-            </header>
+            <div id="print-document-root" class="print-document py-10 px-12 relative flex flex-col">
+                
+                <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-teal-500 via-emerald-500 to-cyan-500"></div>
 
-            <div class="client-info-grid">
-                <div class="info-box">
-                    <span>Project Name</span>
-                    <strong id="outProjectName">KlassConneqt Hub</strong>
+                <div class="flex justify-between items-start border-b-2 border-slate-100 pb-5 mb-6">
+                    <div class="flex items-center gap-4">
+                        <img src="logo.png" alt="Logo" onerror="this.style.opacity='0'; this.style.width='0px'; this.style.margin='0px';" style="height: 60px; width: auto;" class="object-contain">
+                        <div>
+                            <h2 class="text-3xl font-black text-slate-900 tracking-tight leading-none uppercase">KlassConneqt</h2>
+                            <p class="text-xs text-slate-500 font-bold tracking-widest uppercase mt-1.5">Project Handover Protocol</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="inline-block bg-slate-900 text-white font-black text-[10px] tracking-widest uppercase px-3 py-1 rounded mb-2 shadow-sm">
+                            Official Release
+                        </span>
+                        <p class="text-xs font-bold text-slate-900">Ref ID: <span id="view-ref" class="font-mono text-slate-600">#HO-0000</span></p>
+                        <p class="text-xs font-bold text-slate-900">Date: <span id="view-date" class="font-medium text-slate-600">June 25, 2026</span></p>
+                    </div>
                 </div>
-                <div class="info-box">
-                    <span>Client / Organization</span>
-                    <strong id="outClientName">WOS Academy</strong>
+
+                <div class="grid grid-cols-2 gap-y-4 gap-x-8 bg-slate-50 p-5 rounded-xl border border-slate-200 mb-6 avoid-page-split">
+                    <div>
+                        <span class="text-[9px] font-bold text-teal-600 uppercase tracking-widest block mb-0.5">Prepared For:</span>
+                        <h4 id="view-client-org" class="text-sm font-extrabold text-slate-800 leading-snug">Client Name</h4>
+                    </div>
+                    <div>
+                        <span class="text-[9px] font-bold text-teal-600 uppercase tracking-widest block mb-0.5">Project Name:</span>
+                        <h4 id="view-project-name" class="text-sm font-extrabold text-slate-900 leading-snug">Project Title</h4>
+                    </div>
+                    <div class="col-span-2 pt-3 border-t border-slate-200 flex justify-between items-center">
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">Live Deployment Origin:</span>
+                            <p id="view-domain" class="text-xs font-bold text-slate-700 font-mono">https://...</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">System Status:</span>
+                            <p class="text-xs font-black text-emerald-600 uppercase tracking-wide flex items-center gap-1.5 justify-end">
+                                <span class="h-2 w-2 rounded-full bg-emerald-500"></span> 100% Deployed & Active
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-box">
-                    <span>Deployed Domain / URL</span>
-                    <strong id="outDomain">https://klassconneqt.com</strong>
+
+                <p class="text-[11px] leading-relaxed text-slate-600 mb-8 text-justify">
+                    This document serves as the official handover protocol, confirming that the digital architecture, systems, and assets outlined below have been fully deployed, tested, and transferred to the client’s administrative control. Acceptance of these credentials assumes successful completion of the project scope.
+                </p>
+
+                <div class="mb-8 avoid-page-split">
+                    <h3 class="text-[11px] font-bold tracking-widest uppercase text-slate-900 mb-2 border-b-2 border-teal-500 inline-block pb-1">1. Confirmed Deliverables</h3>
+                    <table class="w-full text-left border-collapse mt-2">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700">
+                                <th class="py-2 px-3 border border-slate-200 text-[10px] font-bold tracking-wider uppercase w-[35%]">Asset Category</th>
+                                <th class="py-2 px-3 border border-slate-200 text-[10px] font-bold tracking-wider uppercase w-[65%]">Description / Specifications</th>
+                            </tr>
+                        </thead>
+                        <tbody id="view-deliverables-body" class="text-[11px] text-slate-700">
+                            </tbody>
+                    </table>
                 </div>
-                <div class="info-box">
-                    <span>Handover Status</span>
-                    <strong style="color: var(--accent-green);">100% Completed</strong>
+
+                <div class="mb-8 avoid-page-split">
+                    <h3 class="text-[11px] font-bold tracking-widest uppercase text-slate-900 mb-2 border-b-2 border-amber-500 inline-block pb-1">2. Access Credentials</h3>
+                    <table class="w-full text-left border-collapse mt-2">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700">
+                                <th class="py-2 px-3 border border-slate-200 text-[10px] font-bold tracking-wider uppercase w-[30%]">Platform / Node</th>
+                                <th class="py-2 px-3 border border-slate-200 text-[10px] font-bold tracking-wider uppercase w-[40%]">Login Portal URL</th>
+                                <th class="py-2 px-3 border border-slate-200 text-[10px] font-bold tracking-wider uppercase w-[30%]">Username / Auth ID</th>
+                            </tr>
+                        </thead>
+                        <tbody id="view-credentials-body" class="text-[11px] text-slate-700">
+                            </tbody>
+                    </table>
+                    <p class="text-[9px] font-bold text-rose-500 mt-2 italic">* Security Notice: For maximum protection, raw passwords are not printed. They have been transmitted separately via secure encrypted channels (e.g., WhatsApp/Email).</p>
                 </div>
+
+                <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg mb-12 avoid-page-split mt-auto">
+                    <h4 class="text-[10px] font-bold uppercase text-emerald-900 tracking-widest mb-1">Post-Launch Warranty & Support SLA</h4>
+                    <p class="text-[10px] leading-relaxed text-emerald-800">
+                        This handover triggers a standard 30-day technical warranty period from the date issued above. This covers resolution of critical bugs or deployment errors native to the original scope. Subsequent feature enhancements or structural changes require a separate retainer agreement.
+                    </p>
+                </div>
+
+                <div class="border-t border-slate-200 pt-8 flex justify-between items-end avoid-page-split relative">
+                    <div class="w-48">
+                        <div class="border-b border-slate-400 mb-2 h-10 relative">
+                            </div>
+                        <p class="text-[10px] font-bold text-slate-800 uppercase tracking-widest">Lead Systems Architect</p>
+                        <p class="text-[9px] text-slate-500 uppercase mt-0.5">KlassConneqt</p>
+                    </div>
+
+                    <div class="absolute left-1/2 bottom-0 transform -translate-x-1/2 flex flex-col items-center justify-center pointer-events-none">
+                        <img src="KlassConneqt_Seal.png" alt="Seal" class="w-28 h-28 opacity-20 transform -rotate-12 mix-blend-multiply">
+                    </div>
+
+                    <div class="w-48 text-right">
+                        <div class="border-b border-slate-400 mb-2 h-10"></div>
+                        <p class="text-[10px] font-bold text-slate-800 uppercase tracking-widest">Client Acceptance</p>
+                        <p class="text-[9px] text-slate-500 uppercase mt-0.5">Authorized Signatory</p>
+                    </div>
+                </div>
+
             </div>
-
-            <div class="doc-section">
-                <h3>1. System Deliverables</h3>
-                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 10px;">The following assets and systems have been successfully deployed and transferred to the client.</p>
-                <table id="deliverablesTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 30%;">Item Category</th>
-                            <th style="width: 60%;">Description / Location</th>
-                            <th style="width: 10%;"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="deliverablesBody">
-                        <tr>
-                            <td contenteditable="true">Source Code</td>
-                            <td contenteditable="true">Full frontend and backend repository via GitHub.</td>
-                            <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
-                        </tr>
-                        <tr>
-                            <td contenteditable="true">Database</td>
-                            <td contenteditable="true">Google Sheets DB Integration & Automation Scripts.</td>
-                            <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
-                        </tr>
-                        <tr>
-                            <td contenteditable="true">Design Assets</td>
-                            <td contenteditable="true">High-resolution logos, banners, and layout UI assets.</td>
-                            <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="doc-section">
-                <h3>2. Administrative Credentials</h3>
-                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 10px;">Confidential access keys for system management. Please store securely.</p>
-                <table id="credentialsTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 25%;">Platform</th>
-                            <th style="width: 40%;">Login URL</th>
-                            <th style="width: 25%;">Username / ID</th>
-                            <th style="width: 10%;"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="credentialsBody">
-                        <tr>
-                            <td contenteditable="true">Domain Registrar</td>
-                            <td contenteditable="true">https://godaddy.com</td>
-                            <td contenteditable="true">admin@wosacademy.com</td>
-                            <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
-                        </tr>
-                        <tr>
-                            <td contenteditable="true">Admin Dashboard</td>
-                            <td contenteditable="true">https://klassconneqt.com/admin</td>
-                            <td contenteditable="true">superadmin</td>
-                            <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p style="font-size: 0.8rem; color: #ef4444; margin-top: 5px;">* Note: Passwords have been transmitted securely via encrypted channels.</p>
-            </div>
-
-            <div class="support-terms">
-                <strong>Post-Launch Warranty & Support</strong><br>
-                This handover marks the successful completion of the deployment phase. A standard 30-day technical warranty is included from the date of this document, covering critical bug fixes and deployment errors. Further feature additions will require a separate support retainer.
-            </div>
-
-            <div class="signatures">
-                <div class="sign-box">
-                    <strong>Developer / Agency Sign-off</strong>
-                    <span>Lead Architect, KlassConneqt</span>
-                </div>
-                <div class="sign-box">
-                    <strong>Client Acceptance Sign-off</strong>
-                    <span>Authorized Representative</span>
-                </div>
-            </div>
-
-        </div>
+        </section>
     </main>
 
     <script>
-        // Set today's date automatically
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('inDate').value = today;
-        
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString(undefined, options);
-        }
-        document.getElementById('outDate').innerText = formatDate(today);
+        // --- 1. CORE METADATA SYNC ---
+        const registry = [
+            { id: 'input-date', targetId: 'view-date', transform: val => new Date(val).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) },
+            { id: 'input-ref', targetId: 'view-ref' },
+            { id: 'input-client-org', targetId: 'view-client-org' },
+            { id: 'input-project-name', targetId: 'view-project-name' },
+            { id: 'input-domain', targetId: 'view-domain' }
+        ];
 
-        // Generate a random Reference ID
-        document.getElementById('outRef').innerText = "#HO-" + new Date().getFullYear() + "-" + Math.floor(1000 + Math.random() * 9000);
-
-        // Live Binding for Inputs -> Output
-        const bindInput = (inputId, outputId) => {
-            document.getElementById(inputId).addEventListener('input', function() {
-                document.getElementById(outputId).innerText = this.value || '-';
+        function initMetadataSync() {
+            registry.forEach(node => {
+                const trigger = document.getElementById(node.id);
+                const display = document.getElementById(node.targetId);
+                trigger.addEventListener('input', () => {
+                    display.innerText = node.transform ? node.transform(trigger.value) : trigger.value;
+                });
+                display.innerText = node.transform ? node.transform(trigger.value) : trigger.value;
             });
+        }
+
+        // --- 2. DELIVERABLES LOGIC ---
+        function addDeliverableRow(cat = '', desc = '') {
+            const root = document.getElementById('dynamic-deliverables-root');
+            const card = document.createElement('div');
+            card.className = 'proposal-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2';
+            card.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-bold text-slate-500 tracking-wider">Asset Item</span>
+                    <button onclick="this.closest('.proposal-item-card').remove(); renderDeliverables();" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
+                </div>
+                <input type="text" placeholder="Category (e.g. Source Code)" value="${cat}" oninput="renderDeliverables()" class="deliv-cat w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-teal-300 font-bold">
+                <input type="text" placeholder="Description / Specs" value="${desc}" oninput="renderDeliverables()" class="deliv-desc w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white">
+            `;
+            root.appendChild(card);
+            renderDeliverables();
+        }
+
+        function renderDeliverables() {
+            const rows = document.querySelectorAll('#dynamic-deliverables-root .proposal-item-card');
+            const tbody = document.getElementById('view-deliverables-body');
+            tbody.innerHTML = '';
+            rows.forEach(row => {
+                const cat = row.querySelector('.deliv-cat').value || 'Asset Category';
+                const desc = row.querySelector('.deliv-desc').value || 'System description parameters...';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 border border-slate-200 font-bold text-slate-900 bg-slate-50/50">${cat}</td>
+                    <td class="py-2.5 px-3 border border-slate-200 text-slate-700">${desc}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- 3. CREDENTIALS LOGIC ---
+        function addCredentialRow(plat = '', url = '', user = '') {
+            const root = document.getElementById('dynamic-credentials-root');
+            const card = document.createElement('div');
+            card.className = 'proposal-item-card bg-slate-800/40 p-3 rounded-lg border border-slate-700/60 space-y-2';
+            card.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-bold text-slate-500 tracking-wider">Auth Node</span>
+                    <button onclick="this.closest('.proposal-item-card').remove(); renderCredentials();" class="text-[11px] text-rose-400 hover:text-rose-300 font-bold">[ - ] Drop Row</button>
+                </div>
+                <input type="text" placeholder="Platform (e.g. Domain Panel)" value="${plat}" oninput="renderCredentials()" class="cred-plat w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-amber-300 font-bold">
+                <input type="text" placeholder="URL (e.g. https://godaddy.com)" value="${url}" oninput="renderCredentials()" class="cred-url w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-mono">
+                <input type="text" placeholder="Username / ID" value="${user}" oninput="renderCredentials()" class="cred-user w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-300">
+            `;
+            root.appendChild(card);
+            renderCredentials();
+        }
+
+        function renderCredentials() {
+            const rows = document.querySelectorAll('#dynamic-credentials-root .proposal-item-card');
+            const tbody = document.getElementById('view-credentials-body');
+            tbody.innerHTML = '';
+            rows.forEach(row => {
+                const plat = row.querySelector('.cred-plat').value || 'Platform Node';
+                const url = row.querySelector('.cred-url').value || 'https://...';
+                const user = row.querySelector('.cred-user').value || 'admin_user';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 border border-slate-200 font-bold text-slate-900 bg-slate-50/50">${plat}</td>
+                    <td class="py-2.5 px-3 border border-slate-200 text-slate-600 font-mono text-[10px] break-all">${url}</td>
+                    <td class="py-2.5 px-3 border border-slate-200 text-slate-800 font-medium">${user}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- 4. PDF COMPILATION ENGINE ---
+        function executeDocumentPdfCompilation() {
+            const documentTargetNode = document.getElementById('print-document-root');
+            const sanitizedClientHeader = document.getElementById('input-client-org').value.split(',')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            
+            const renderingParameters = {
+                margin: [4, 0, 4, 0],
+                filename: `klassconneqt_handover_${sanitizedClientHeader}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 3, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(renderingParameters).from(documentTargetNode).save();
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            initMetadataSync();
+            
+            // Seed Default Deliverables
+            addDeliverableRow('Source Code Repository', 'Full frontend web assets securely pushed to Client GitHub account.');
+            addDeliverableRow('Database Architecture', 'Google Sheets automation matrix with active admin hooks verified.');
+            addDeliverableRow('Graphic Assets', 'High-res logos, seal vectors, and compressed web images.');
+            
+            // Seed Default Credentials
+            addCredentialRow('Hosting / Domain DNS', 'https://hostinger.com/login', 'admin@clientdomain.com');
+            addCredentialRow('Admin Gateway', 'https://klassconneqt.com/portal/admin', 'super_admin_node');
         };
-
-        bindInput('inProjectName', 'outProjectName');
-        bindInput('inClientName', 'outClientName');
-        bindInput('inDomain', 'outDomain');
-
-        document.getElementById('inDate').addEventListener('change', function() {
-            document.getElementById('outDate').innerText = formatDate(this.value);
-        });
-
-        // Dynamic Table Row Functions
-        function addDeliverableRow() {
-            const tbody = document.getElementById('deliverablesBody');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td contenteditable="true">New Category</td>
-                <td contenteditable="true">Click here to describe the item...</td>
-                <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
-            `;
-            tbody.appendChild(tr);
-        }
-
-        function addCredentialRow() {
-            const tbody = document.getElementById('credentialsBody');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td contenteditable="true">Platform Name</td>
-                <td contenteditable="true">https://...</td>
-                <td contenteditable="true">username</td>
-                <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">×</button></td>
-            `;
-            tbody.appendChild(tr);
-        }
     </script>
 </body>
 </html>
