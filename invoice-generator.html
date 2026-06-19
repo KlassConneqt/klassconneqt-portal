@@ -37,10 +37,36 @@
         .avoid-page-split { page-break-inside: avoid; break-inside: avoid; }
 
         /* Editable cell styles */
-        td[contenteditable="true"] { transition: background 0.2s; outline: none; cursor: text; }
-        td[contenteditable="true"]:hover { background-color: #f8fafc; }
-        td[contenteditable="true"]:focus { background-color: #e0f2fe; border-color: #0ea5e9; }
+td[contenteditable="true"] {
+    transition: background 0.2s;
+    outline: none;
+    cursor: text;
+}
 
+td[contenteditable="true"]:hover {
+    background-color: #f8fafc;
+}
+
+td[contenteditable="true"]:focus {
+    background-color: #e0f2fe;
+    border-color: #0ea5e9;
+}
+
+/* ALL EDITABLE FIELDS */
+[contenteditable="true"]{
+    cursor:text;
+    border-radius:4px;
+    transition:.2s;
+}
+
+[contenteditable="true"]:hover{
+    background:#f8fafc;
+}
+
+[contenteditable="true"]:focus{
+    background:#e0f2fe;
+    outline:none;
+}
         /* Perfect Print Formatting */
         @media print {
             body { background: white; height: auto; overflow: auto; display: block; }
@@ -193,8 +219,8 @@
                         <img src="logo.png" alt="Logo" onerror="this.style.display='none';" class="h-[60px] w-auto object-contain">
                         <div>
                             <h2 class="text-3xl font-black text-slate-900 tracking-tight leading-none uppercase">KlassConneqt</h2>
-                            <p class="text-[10px] text-slate-500 font-medium tracking-wide mt-1">Salem, Tamil Nadu, India</p>
-                            <p class="text-[10px] text-slate-500 font-medium tracking-wide">📞 +91-8807606980 | ✉️ billing@klassconneqt.com</p>
+                            <p contenteditable="true" class="text-[10px] text-slate-500 font-medium tracking-wide mt-1">Salem, Tamil Nadu, India</p>
+                            <p contenteditable="true" class="text-[10px] text-slate-500 font-medium tracking-wide">📞 +91-8807606980 | ✉️ billing@klassconneqt.com</p>
                         </div>
                     </div>
                     <div class="text-right">
@@ -268,7 +294,7 @@
                             <p><strong>Account No:</strong> <span id="view-acc" class="font-mono font-bold">50200012345678</span></p>
                             <p><strong>IFSC/Routing:</strong> <span id="view-ifsc" class="font-mono">HDFC0001234</span></p>
                         </div>
-                        <p class="text-[8px] text-slate-400 mt-4 italic">Make all checks payable to KlassConneqt. Late payments may be subject to a 2% monthly fee.</p>
+                        <p contenteditable="true" class="text-[8px] text-slate-400 mt-4 italic">Make all checks payable to KlassConneqt. Late payments may be subject to a 2% monthly fee.</p>
                     </div>
 
                     <div class="w-1/3 flex flex-col items-center justify-end text-center relative pt-4">
