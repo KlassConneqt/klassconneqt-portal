@@ -227,7 +227,7 @@
                     </p>
                 </div>
 
-                <div class="border-t border-slate-200 pt-8 flex justify-between items-end avoid-page-split relative">
+                <div class="border-t border-slate-200 pt-6 flex justify-between items-end relative">
                     <div class="w-48 relative">
 
     <img src="KlassConneqt_Seal.png"
@@ -401,9 +401,10 @@
             
             const renderingParameters = {
                 // Add a small 5mm margin to top and bottom so it calculates breaks correctly
-                margin: [5, 0, 5, 0], 
-                // Let the library naturally split the document when it gets too long
-                pagebreak: { mode: ['css', 'legacy'] }, 
+                margin: [0, 0, 0, 0],
+                pagebreak: {
+                   avoid: '.avoid-page-split'
+                }, 
                 filename: `klassconneqt_handover_${sanitizedClientHeader}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 // Keep scrollY: 0 so it doesn't capture blank scroll areas
