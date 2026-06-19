@@ -361,10 +361,14 @@
             const invNo = document.getElementById('in-inv-no').value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
             
             const opt = {
-                margin: [4, 0, 4, 0],
+                // 5mm top/bottom margin allows the library to calculate breaks cleanly
+                margin: [5, 0, 5, 0], 
+                // Let the library naturally split the invoice if you add a lot of rows
+                pagebreak: { mode: ['css', 'legacy'] }, 
                 filename: `klassconneqt_invoice_${invNo}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 3, useCORS: true },
+                // scrollY: 0 prevents it from capturing blank scroll space
+                html2canvas: { scale: 3, useCORS: true, scrollY: 0 }, 
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
