@@ -119,6 +119,21 @@
 
             <hr class="border-slate-800 my-4">
 
+            <div class="pt-2">
+    <label class="block text-xs font-medium text-slate-400 mb-1">
+        Authorized Signatory
+    </label>
+
+    <select id="signatory-select"
+            class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+
+        <option value="sriram">Sriram</option>
+        <option value="kowsalya">Kowsalya</option>
+        <option value="priyadharshini">Priyadharshini</option>
+
+    </select>
+</div>
+            
             <div class="pt-2 pb-10">
                 <button id="compile-btn" onclick="executeDocumentPdfCompilation()" class="w-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-slate-950 font-black text-[11px] py-4 rounded-xl transition duration-300 tracking-widest flex items-center justify-center gap-2 uppercase shadow-xl shadow-teal-500/20">
                     📄 Compile Protocol & Generate Handover PDF
@@ -214,17 +229,31 @@
                 </div>
 
                 <div class="border-t border-slate-200 pt-8 flex justify-between items-end avoid-page-split relative">
-                    <div class="w-48">
-                        <div class="border-b border-slate-400 mb-2 h-10 relative">
-                            </div>
-                        <p class="text-[10px] font-bold text-slate-800 uppercase tracking-widest">Lead Systems Architect</p>
-                        <p class="text-[9px] text-slate-500 uppercase mt-0.5">KlassConneqt</p>
-                    </div>
+                    <div class="w-48 relative">
 
-                    <div class="absolute left-1/2 bottom-0 transform -translate-x-1/2 flex flex-col items-center justify-center pointer-events-none">
-                        <img src="KlassConneqt_Seal.png" alt="Seal" onerror="this.style.display='none';" class="w-28 h-28 opacity-20 transform -rotate-12 mix-blend-multiply">
-                    </div>
+    <img src="KlassConneqt_Seal.png"
+         onerror="this.style.display='none';"
+         class="absolute left-1/2 -translate-x-1/2 top-0 w-24 opacity-20 -rotate-12 z-10">
 
+    <img id="signature-image"
+         src="sriram.png"
+         onerror="this.style.display='none';"
+         class="absolute left-1/2 -translate-x-1/2 top-1 w-28 z-20 object-contain">
+
+    <div class="h-16"></div>
+
+    <div class="border-b border-slate-400 mb-2"></div>
+
+    <p class="text-[10px] font-bold text-slate-800 uppercase tracking-widest">
+        Lead Systems Architect
+    </p>
+
+    <p id="signatory-name"
+       class="text-[9px] text-slate-500 uppercase mt-0.5">
+       SRIRAM
+    </p>
+
+</div>
                     <div class="w-48 text-right">
                         <div class="border-b border-slate-400 mb-2 h-10"></div>
                         <p class="text-[10px] font-bold text-slate-800 uppercase tracking-widest">Client Acceptance</p>
@@ -386,6 +415,40 @@
             html2pdf().set(renderingParameters).from(documentTargetNode).save();
         }
 
+        const signatures = {
+    sriram: {
+        name: "SRIRAM",
+        image: "sriram.png"
+    },
+
+    kowsalya: {
+        name: "KOWSALYA",
+        image: "kowsalya.png"
+    },
+
+    priyadharshini: {
+        name: "PRIYADHARSHINI",
+        image: "priyadharshini.png"
+    }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const dropdown = document.getElementById("signatory-select");
+
+    dropdown.addEventListener("change", () => {
+
+        const selected = signatures[dropdown.value];
+
+        document.getElementById("signature-image").src =
+            selected.image;
+
+        document.getElementById("signatory-name").innerText =
+            selected.name;
+
+    });
+
+});
         // --- INIT ---
         window.onload = () => {
             initMetadataSync();
