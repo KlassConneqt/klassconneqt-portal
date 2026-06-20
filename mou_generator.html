@@ -3,268 +3,414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KlassConneqt MoU Generator</title>
+    <title>KlassConneqt - Master MoU Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        /* --- Dashboard / Form UI Styles --- */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
-        .dashboard-container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { color: #1a365d; text-align: center; border-bottom: 2px solid #3182ce; padding-bottom: 10px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group.full-width { grid-column: span 2; }
-        label { font-weight: bold; margin-bottom: 5px; color: #4a5568; }
-        input[type="text"], input[type="date"], textarea { padding: 10px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 14px; }
-        textarea { resize: vertical; height: 80px; }
-        .btn-generate { background: #3182ce; color: white; border: none; padding: 15px 20px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; transition: 0.3s; }
-        .btn-generate:hover { background: #2b6cb0; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         
-        /* --- Hidden PDF Template Styles --- */
-        #pdf-template { display: none; } /* Hidden on screen, only used for PDF building */
+        /* Custom Scrollbar for textareas */
+        textarea::-webkit-scrollbar { width: 6px; }
+        textarea::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        /* ========================================================
+           PDF TEMPLATE STYLES (Strictly for html2pdf rendering) 
+           ======================================================== */
+        #pdf-wrapper { display: none; } /* Hidden from UI */
+        #mou-doc { 
+            font-family: 'Georgia', serif; 
+            color: #1e293b; 
+            font-size: 11pt; 
+            line-height: 1.6; 
+            padding: 10mm 15mm; 
+            background: white; 
+        }
         
-        /* We wrap the PDF content in a container to enforce styling during html2pdf rendering */
-        .pdf-content { font-family: 'Georgia', 'Times New Roman', serif; color: #2d3748; line-height: 1.6; font-size: 11pt; padding: 20mm; background: white; }
-        .pdf-cover { text-align: center; height: 260mm; position: relative; }
-        .cover-top-bar { margin: -20mm -20mm 25mm -20mm; height: 12mm; background-color: #1a365d; border-bottom: 3px solid #3182ce; }
-        .logo-container { display: flex; justify-content: center; align-items: center; width: 100%; margin: 20mm auto 30mm auto; gap: 20px;}
-        .logo-img-klass { height: 130px; width: auto; }
-        .logo-img-party2 { height: 95px; width: auto; max-width: 200px; object-fit: contain; }
-        .divider-line { width: 2px; height: 100px; background-color: #cbd5e0; }
-        .doc-title { font-size: 26pt; color: #1a365d; font-family: 'Arial', sans-serif; font-weight: 800; letter-spacing: 1.5px; margin-top: 10mm; }
-        .doc-subtitle { font-size: 14pt; color: #4a5568; font-family: 'Arial', sans-serif; margin-bottom: 35mm; letter-spacing: 1px; }
-        .between { font-size: 10pt; color: #a0aec0; letter-spacing: 4px; margin: 15px 0; text-transform: uppercase; font-family: 'Arial', sans-serif;}
-        .party-name { font-size: 20pt; color: #2b6cb0; font-weight: 800; margin: 0; text-transform: uppercase; font-family: 'Arial', sans-serif;}
-        .party-tagline { font-size: 12pt; color: #718096; font-style: italic; margin-top: 5px; margin-bottom: 10px; font-family: 'Arial', sans-serif;}
+        /* Cover Page */
+        .pdf-cover { height: 250mm; position: relative; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .logo-row { display: flex; justify-content: center; align-items: center; gap: 40px; margin-bottom: 50px; width: 100%; }
+        .logo-img { max-height: 120px; max-width: 200px; object-fit: contain; }
+        .logo-divider { width: 2px; height: 100px; background-color: #cbd5e1; }
         
+        .doc-title { font-size: 24pt; font-family: 'Arial', sans-serif; font-weight: bold; color: #1e3a8a; letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; }
+        .doc-subtitle { font-size: 14pt; font-family: 'Arial', sans-serif; color: #64748b; margin-bottom: 40px; }
+        
+        .between-text { font-size: 10pt; color: #94a3b8; letter-spacing: 3px; text-transform: uppercase; margin: 20px 0; font-family: 'Arial', sans-serif; }
+        .party-title { font-size: 18pt; font-family: 'Arial', sans-serif; font-weight: bold; color: #2563eb; text-transform: uppercase; margin: 0; }
+        .party-tag { font-size: 12pt; font-style: italic; color: #64748b; margin-top: 5px; }
+
+        /* Content Pages */
         .pdf-page-break { page-break-before: always; }
+        .pdf-h2 { 
+            font-family: 'Arial', sans-serif; 
+            color: #1e3a8a; 
+            font-size: 13pt; 
+            font-weight: bold;
+            border-left: 4px solid #3b82f6; 
+            padding-left: 10px; 
+            margin-top: 25px; 
+            margin-bottom: 12px; 
+            background-color: #f1f5f9; 
+            padding-top: 4px; 
+            padding-bottom: 4px; 
+            page-break-after: avoid;
+        }
+        .pdf-p { margin-bottom: 12px; text-align: justify; }
+        .pdf-ul { padding-left: 25px; margin-bottom: 15px; }
+        .pdf-li { margin-bottom: 6px; text-align: justify; }
         
-        .pdf-content h2 { font-family: 'Arial', sans-serif; color: #1a365d; font-size: 14pt; border-left: 5px solid #3182ce; padding-left: 12px; margin-top: 35px; margin-bottom: 15px; background: linear-gradient(to right, #ebf8ff, transparent); padding-top: 4px; padding-bottom: 4px; }
-        .pdf-content p { margin-bottom: 12px; text-align: justify; }
-        .pdf-content ul { padding-left: 25px; margin-bottom: 15px; }
-        .pdf-content li { margin-bottom: 8px; text-align: justify; }
-        .commercial-box { background-color: #f7fafc; border: 1px solid #e2e8f0; border-left: 4px solid #ecc94b; padding: 20px; border-radius: 4px; margin: 20px 0; font-family: 'Arial', sans-serif; }
+        /* Commercial Box */
+        .pdf-commercial-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; page-break-inside: avoid; }
+        .pdf-commercial-box p { margin-bottom: 8px; }
         
-        table.signatures { width: 100%; border-collapse: collapse; font-family: 'Arial', sans-serif; margin-top: 30px; }
-        table.signatures td { width: 50%; vertical-align: top; padding: 25px; border: 1px solid #e2e8f0; background-color: #fcfcfc; }
-        .sig-party { font-weight: 800; color: #1a365d; font-size: 13pt; margin-bottom: 25px; border-bottom: 2px solid #cbd5e0; padding-bottom: 5px; text-transform: uppercase; }
-        .sig-row { margin-bottom: 15px; font-size: 10.5pt; color: #4a5568; }
-        .sig-stamp { height: 80px; object-fit: contain; display: block; margin: 10px auto; }
+        /* Signatures */
+        .pdf-signatures { width: 100%; border-collapse: collapse; margin-top: 40px; page-break-inside: avoid; font-family: 'Arial', sans-serif; }
+        .pdf-signatures td { width: 50%; vertical-align: top; padding: 20px; }
+        .sig-header { font-weight: bold; color: #1e3a8a; font-size: 12pt; margin-bottom: 25px; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px; text-transform: uppercase; }
+        .sig-line { margin-bottom: 15px; font-size: 10pt; color: #475569; }
+        .sig-space { border-bottom: 1px solid #475569; display: inline-block; width: 70%; height: 15px; }
+        .sig-stamp-box { border-top: 1px solid #1e293b; margin-top: 50px; text-align: center; padding-top: 5px; font-size: 10pt; }
     </style>
 </head>
-<body>
+<body class="p-4 md:p-8">
 
-<div class="dashboard-container">
-    <h1>Create New Partnership MoU</h1>
-    
-    <div class="form-grid">
-        <div class="form-group full-width">
-            <label>Partner Company Name (Party 2)</label>
-            <input type="text" id="p2_name" placeholder="e.g., Wehive">
+<div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+    <div class="bg-slate-900 px-8 py-6 text-white flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-bold">Master MoU Generator</h1>
+            <p class="text-sm text-slate-400 mt-1">Configure all variables, clauses, and branding before generating.</p>
         </div>
-        <div class="form-group">
-            <label>Partner Tagline</label>
-            <input type="text" id="p2_tagline" placeholder="e.g., Learn • Build • Get Hired">
-        </div>
-        <div class="form-group">
-            <label>Upload Partner Logo (Image)</label>
-            <input type="file" id="p2_logo_upload" accept="image/png, image/jpeg">
-        </div>
-        <div class="form-group full-width">
-            <label>Partner Description</label>
-            <textarea id="p2_desc" placeholder="e.g., IT Training and Placement Consultancy focused on career development..."></textarea>
-        </div>
-        <div class="form-group full-width">
-            <label>Partner Responsibilities (Separate by commas)</label>
-            <textarea id="p2_resp" placeholder="e.g., Promote program, Assist in registrations, Provide resume support..."></textarea>
+        <button onclick="generateMoU()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Generate PDF
+        </button>
+    </div>
+
+    <div class="p-8 h-[80vh] overflow-y-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <div class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                <h2 class="text-lg font-bold text-slate-800 border-b border-slate-300 pb-2">Party 1 Details (First Party)</h2>
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Company Name</label>
+                    <input type="text" id="p1_name" value="KlassConneqt" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tagline</label>
+                    <input type="text" id="p1_tagline" value="Seamless Learning, Anytime, Anywhere." class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Upload Custom Logo (Optional)</label>
+                    <input type="file" id="p1_logo_upload" accept="image/*" class="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                    <p class="text-[10px] text-slate-400 mt-1">Leave empty to use default logo.png from folder.</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Company Description</label>
+                    <textarea id="p1_desc" rows="3" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">an online learning platform dedicated to providing academic excellence, professional certification training, skill development programs, and language learning opportunities.</textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Responsibilities (One per line)</label>
+                    <textarea id="p1_resp" rows="5" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none leading-relaxed">Design and deliver the training curriculum.
+Provide qualified trainers and learning resources.
+Conduct live classes, practical labs, and assessments.
+Issue course completion certificates where applicable.
+Monitor student progress and performance.
+Support students throughout the training lifecycle.</textarea>
+                </div>
+            </div>
+
+            <div class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                <h2 class="text-lg font-bold text-slate-800 border-b border-slate-300 pb-2">Party 2 Details (Partner)</h2>
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Company Name</label>
+                    <input type="text" id="p2_name" placeholder="e.g., Wehive" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tagline</label>
+                    <input type="text" id="p2_tagline" placeholder="e.g., Learn • Build • Get Hired" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Upload Partner Logo</label>
+                    <input type="file" id="p2_logo_upload" accept="image/*" class="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-200 file:text-slate-700 hover:file:bg-slate-300">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Company Description</label>
+                    <textarea id="p2_desc" rows="3" placeholder="e.g., an IT Training and Placement Consultancy focused on career development..." class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Responsibilities (One per line)</label>
+                    <textarea id="p2_resp" rows="5" placeholder="Promote the training program to eligible candidates.&#10;Assist in student registrations and onboarding.&#10;Provide resume-building support." class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none leading-relaxed"></textarea>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Course Name</label>
-            <input type="text" id="course_name" value="CCNA Certification Training">
+        <div class="mt-8 space-y-4 bg-blue-50 p-6 rounded-xl border border-blue-100">
+            <h2 class="text-lg font-bold text-blue-900 border-b border-blue-200 pb-2">Commercial Terms & Scope</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-blue-800 uppercase mb-1">Course Name / Program</label>
+                    <input type="text" id="c_course" value="CCNA Certification Training" class="w-full border border-blue-200 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-blue-800 uppercase mb-1">Partnership Fee</label>
+                    <input type="text" id="c_fee" placeholder="e.g., ₹10,000 per student" class="w-full border border-blue-200 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-blue-800 uppercase mb-1">Revenue Sharing (%)</label>
+                    <input type="text" id="c_rev" placeholder="e.g., 60% / 40%" class="w-full border border-blue-200 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                </div>
+                <div class="lg:col-span-3">
+                    <label class="block text-xs font-bold text-blue-800 uppercase mb-1">Payment Terms</label>
+                    <input type="text" id="c_terms" placeholder="e.g., 50% advance, 50% post completion" class="w-full border border-blue-200 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                </div>
+                <div class="lg:col-span-3">
+                    <label class="block text-xs font-bold text-blue-800 uppercase mb-1">Scope of Collaboration (One per line)</label>
+                    <textarea id="c_scope" rows="4" class="w-full border border-blue-200 rounded p-2 text-sm focus:border-blue-500 outline-none leading-relaxed">Delivery of Certification Training Programs.
+Student enrollment and candidate referrals.
+Placement preparation and interview guidance.
+Joint marketing and promotional activities.</textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-blue-800 uppercase mb-1">MoU Validity (Years)</label>
+                    <input type="text" id="c_years" value="1" class="w-full border border-blue-200 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-blue-800 uppercase mb-1">Commencement Date</label>
+                    <input type="date" id="c_date" class="w-full border border-blue-200 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Partnership Fee / Pricing Info</label>
-            <input type="text" id="fee_info" placeholder="e.g., ₹10,000 per student">
-        </div>
-        <div class="form-group full-width">
-            <label>Revenue Sharing Terms</label>
-            <input type="text" id="rev_share" placeholder="e.g., 60% KlassConneqt / 40% Partner">
-        </div>
-        <div class="form-group">
-            <label>MoU Validity (Years)</label>
-            <input type="text" id="mou_years" value="1">
-        </div>
-        <div class="form-group">
-            <label>Commencement Date</label>
-            <input type="date" id="start_date">
+
+        <div class="mt-8 space-y-4 bg-white p-6 rounded-xl border border-slate-200">
+            <h2 class="text-lg font-bold text-slate-800 border-b border-slate-300 pb-2">Legal Clauses (Fully Editable)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Marketing & Branding</label>
+                    <textarea id="cl_marketing" rows="3" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">Both parties may use each other's name and logo solely for partnership-related promotional activities.
+Any marketing material shall be approved by both parties before publication.
+Both parties agree to maintain brand integrity and professional standards.</textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Confidentiality</label>
+                    <textarea id="cl_confidentiality" rows="3" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">Both parties agree to maintain confidentiality regarding business information, student data, pricing structures, operational processes, and any proprietary information shared during the course of this partnership.</textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Termination</label>
+                    <textarea id="cl_termination" rows="3" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">Either party may terminate this MoU by providing thirty (30) days written notice to the other party.
+Any ongoing student batches shall be completed under mutually agreed arrangements.</textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Dispute Resolution</label>
+                    <textarea id="cl_dispute" rows="3" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">Any disputes arising from this MoU shall first be resolved through mutual discussion and negotiation.
+If unresolved, the matter shall be subject to the jurisdiction of the competent courts of Salem, Tamil Nadu.</textarea>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Non-Exclusivity</label>
+                    <textarea id="cl_nonexclusivity" rows="2" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">This partnership shall be non-exclusive unless otherwise agreed in writing by both parties. Both parties remain free to collaborate with other organizations and training providers.</textarea>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <button class="btn-generate" onclick="generateMoU()">Generate & Download MoU PDF</button>
 </div>
 
-<div id="pdf-template">
-    <div class="pdf-content" id="mou-doc">
+<div id="pdf-wrapper">
+    <div id="mou-doc">
         
         <div class="pdf-cover">
-            <div class="cover-top-bar"></div>
-            
-            <div class="logo-container">
-                <img src="logo.png" class="logo-img-klass" alt="KlassConneqt">
-                <div class="divider-line"></div>
-                <img id="pdf_p2_logo" src="" class="logo-img-party2" style="display:none;" alt="Partner Logo">
+            <div class="logo-row">
+                <img id="out_p1_logo" src="logo.png" class="logo-img" alt="Party 1 Logo" onerror="this.style.display='none'">
+                <div class="logo-divider"></div>
+                <img id="out_p2_logo" src="" class="logo-img" style="display:none;" alt="Party 2 Logo">
             </div>
             
             <div class="doc-title">MEMORANDUM OF UNDERSTANDING</div>
             <div class="doc-subtitle">(MoU)</div>
             
-            <div class="between">Between</div>
-            <div class="party-name">KLASSCONNEQT</div>
-            <div class="party-tagline">Seamless Learning, Anytime, Anywhere.</div>
+            <div class="between-text">Between</div>
+            <div class="party-title" id="out_p1_name_cover">PARTY 1</div>
+            <div class="party-tag" id="out_p1_tagline_cover">Tagline 1</div>
             
-            <div class="between" style="margin-top: 25px;">And</div>
-            <div class="party-name" id="out_p2_name_cover">[PARTNER NAME]</div>
-            <div class="party-tagline" id="out_p2_tagline">[Partner Tagline]</div>
+            <div class="between-text" style="margin-top: 30px;">And</div>
+            <div class="party-title" id="out_p2_name_cover">PARTY 2</div>
+            <div class="party-tag" id="out_p2_tagline_cover">Tagline 2</div>
         </div>
 
         <div class="pdf-page-break"></div>
 
-        <h2>1. PURPOSE</h2>
-        <p>This Memorandum of Understanding (MoU) is entered into between <strong>KlassConneqt</strong> ("Training Partner") and <strong id="out_p2_name_1">[PARTNER NAME]</strong> ("Placement & Career Development Partner") with the objective of collaboratively delivering industry-relevant training programs and enhancing career opportunities for students.</p>
+        <h2 class="pdf-h2">1. PURPOSE</h2>
+        <p class="pdf-p">This Memorandum of Understanding (MoU) is entered into between <strong id="out_p1_name_p1">Party 1</strong> ("Training Partner") and <strong id="out_p2_name_p1">Party 2</strong> ("Placement & Career Development Partner") with the objective of collaboratively delivering industry-relevant training programs and enhancing career opportunities for students and aspiring professionals.</p>
+        <p class="pdf-p">Both parties agree to work together to provide high-quality training, career guidance, placement preparation, and employment support for enrolled candidates.</p>
 
-        <h2>2. PARTIES</h2>
-        <p><strong>Party 1: KlassConneqt</strong><br>
-        KlassConneqt is an online learning platform dedicated to providing academic excellence, professional certification training, skill development programs, and language learning opportunities.</p>
-        <p><strong id="out_p2_name_2">Party 2: [PARTNER NAME]</strong><br>
-        <span id="out_p2_desc">[Partner Description]</span></p>
+        <h2 class="pdf-h2">2. PARTIES</h2>
+        <p class="pdf-p"><strong id="out_p1_name_p2">Party 1</strong><br>
+        <span id="out_p1_desc">Description 1</span></p>
+        <p class="pdf-p"><strong id="out_p2_name_p2">Party 2</strong><br>
+        <span id="out_p2_desc">Description 2</span></p>
 
-        <h2>3. RESPONSIBILITIES OF KLASSCONNEQT</h2>
-        <ul>
-            <li>Design and deliver the training curriculum.</li>
-            <li>Provide qualified trainers and learning resources.</li>
-            <li>Conduct live classes, practical labs, and assessments.</li>
-            <li>Issue course completion certificates where applicable.</li>
-            <li>Monitor student progress and performance.</li>
-        </ul>
+        <h2 class="pdf-h2">3. SCOPE OF COLLABORATION</h2>
+        <p class="pdf-p">The collaboration shall include:</p>
+        <ul class="pdf-ul" id="out_scope_list"></ul>
 
-        <h2>4. RESPONSIBILITIES OF <span id="out_p2_name_3">[PARTNER NAME]</span></h2>
-        <ul id="out_p2_resp_list">
-            <li>[Responsibilities will appear here]</li>
-        </ul>
+        <h2 class="pdf-h2">4. RESPONSIBILITIES OF <span id="out_p1_name_h">PARTY 1</span></h2>
+        <ul class="pdf-ul" id="out_p1_resp_list"></ul>
 
-        <h2>5. COMMERCIAL TERMS</h2>
-        <div class="commercial-box">
-            <p><strong>Course Name:</strong> <span id="out_course"></span></p>
-            <p><strong>Special Partnership Fee:</strong> <span id="out_fee"></span></p>
-            <p><strong>Revenue Sharing:</strong> <span id="out_rev"></span></p>
+        <h2 class="pdf-h2">5. RESPONSIBILITIES OF <span id="out_p2_name_h">PARTY 2</span></h2>
+        <ul class="pdf-ul" id="out_p2_resp_list"></ul>
+
+        <h2 class="pdf-h2">6. COMMERCIAL TERMS</h2>
+        <div class="pdf-commercial-box">
+            <p><strong>Course Name:</strong> <span id="out_c_course"></span></p>
+            <p><strong>Special Partnership Fee:</strong> <span id="out_c_fee"></span></p>
+            <p><strong>Revenue Sharing:</strong> <span id="out_c_rev"></span></p>
+            <p><strong>Payment Terms:</strong> <span id="out_c_terms"></span></p>
         </div>
+        <p class="pdf-p" style="font-style: italic; font-size: 10pt; color: #64748b;">The above commercial terms shall be finalized and mutually agreed upon by both parties prior to execution of this partnership.</p>
 
-        <h2>6. TERM OF AGREEMENT & TERMINATION</h2>
-        <p>This MoU shall remain valid for a period of <strong id="out_years"></strong> year(s) commencing from <strong id="out_date"></strong>. Either party may terminate this MoU by providing thirty (30) days written notice.</p>
+        <h2 class="pdf-h2">7. MARKETING & BRANDING</h2>
+        <ul class="pdf-ul" id="out_cl_marketing"></ul>
 
-        <h2>7. ACCEPTANCE</h2>
-        <p>By signing below, both parties acknowledge and agree to the terms and conditions.</p>
+        <h2 class="pdf-h2">8. CONFIDENTIALITY</h2>
+        <p class="pdf-p" id="out_cl_confidentiality"></p>
 
-        <table class="signatures">
+        <h2 class="pdf-h2">9. TERM OF AGREEMENT</h2>
+        <p class="pdf-p">This MoU shall remain valid for a period of <strong id="out_c_years"></strong> Year(s) commencing from <strong id="out_c_date"></strong> and may be renewed upon mutual written consent.</p>
+
+        <h2 class="pdf-h2">10. TERMINATION</h2>
+        <ul class="pdf-ul" id="out_cl_termination"></ul>
+
+        <h2 class="pdf-h2">11. DISPUTE RESOLUTION</h2>
+        <ul class="pdf-ul" id="out_cl_dispute"></ul>
+
+        <h2 class="pdf-h2">12. NON-EXCLUSIVITY</h2>
+        <p class="pdf-p" id="out_cl_nonexclusivity"></p>
+
+        <h2 class="pdf-h2">13. ACCEPTANCE</h2>
+        <p class="pdf-p">By signing below, both parties acknowledge and agree to the terms and conditions contained within this Memorandum of Understanding.</p>
+
+        <table class="pdf-signatures">
             <tr>
                 <td>
-                    <div class="sig-party">FOR KLASSCONNEQT</div>
-                    <div class="sig-row">Name:</div><br>
-                    <div class="sig-row">Designation:</div><br>
-                    <img src="seal.png" class="sig-stamp" alt="KlassConneqt Seal" onerror="this.style.display='none'"> 
-                    <div style="border-top:1px solid #000; margin-top:20px; text-align:center; padding-top:5px;">Authorized Signature & Seal</div>
+                    <div class="sig-header">FOR <span id="out_sig_p1">PARTY 1</span></div>
+                    <div class="sig-line">Name: <span class="sig-space"></span></div>
+                    <div class="sig-line">Designation: <span class="sig-space" style="width: 58%"></span></div>
+                    <div class="sig-line">Date: <span class="sig-space"></span></div>
+                    <div class="sig-stamp-box">Authorized Signature & Seal</div>
                 </td>
                 <td>
-                    <div class="sig-party" id="out_p2_name_sig">FOR [PARTNER]</div>
-                    <div class="sig-row">Name:</div><br>
-                    <div class="sig-row">Designation:</div><br>
-                    <div class="sig-stamp"></div> <div style="border-top:1px solid #000; margin-top:20px; text-align:center; padding-top:5px;">Authorized Signature & Seal</div>
+                    <div class="sig-header">FOR <span id="out_sig_p2">PARTY 2</span></div>
+                    <div class="sig-line">Name: <span class="sig-space"></span></div>
+                    <div class="sig-line">Designation: <span class="sig-space" style="width: 58%"></span></div>
+                    <div class="sig-line">Date: <span class="sig-space"></span></div>
+                    <div class="sig-stamp-box">Authorized Signature & Seal</div>
                 </td>
             </tr>
         </table>
-
     </div>
 </div>
 
 <script>
-    // Handle Image Upload and convert to Base64 instantly
-    let partnerLogoBase64 = "";
-    document.getElementById('p2_logo_upload').addEventListener('change', function(e) {
+    // Logo Handlers
+    let p1Base64 = "";
+    let p2Base64 = "";
+    
+    document.getElementById('p1_logo_upload').addEventListener('change', e => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(readerEvent) {
-                partnerLogoBase64 = readerEvent.target.result;
-            }
+            reader.onload = e => p1Base64 = e.target.result;
             reader.readAsDataURL(file);
         }
     });
 
+    document.getElementById('p2_logo_upload').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => p2Base64 = e.target.result;
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Helper to format line-break separated text into HTML list items
+    function formatList(text) {
+        if(!text) return "<li>N/A</li>";
+        return text.split('\n').filter(line => line.trim() !== "").map(line => `<li>${line.trim()}</li>`).join('');
+    }
+
     function generateMoU() {
-        // 1. Grab values from the form
-        const p2Name = document.getElementById('p2_name').value.toUpperCase() || "[PARTNER NAME]";
-        const p2NameNormal = document.getElementById('p2_name').value || "[PARTNER NAME]";
-        const p2Tagline = document.getElementById('p2_tagline').value || "";
-        const p2Desc = document.getElementById('p2_desc').value || "Description not provided.";
-        const course = document.getElementById('course_name').value || "N/A";
-        const fee = document.getElementById('fee_info').value || "TBD";
-        const rev = document.getElementById('rev_share').value || "TBD";
-        const years = document.getElementById('mou_years').value || "1";
-        const sDate = document.getElementById('start_date').value || "________________";
-
-        // Handle Responsibilities List (comma separated)
-        const respText = document.getElementById('p2_resp').value;
-        let respHTML = "";
-        if(respText) {
-            const respArray = respText.split(',');
-            respArray.forEach(item => {
-                if(item.trim() !== "") respHTML += `<li>${item.trim()}</li>`;
-            });
-        } else {
-            respHTML = "<li>[Partner responsibilities not specified]</li>";
-        }
-
-        // 2. Inject values into the hidden template
-        document.getElementById('out_p2_name_cover').innerText = p2Name;
-        document.getElementById('out_p2_tagline').innerText = p2Tagline;
-        document.getElementById('out_p2_name_1').innerText = p2NameNormal;
-        document.getElementById('out_p2_name_2').innerText = `Party 2: ${p2NameNormal}`;
-        document.getElementById('out_p2_desc').innerText = p2Desc;
-        document.getElementById('out_p2_name_3').innerText = p2NameNormal.toUpperCase();
-        document.getElementById('out_p2_resp_list').innerHTML = respHTML;
-        document.getElementById('out_course').innerText = course;
-        document.getElementById('out_fee').innerText = fee;
-        document.getElementById('out_rev').innerText = rev;
-        document.getElementById('out_years').innerText = years;
-        document.getElementById('out_date').innerText = sDate;
-        document.getElementById('out_p2_name_sig').innerText = `FOR ${p2Name}`;
-
-        // Inject uploaded logo if exists
-        const logoImg = document.getElementById('pdf_p2_logo');
-        if (partnerLogoBase64) {
-            logoImg.src = partnerLogoBase64;
-            logoImg.style.display = "block";
-        } else {
-            logoImg.style.display = "none";
-        }
-
-        // 3. Generate PDF using html2pdf
-        const element = document.getElementById('mou-doc');
+        // Grab Values
+        const p1Name = document.getElementById('p1_name').value || "KlassConneqt";
+        const p2Name = document.getElementById('p2_name').value || "[PARTNER NAME]";
         
-        // Temporarily display block so html2pdf can read it properly
-        document.getElementById('pdf-template').style.display = 'block';
+        // Populate Cover
+        document.getElementById('out_p1_name_cover').innerText = p1Name.toUpperCase();
+        document.getElementById('out_p1_tagline_cover').innerText = document.getElementById('p1_tagline').value;
+        document.getElementById('out_p2_name_cover').innerText = p2Name.toUpperCase();
+        document.getElementById('out_p2_tagline_cover').innerText = document.getElementById('p2_tagline').value;
+        
+        // Handle Logos
+        if(p1Base64) document.getElementById('out_p1_logo').src = p1Base64;
+        const p2Img = document.getElementById('out_p2_logo');
+        if(p2Base64) {
+            p2Img.src = p2Base64;
+            p2Img.style.display = "block";
+        } else {
+            p2Img.style.display = "none";
+        }
 
+        // Populate Text References
+        document.getElementById('out_p1_name_p1').innerText = p1Name;
+        document.getElementById('out_p2_name_p1').innerText = p2Name;
+        document.getElementById('out_p1_name_p2').innerText = `Party 1: ${p1Name}`;
+        document.getElementById('out_p2_name_p2').innerText = `Party 2: ${p2Name}`;
+        document.getElementById('out_p1_name_h').innerText = p1Name.toUpperCase();
+        document.getElementById('out_p2_name_h').innerText = p2Name.toUpperCase();
+        document.getElementById('out_sig_p1').innerText = p1Name.toUpperCase();
+        document.getElementById('out_sig_p2').innerText = p2Name.toUpperCase();
+
+        // Populate Descriptions
+        document.getElementById('out_p1_desc').innerText = document.getElementById('p1_desc').value;
+        document.getElementById('out_p2_desc').innerText = document.getElementById('p2_desc').value;
+
+        // Populate Lists (Responsibilities & Scope)
+        document.getElementById('out_scope_list').innerHTML = formatList(document.getElementById('c_scope').value);
+        document.getElementById('out_p1_resp_list').innerHTML = formatList(document.getElementById('p1_resp').value);
+        document.getElementById('out_p2_resp_list').innerHTML = formatList(document.getElementById('p2_resp').value);
+
+        // Populate Commercials
+        document.getElementById('out_c_course').innerText = document.getElementById('c_course').value || "N/A";
+        document.getElementById('out_c_fee').innerText = document.getElementById('c_fee').value || "______________";
+        document.getElementById('out_c_rev').innerText = document.getElementById('c_rev').value || "______________";
+        document.getElementById('out_c_terms').innerText = document.getElementById('c_terms').value || "______________";
+        document.getElementById('out_c_years').innerText = document.getElementById('c_years').value || "_____";
+        const dateRaw = document.getElementById('c_date').value;
+        document.getElementById('out_c_date').innerText = dateRaw ? new Date(dateRaw).toLocaleDateString('en-GB') : "_____/_____/20___";
+
+        // Populate Clauses
+        document.getElementById('out_cl_marketing').innerHTML = formatList(document.getElementById('cl_marketing').value);
+        document.getElementById('out_cl_confidentiality').innerText = document.getElementById('cl_confidentiality').value;
+        document.getElementById('out_cl_termination').innerHTML = formatList(document.getElementById('cl_termination').value);
+        document.getElementById('out_cl_dispute').innerHTML = formatList(document.getElementById('cl_dispute').value);
+        document.getElementById('out_cl_nonexclusivity').innerText = document.getElementById('cl_nonexclusivity').value;
+
+        // Execute PDF Engine
+        const element = document.getElementById('mou-doc');
+        document.getElementById('pdf-wrapper').style.display = 'block'; // Unhide temporarily
+
+        // Clean Configuration for perfect A4 mapping
         const opt = {
-            margin:       0,
-            filename:     `MoU_KlassConneqt_${p2NameNormal.replace(/\s+/g, '_')}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
+            margin:       [15, 0, 15, 0], // Top, Left, Bottom, Right margins in mm (Left/Right handled by padding inside div)
+            filename:     `MoU_${p1Name}_${p2Name}.pdf`.replace(/\s+/g, '_'),
+            image:        { type: 'jpeg', quality: 1.0 },
+            html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
-        // Generate and save, then hide template again
         html2pdf().set(opt).from(element).save().then(() => {
-            document.getElementById('pdf-template').style.display = 'none';
+            document.getElementById('pdf-wrapper').style.display = 'none'; // Hide again
         });
     }
 </script>
