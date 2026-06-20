@@ -28,8 +28,8 @@
         }
         
         /* Cover Page */
-        .pdf-cover { height: 260mm; position: relative; text-align: center; }
-        .cover-top-bar { background-color: #1a365d; height: 35px; width: 100%; margin: -10mm -15mm 60px -15mm; }
+        .pdf-cover { height: 250mm; position: relative; text-align: center; margin-top: -10mm; } /* Pulled up to counter default margin */
+        .cover-top-bar { background-color: #1a365d; height: 30px; width: 100%; margin-bottom: 50px; } /* Removed negative horizontal margins, we'll fix width via JS options */
         .logo-row { display: flex; justify-content: center; align-items: center; gap: 30px; margin-bottom: 50px; width: 100%; }
         .logo-img { max-height: 100px; max-width: 180px; object-fit: contain; }
         .logo-divider { width: 1px; height: 80px; background-color: #cbd5e1; }
@@ -66,8 +66,8 @@
         .pdf-commercial-box p { margin-bottom: 8px; }
         
         /* Boxed Signatures */
-        .pdf-signatures { width: 100%; border-collapse: separate; border-spacing: 15px 0; margin-top: 40px; page-break-inside: avoid; font-family: 'Arial', sans-serif; margin-left: -7.5px; margin-right: -7.5px; }
-        .pdf-signatures td { width: 50%; vertical-align: top; padding: 25px; border: 1px solid #e2e8f0; background: #fafbfc; position: relative; overflow: hidden; }
+        .pdf-signatures { width: 100%; border-collapse: separate; border-spacing: 10px 0; margin-top: 20px; page-break-inside: avoid; font-family: 'Arial', sans-serif; margin-left: -5px; margin-right: -5px; }
+        .pdf-signatures td { width: 50%; vertical-align: top; padding: 15px; border: 1px solid #e2e8f0; background: #fafbfc; position: relative; overflow: hidden; }
         .sig-header { font-weight: bold; color: #1a365d; font-size: 14pt; margin-bottom: 25px; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px; text-transform: uppercase; }
         .sig-line { margin-bottom: 15px; font-size: 10.5pt; color: #4a5568; position: relative; z-index: 2; }
         .sig-space { border-bottom: 1px solid #718096; display: inline-block; width: 65%; height: 15px; margin-left: 5px; }
@@ -118,19 +118,28 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 border-t border-slate-200 pt-4 mt-2">
+                    <div class="col-span-2">
+                        <label class="block text-xs font-bold text-blue-600 uppercase mb-1">Company Seal (Transparent Background)</label>
+                        <input type="file" id="p1_seal_upload" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200 w-full">
+                    </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Signatory 1 Signature</label>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Signatory 1 Name</label>
+                        <input type="text" id="p1_sig1_name" placeholder="e.g. John Doe" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none mb-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Signatory 1 Title</label>
+                        <input type="text" id="p1_sig1_title" placeholder="e.g. CEO" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none mb-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Upload Signature</label>
                         <input type="file" id="p1_sig1_upload" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 w-full">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Signatory 2 Signature</label>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Signatory 2 Name</label>
+                        <input type="text" id="p1_sig2_name" placeholder="e.g. Jane Smith" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none mb-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Signatory 2 Title</label>
+                        <input type="text" id="p1_sig2_title" placeholder="e.g. Director" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none mb-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Upload Signature</label>
                         <input type="file" id="p1_sig2_upload" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 w-full">
                     </div>
-                    <div class="col-span-2">
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1 text-blue-600">Company Seal (Transparent Background)</label>
-                        <input type="file" id="p1_seal_upload" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200 w-full">
-                    </div>
                 </div>
+
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Company Description</label>
                     <textarea id="p1_desc" rows="3" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">an online learning platform dedicated to providing academic excellence, professional certification training, skill development programs, and language learning opportunities.</textarea>
@@ -161,6 +170,22 @@ Support students throughout the training lifecycle.</textarea>
                     <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Upload Partner Logo</label>
                     <input type="file" id="p2_logo_upload" accept="image/*" class="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-200 file:text-slate-700 hover:file:bg-slate-300">
                 </div>
+
+                <div class="grid grid-cols-2 gap-4 border-t border-slate-200 pt-4 mt-2 mb-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Signatory 1 Name</label>
+                        <input type="text" id="p2_sig1_name" placeholder="Name" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none mb-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Signatory 1 Title</label>
+                        <input type="text" id="p2_sig1_title" placeholder="Title" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Signatory 2 Name</label>
+                        <input type="text" id="p2_sig2_name" placeholder="Name" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none mb-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Signatory 2 Title</label>
+                        <input type="text" id="p2_sig2_title" placeholder="Title" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none">
+                    </div>
+                </div>
+
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Company Description</label>
                     <textarea id="p2_desc" rows="3" placeholder="e.g., an IT Training and Placement Consultancy focused on career development..." class="w-full border border-slate-300 rounded p-2 text-sm focus:border-blue-500 outline-none"></textarea>
@@ -323,37 +348,39 @@ If unresolved, the matter shall be subject to the jurisdiction of the competent 
                     <div class="sig-header">FOR <span id="out_sig_p1">PARTY 1</span></div>
                     
                     <div class="sig-line" style="font-weight: bold; color: #1e3a8a;">Authorized Signatory 1:</div>
-                    <div class="sig-line">Name: <span class="sig-space"></span></div>
-                    <div class="sig-line">Designation: <span class="sig-space" style="width: 58%"></span></div>
+                    <div class="sig-line">Name: <span id="out_p1_s1_name" style="border-bottom: 1px solid #718096; display: inline-block; width: 65%; margin-left: 5px;"></span></div>
+                    <div class="sig-line">Designation: <span id="out_p1_s1_title" style="border-bottom: 1px solid #718096; display: inline-block; width: 58%; margin-left: 5px;"></span></div>
                     <div class="sig-line">Date: <span class="sig-space"></span></div>
-                    <div style="height: 55px; margin-top: 10px; display: flex; align-items: flex-end; justify-content: center;">
-                        <img id="out_p1_sig1_img" style="max-height: 50px; max-width: 150px; object-fit: contain; display:none;" alt="Sig 1">
+                    <div style="height: 40px; margin-top: 5px; display: flex; align-items: flex-end; justify-content: center;">
+                        <img id="out_p1_sig1_img" class="sig-image-render" style="display:none;" alt="Sig 1">
                     </div>
-                    <div class="sig-stamp-box" style="margin-top: 5px; margin-bottom: 40px;">Signature & Seal</div>
+                    <div class="sig-stamp-box" style="margin-bottom: 20px;">Signature & Seal</div>
 
                     <div class="sig-line" style="font-weight: bold; color: #1e3a8a;">Authorized Signatory 2:</div>
-                    <div class="sig-line">Name: <span class="sig-space"></span></div>
-                    <div class="sig-line">Designation: <span class="sig-space" style="width: 58%"></span></div>
+                    <div class="sig-line">Name: <span id="out_p1_s2_name" style="border-bottom: 1px solid #718096; display: inline-block; width: 65%; margin-left: 5px;"></span></div>
+                    <div class="sig-line">Designation: <span id="out_p1_s2_title" style="border-bottom: 1px solid #718096; display: inline-block; width: 58%; margin-left: 5px;"></span></div>
                     <div class="sig-line">Date: <span class="sig-space"></span></div>
-                    <div style="height: 55px; margin-top: 10px; display: flex; align-items: flex-end; justify-content: center;">
-                        <img id="out_p1_sig2_img" style="max-height: 50px; max-width: 150px; object-fit: contain; display:none;" alt="Sig 2">
+                    <div style="height: 40px; margin-top: 5px; display: flex; align-items: flex-end; justify-content: center;">
+                        <img id="out_p1_sig2_img" class="sig-image-render" style="display:none;" alt="Sig 2">
                     </div>
-                    <div class="sig-stamp-box" style="margin-top: 5px;">Signature & Seal</div>
+                    <div class="sig-stamp-box">Signature & Seal</div>
                 </td>
                 
                 <td>
                     <div class="sig-header">FOR <span id="out_sig_p2">PARTY 2</span></div>
                     
                     <div class="sig-line" style="font-weight: bold; color: #1e3a8a;">Authorized Signatory 1:</div>
-                    <div class="sig-line">Name: <span class="sig-space"></span></div>
-                    <div class="sig-line">Designation: <span class="sig-space" style="width: 58%"></span></div>
+                    <div class="sig-line">Name: <span id="out_p2_s1_name" style="border-bottom: 1px solid #718096; display: inline-block; width: 65%; margin-left: 5px;"></span></div>
+                    <div class="sig-line">Designation: <span id="out_p2_s1_title" style="border-bottom: 1px solid #718096; display: inline-block; width: 58%; margin-left: 5px;"></span></div>
                     <div class="sig-line">Date: <span class="sig-space"></span></div>
-                    <div class="sig-stamp-box" style="margin-bottom: 40px;">Signature & Seal</div>
+                    <div style="height: 40px; margin-top: 5px;"></div>
+                    <div class="sig-stamp-box" style="margin-bottom: 20px;">Signature & Seal</div>
 
                     <div class="sig-line" style="font-weight: bold; color: #1e3a8a;">Authorized Signatory 2:</div>
-                    <div class="sig-line">Name: <span class="sig-space"></span></div>
-                    <div class="sig-line">Designation: <span class="sig-space" style="width: 58%"></span></div>
+                    <div class="sig-line">Name: <span id="out_p2_s2_name" style="border-bottom: 1px solid #718096; display: inline-block; width: 65%; margin-left: 5px;"></span></div>
+                    <div class="sig-line">Designation: <span id="out_p2_s2_title" style="border-bottom: 1px solid #718096; display: inline-block; width: 58%; margin-left: 5px;"></span></div>
                     <div class="sig-line">Date: <span class="sig-space"></span></div>
+                    <div style="height: 40px; margin-top: 5px;"></div>
                     <div class="sig-stamp-box">Signature & Seal</div>
                 </td>
             </tr>
@@ -470,6 +497,26 @@ If unresolved, the matter shall be subject to the jurisdiction of the competent 
             sealBgImg.style.display = "none";
         }
 
+        // Populate Seal
+        const sealBgImg = document.getElementById('out_p1_seal_bg');
+        if (typeof p1SealBase64 !== 'undefined' && p1SealBase64) {
+            sealBgImg.src = p1SealBase64;
+            sealBgImg.style.display = "block";
+        } else {
+            sealBgImg.style.display = "none";
+        }
+
+        // Populate Signatory Names/Titles
+        document.getElementById('out_p1_s1_name').innerText = document.getElementById('p1_sig1_name')?.value || "";
+        document.getElementById('out_p1_s1_title').innerText = document.getElementById('p1_sig1_title')?.value || "";
+        document.getElementById('out_p1_s2_name').innerText = document.getElementById('p1_sig2_name')?.value || "";
+        document.getElementById('out_p1_s2_title').innerText = document.getElementById('p1_sig2_title')?.value || "";
+        
+        document.getElementById('out_p2_s1_name').innerText = document.getElementById('p2_sig1_name')?.value || "";
+        document.getElementById('out_p2_s1_title').innerText = document.getElementById('p2_sig1_title')?.value || "";
+        document.getElementById('out_p2_s2_name').innerText = document.getElementById('p2_sig2_name')?.value || "";
+        document.getElementById('out_p2_s2_title').innerText = document.getElementById('p2_sig2_title')?.value || "";
+
         // Populate Text References
         document.getElementById('out_p1_name_p1').innerText = p1Name;
         document.getElementById('out_p2_name_p1').innerText = p2Name;
@@ -511,7 +558,7 @@ If unresolved, the matter shall be subject to the jurisdiction of the competent 
 
         // Clean Configuration for perfect A4 mapping
         const opt = {
-            margin:       [15, 0, 15, 0], // Top, Left, Bottom, Right margins in mm (Left/Right handled by padding inside div)
+            margin:       [0, 0, 15, 0], // Top changed to 0 for full-bleed blue bar
             filename:     `MoU_${p1Name}_${p2Name}.pdf`.replace(/\s+/g, '_'),
             image:        { type: 'jpeg', quality: 1.0 },
             html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
