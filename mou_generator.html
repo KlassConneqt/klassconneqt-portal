@@ -76,6 +76,10 @@
         
         /* Transparent Seal */
         .sig-seal-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 250px; object-fit: contain; opacity: 0.12; z-index: 1; pointer-events: none; } /* FIX: Centers seal perfectly behind BOTH signatures */
+   /* Fix Dispute Resolution Page Break */
+#out_cl_dispute {
+    page-break-inside: avoid;
+}
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -333,7 +337,7 @@ If unresolved, the matter shall be subject to the jurisdiction of the competent 
         <ul class="pdf-ul" id="out_cl_termination"></ul>
 
         <h2 class="pdf-h2">11. DISPUTE RESOLUTION</h2>
-        <ul class="pdf-ul" id="out_cl_dispute"></ul>
+        <div id="out_cl_dispute"></div>
 
         <h2 class="pdf-h2">12. NON-EXCLUSIVITY</h2>
         <p class="pdf-p" id="out_cl_nonexclusivity"></p>
@@ -540,7 +544,12 @@ If unresolved, the matter shall be subject to the jurisdiction of the competent 
         document.getElementById('out_cl_marketing').innerHTML = formatList(document.getElementById('cl_marketing').value);
         document.getElementById('out_cl_confidentiality').innerText = document.getElementById('cl_confidentiality').value;
         document.getElementById('out_cl_termination').innerHTML = formatList(document.getElementById('cl_termination').value);
-        document.getElementById('out_cl_dispute').innerHTML = formatList(document.getElementById('cl_dispute').value);
+        document.getElementById('out_cl_dispute').innerHTML =
+    document.getElementById('cl_dispute').value
+        .split('\n')
+        .filter(x => x.trim())
+        .map(x => `<p class="pdf-p">${x}</p>`)
+        .join('');
         document.getElementById('out_cl_nonexclusivity').innerText = document.getElementById('cl_nonexclusivity').value;
 
         // Execute PDF Engine
