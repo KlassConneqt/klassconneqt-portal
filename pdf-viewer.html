@@ -75,8 +75,9 @@ localStorage.getItem(
 'portalUser'
 );
 
-const startTime =
-Date.now();
+const SCRIPT_URL =
+'https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec';
+
 if(!userEmail){
 
 window.location.href =
@@ -84,6 +85,34 @@ window.location.href =
 
 }
 
+// =========================
+// HEARTBEAT
+// =========================
+
+setInterval(function(){
+
+fetch(SCRIPT_URL,{
+
+method:"POST",
+
+body:JSON.stringify({
+
+action:"heartbeat",
+
+email:userEmail
+
+})
+
+}).catch(function(err){
+
+console.log(err);
+
+});
+
+},60000);
+
+const startTime =
+Date.now();
 document.getElementById(
 'watermark'
 ).innerText =
@@ -106,8 +135,6 @@ console.log(
 fileId
 );  
 
-const SCRIPT_URL =
-'https://script.google.com/macros/s/AKfycbzPLuiYptDZx5GvbJFGdxv8XYm4W4-2Jd7fLxBvV4F3MagSTjl8W_qZKa2GzuPVPP-5/exec';
   fetch(
 SCRIPT_URL,
 {
