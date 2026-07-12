@@ -10,8 +10,9 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         
-        textarea::-webkit-scrollbar { width: 6px; }
-        textarea::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
         /* ========================================================
            PDF TEMPLATE STYLES (Strictly for html2pdf rendering) 
@@ -20,449 +21,449 @@
         #hr-doc { 
             font-family: 'Georgia', serif; 
             color: #1e293b; 
-            font-size: 10.5pt; 
+            font-size: 10pt; 
             line-height: 1.5; 
             padding: 12mm 15mm; 
             background: white; 
         }
         
-        .doc-header-table { width: 100%; border-bottom: 2px solid #1a365d; padding-bottom: 15px; margin-bottom: 20px; }
+        .doc-header-table { width: 100%; border-bottom: 2px solid #1a365d; padding-bottom: 12px; margin-bottom: 15px; }
         .doc-header-table td { vertical-align: middle; }
-        .logo-img { max-height: 70px; object-fit: contain; }
-        .doc-title { font-size: 18pt; font-family: 'Arial', sans-serif; font-weight: 900; color: #1a365d; text-align: right; text-transform: uppercase; letter-spacing: 1px; }
+        .logo-img { max-height: 65px; object-fit: contain; }
+        .doc-title { font-size: 16pt; font-family: 'Arial', sans-serif; font-weight: 900; color: #1a365d; text-align: right; text-transform: uppercase; letter-spacing: 1px; }
         .doc-ref { font-size: 9pt; color: #64748b; text-align: right; font-family: 'Arial', sans-serif; margin-top: 5px; }
 
-        .candidate-block { margin-bottom: 20px; font-family: 'Arial', sans-serif; }
+        .candidate-block { margin-bottom: 15px; font-family: 'Arial', sans-serif; }
         .candidate-block p { margin: 2px 0; }
-        .subject-line { font-weight: bold; font-family: 'Arial', sans-serif; background: #f1f5f9; padding: 8px 12px; border-left: 4px solid #3182ce; margin-bottom: 20px; }
+        .subject-line { font-weight: bold; font-family: 'Arial', sans-serif; background: #f1f5f9; padding: 8px 12px; border-left: 4px solid #3182ce; margin-bottom: 15px; font-size: 10.5pt;}
 
+        .avoid-page-split { page-break-inside: avoid; break-inside: avoid; }
         .pdf-page-break { page-break-before: always; }
+        
         .pdf-h2 { 
             font-family: 'Arial', sans-serif; 
             color: #1a365d; 
-            font-size: 11pt; 
+            font-size: 10.5pt; 
             font-weight: bold;
             margin-top: 15px; 
-            margin-bottom: 8px; 
+            margin-bottom: 6px; 
             text-transform: uppercase;
             page-break-after: avoid;
         }
         .pdf-p { margin-bottom: 10px; text-align: justify; }
         .pdf-ul { padding-left: 20px; margin-bottom: 10px; }
-        .pdf-li { margin-bottom: 6px; text-align: justify; }
+        .pdf-li { margin-bottom: 5px; text-align: justify; }
         
         /* Salary Table for Full Time */
-        .salary-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-family: 'Arial', sans-serif; font-size: 9.5pt; }
+        .salary-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-family: 'Arial', sans-serif; font-size: 9pt; }
         .salary-table th, .salary-table td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: left; }
         .salary-table th { background-color: #f1f5f9; color: #1a365d; font-weight: bold; text-transform: uppercase; }
         .salary-table .total-row { font-weight: bold; background-color: #e2e8f0; }
 
         /* Commercial Box for Freelancer */
-        .pdf-commercial-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #ecc94b; padding: 15px; margin: 15px 0; page-break-inside: avoid; }
-        
-        /* 3-Person Boxed Signatures */
-        .pdf-signatures { width: 100%; border-collapse: separate; border-spacing: 8px 0; margin-top: 30px; page-break-inside: avoid; font-family: 'Arial', sans-serif; margin-left: -4px; margin-right: -4px; }
-        .pdf-signatures td { width: 33.33%; vertical-align: top; padding: 10px; border: 1px solid #e2e8f0; background: #fafbfc; position: relative; overflow: hidden; }
-        .sig-header { font-weight: bold; color: #1a365d; font-size: 10pt; margin-bottom: 25px; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px; text-transform: uppercase; text-align: center; }
-        .sig-line { margin-bottom: 10px; font-size: 9pt; color: #4a5568; position: relative; z-index: 2; }
-        .sig-image-render { max-height: 45px; max-width: 120px; object-fit: contain; margin: 0 auto; display: block; position: relative; z-index: 2; }
-        
-        /* Transparent Seal */
-        .sig-seal-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120%; max-height: 150px; object-fit: contain; opacity: 0.12; z-index: 1; pointer-events: none; }
+        .pdf-commercial-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #ecc94b; padding: 12px; margin: 12px 0; page-break-inside: avoid; font-family: 'Arial', sans-serif;}
+        .pdf-commercial-box p { margin: 4px 0;}
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col overflow-x-hidden">
 
-<div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-    <div class="bg-slate-900 px-8 py-6 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-            <h1 class="text-2xl font-bold">HR Document Generator</h1>
-            <p class="text-sm text-slate-400 mt-1">Select contract type, edit details/clauses, and generate official PDFs.</p>
+    <header class="border-b border-slate-800 bg-slate-900 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="h-9 w-9 rounded-lg bg-gradient-to-tr from-cyan-500 via-blue-500 to-indigo-500 flex items-center justify-center font-black text-white text-sm tracking-tighter shadow-lg shadow-cyan-500/20">
+                KC
+            </div>
+            <div>
+                <h1 class="text-md font-bold text-white tracking-tight">KlassConneqt HR Workstation</h1>
+                <p class="text-xs text-slate-400">Official Agreement & Appointment Engine</p>
+            </div>
         </div>
-        <div class="flex items-center gap-3 w-full md:w-auto">
-            <button onclick="window.location.href='index.html'" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold py-2.5 px-5 rounded-lg shadow-sm transition-all text-sm w-full md:w-auto">
-                ← Dashboard
-            </button>
-            <button onclick="generateHRDoc()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 px-5 rounded-lg shadow-lg transition-all text-sm w-full md:w-auto">
-                📄 Generate PDF
-            </button>
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 px-4 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">← Back to Dashboard</a>
+            <div class="flex items-center gap-2 bg-slate-800 rounded-full px-4 py-1 border border-slate-700 text-xs font-semibold text-cyan-400">
+                <span class="h-2 w-2 rounded-full bg-cyan-400 animate-pulse"></span> HR Node Ready
+            </div>
         </div>
-    </div>
+    </header>
 
-    <div class="p-8 h-[80vh] overflow-y-auto">
-        <div class="bg-cyan-50 p-6 rounded-xl border border-cyan-100 mb-8">
-            <h2 class="text-lg font-bold text-cyan-900 border-b border-cyan-200 pb-2 mb-4">1. Document Type & Identity</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        
+        <section class="w-full lg:w-[42%] bg-slate-900 p-6 border-r border-slate-800 overflow-y-auto max-h-[calc(100vh-69px)] space-y-6 custom-scrollbar">
+            
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-lg font-bold text-white">Document Configuration</h2>
+                <p class="text-xs text-slate-400">Toggle between Freelancer and Full-Time formats. All clauses are fully editable below.</p>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-cyan-400">1. Document Type & Identity</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Engagement Type</label>
+                        <select id="doc_type" onchange="toggleTemplateContent()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white font-bold focus:outline-none focus:border-cyan-500 cursor-pointer">
+                            <option value="FREELANCE">Freelance / Tutor Agreement</option>
+                            <option value="ONROLL">Full-Time / On-Roll Employee</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Upload Company Logo</label>
+                        <input type="file" id="logo_upload" accept="image/*" class="w-full text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-700 file:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Company Seal (Transparent)</label>
+                        <input type="file" id="seal_upload" accept="image/*" class="w-full text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-700 file:text-white">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-cyan-400">2. Candidate Information</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Full Name</label>
+                        <input type="text" id="c_name" value="Jane Doe" oninput="updatePreviewBasic()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Designation / Role</label>
+                        <input type="text" id="c_role" value="Lead Freelance Tutor" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    </div>
+                </div>
                 <div>
-                    <label class="block text-xs font-bold text-cyan-800 uppercase mb-1">Engagement Type</label>
-                    <select id="doc_type" onchange="toggleTemplateContent()" class="w-full border border-cyan-300 rounded p-2 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-bold bg-white outline-none">
-                        <option value="FREELANCE">Freelance / Contract Consultant</option>
-                        <option value="ONROLL">Full-Time / On-Roll Employee</option>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Full Address</label>
+                    <input type="text" id="c_address" value="123 Tech Park Avenue, Bengaluru, Karnataka" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Issue Date</label>
+                        <input type="date" id="c_issue_date" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Joining / Start Date</label>
+                        <input type="date" id="c_join_date" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Compensation Amount</label>
+                        <input type="text" id="c_comp" value="₹ 45,000" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Compensation Frequency</label>
+                        <input type="text" id="c_comp_freq" value="Per Month / Per Batch" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-cyan-400">3. Authorized Signatory</h3>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Select Signing Authority</label>
+                    <select id="signatory-select" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-bold focus:outline-none focus:border-cyan-500 cursor-pointer">
+                        <option value="sriram">Sriram Murugan (Lead Systems Architect)</option>
+                        <option value="kowsalya">Kowsalya K (HR Director)</option>
+                        <option value="priyadharshini">Priyadharshini Murugan (Operations Head)</option>
                     </select>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-cyan-800 uppercase mb-1">Upload Company Logo</label>
-                    <input type="file" id="logo_upload" accept="image/*" class="text-sm text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-100 file:text-cyan-700 w-full bg-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-cyan-800 uppercase mb-1">Company Seal (Transparent)</label>
-                    <input type="file" id="seal_upload" accept="image/*" class="text-sm text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-100 file:text-indigo-700 w-full bg-white">
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <div class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
-                <h2 class="text-lg font-bold text-slate-800 border-b border-slate-300 pb-2">2. Candidate Information</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Full Name</label>
-                        <input type="text" id="c_name" value="Jane Doe" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Designation / Role</label>
-                        <input type="text" id="c_role" value="Lead Freelance Tutor" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Full Address</label>
-                    <input type="text" id="c_address" value="123 Tech Park Avenue, Bengaluru, Karnataka" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Issue Date</label>
-                        <input type="date" id="c_issue_date" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Joining / Start Date</label>
-                        <input type="date" id="c_join_date" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Compensation Amount</label>
-                        <input type="text" id="c_comp" value="₹ 45,000" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Compensation Frequency</label>
-                        <input type="text" id="c_comp_freq" value="Per Month / Per Batch" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none">
-                    </div>
-                </div>
             </div>
 
-            <div class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
-                <h2 class="text-lg font-bold text-slate-800 border-b border-slate-300 pb-2">3. Three-Party Signatures</h2>
+            <hr class="border-slate-800">
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-cyan-400">4. Legal Clauses & Content</h3>
                 
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="col-span-2 border-b border-slate-200 pb-2 mb-2">
-                        <label class="block text-xs font-bold text-indigo-600 uppercase mb-1">Company Signatory 1</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="s1_name" placeholder="Name (e.g. John Doe)" class="border border-slate-300 rounded p-1.5 text-sm outline-none">
-                            <input type="text" id="s1_title" placeholder="Title (e.g. Director)" class="border border-slate-300 rounded p-1.5 text-sm outline-none">
-                        </div>
-                        <input type="file" id="s1_upload" accept="image/*" class="mt-2 text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-slate-200 w-full">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Document Subject Line</label>
+                    <input type="text" id="cl_subject" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-cyan-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause 1: Scope & Responsibilities (One per line)</label>
+                    <textarea id="cl_scope" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause 2: Payment / Remuneration Terms</label>
+                    <textarea id="cl_payment" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause 3: Confidentiality & IP</label>
+                    <textarea id="cl_confidentiality" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause 4: Termination & Notice Period</label>
+                    <textarea id="cl_termination" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause 5: Independent Status / Governing Law</label>
+                    <textarea id="cl_misc" rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
+                </div>
+            </div>
+
+            <div class="pt-4 pb-10">
+                <button onclick="generateHRDoc()" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black text-xs py-4 rounded-xl transition duration-300 tracking-widest flex items-center justify-center gap-2 uppercase shadow-xl shadow-cyan-500/20">
+                    📄 Compile Agreement & Download PDF
+                </button>
+            </div>
+        </section>
+
+        <section class="w-full lg:w-[58%] preview-pane p-8 overflow-y-auto max-h-[calc(100vh-69px)] flex justify-center items-start">
+            
+            <div id="print-document-root" class="bg-white text-slate-900 w-[210mm] shadow-2xl relative p-10 font-[Arial]">
+                
+                <div class="text-center text-slate-400 py-20">
+                    <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <h2 class="text-xl font-bold text-slate-600">Document Engine Ready</h2>
+                    <p class="text-sm mt-2">Adjust parameters on the left and click <strong>Compile Agreement</strong> to render the official A4 PDF document.</p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <div id="pdf-wrapper">
+        <div id="hr-doc">
+            
+            <table class="doc-header-table">
+                <tr>
+                    <td style="width: 50%;">
+                        <img id="out_logo" src="logo.png" class="logo-img" alt="Logo" onerror="this.style.display='none'">
+                    </td>
+                    <td style="width: 50%;">
+                        <div class="doc-title" id="out_doc_title">AGREEMENT</div>
+                        <div class="doc-ref">Date: <span id="out_issue_date"></span> | Ref: KC-HR-<span id="out_ref"></span></div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="candidate-block">
+                <p style="font-weight: bold;">To,</p>
+                <p style="font-size: 13pt; font-weight: bold; color: #1a365d; margin-top: 4px;" id="out_c_name">Candidate Name</p>
+                <p id="out_c_address">Address</p>
+            </div>
+
+            <div class="subject-line">Subject: <span id="out_subject"></span></div>
+
+            <p class="pdf-p">Dear <strong id="out_c_name_inline"></strong>,</p>
+            <p class="pdf-p">Following our recent discussions, we are pleased to offer you the engagement of <strong id="out_c_role"></strong> at KlassConneqt. Your effective start date is <strong id="out_join_date"></strong>.</p>
+
+            <h2 class="pdf-h2">1. Scope of Services & Responsibilities</h2>
+            <ul class="pdf-ul" id="out_cl_scope"></ul>
+
+            <h2 class="pdf-h2">2. Compensation & Remuneration</h2>
+            
+            <div id="freelance_commercial_box" class="pdf-commercial-box">
+                <p><strong>Professional Fee:</strong> <span id="out_c_comp_f"></span></p>
+                <p><strong>Frequency/Structure:</strong> <span id="out_c_comp_freq_f"></span></p>
+            </div>
+
+            <table id="onroll_salary_table" class="salary-table" style="display:none;">
+                <thead>
+                    <tr>
+                        <th style="width: 60%;">Earnings Component</th>
+                        <th style="width: 40%;">Amount (INR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Basic Salary</td><td id="t_basic"></td></tr>
+                    <tr><td>House Rent Allowance (HRA)</td><td id="t_hra"></td></tr>
+                    <tr><td>Special/Other Allowances</td><td id="t_special"></td></tr>
+                    <tr class="total-row"><td>Total Gross Compensation</td><td id="t_total"></td></tr>
+                </tbody>
+            </table>
+
+            <p class="pdf-p" id="out_cl_payment"></p>
+
+            <h2 class="pdf-h2">3. Confidentiality & Intellectual Property</h2>
+            <p class="pdf-p" id="out_cl_confidentiality"></p>
+
+            <h2 class="pdf-h2">4. Term & Termination</h2>
+            <p class="pdf-p" id="out_cl_termination"></p>
+
+            <h2 class="pdf-h2">5. General Provisions</h2>
+            <p class="pdf-p" id="out_cl_misc"></p>
+
+            <p class="pdf-p" style="margin-top: 20px;">Please sign and return the duplicate copy of this document as a token of your acceptance of the terms and conditions outlined above.</p>
+
+            <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end; position: relative;" class="avoid-page-split">
+                
+                <div style="width: 45%;">
+                    <div style="border-bottom: 1px solid #718096; margin-bottom: 8px; height: 50px;"></div>
+                    <p style="font-size: 9.5pt; font-weight: bold; color: #1e293b; text-transform: uppercase; margin: 0;">Accepted & Agreed</p>
+                    <p style="font-size: 8.5pt; color: #64748b; margin: 2px 0 0 0;">Signature & Date</p>
+                    <p id="sig_c_name" style="font-size: 9.5pt; font-weight: bold; color: #0f172a; margin: 8px 0 0 0; text-transform: uppercase;"></p>
+                </div>
+                
+                <div style="width: 45%; text-align: right; position: relative;">
+                    <img id="out_seal" src="KlassConneqt_Seal.png" style="position: absolute; right: 20px; bottom: 10px; width: 110px; opacity: 0.15; transform: rotate(-15deg); z-index: 1; display: none;" alt="Seal">
+                    
+                    <div style="height: 50px; position: relative; z-index: 2; display: flex; justify-content: flex-end; align-items: flex-end;">
+                        <img id="signature-image" src="sriram.png" style="max-height: 55px; max-width: 140px; object-fit: contain;" onerror="this.style.display='none';">
                     </div>
                     
-                    <div class="col-span-2">
-                        <label class="block text-xs font-bold text-indigo-600 uppercase mb-1">Company Signatory 2</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="s2_name" placeholder="Name (e.g. Jane Smith)" class="border border-slate-300 rounded p-1.5 text-sm outline-none">
-                            <input type="text" id="s2_title" placeholder="Title (e.g. HR Head)" class="border border-slate-300 rounded p-1.5 text-sm outline-none">
-                        </div>
-                        <input type="file" id="s2_upload" accept="image/*" class="mt-2 text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-slate-200 w-full">
-                    </div>
+                    <div style="border-bottom: 1px solid #718096; margin-bottom: 8px; position: relative; z-index: 2;"></div>
+                    
+                    <p style="font-size: 9.5pt; font-weight: bold; color: #1e293b; text-transform: uppercase; margin: 0; position: relative; z-index: 2;">For KlassConneqt</p>
+                    <p style="font-size: 8.5pt; color: #64748b; margin: 2px 0 0 0; position: relative; z-index: 2;">Authorized Signatory</p>
+                    <p id="signatory-name" style="font-size: 9.5pt; font-weight: bold; color: #0f172a; margin: 8px 0 0 0; text-transform: uppercase; position: relative; z-index: 2;">SRIRAM MURUGAN</p>
                 </div>
             </div>
-        </div>
 
-        <div class="mt-8 space-y-4 bg-white p-6 rounded-xl border border-slate-200">
-            <h2 class="text-lg font-bold text-slate-800 border-b border-slate-300 pb-2">4. Document Content & Legal Clauses</h2>
-            
-            <div>
-                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Document Subject Line</label>
-                <input type="text" id="cl_subject" class="w-full border border-slate-300 rounded p-2 text-sm font-bold focus:border-cyan-500 outline-none">
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Clause 1: Scope & Responsibilities (One per line for bullet points)</label>
-                    <textarea id="cl_scope" rows="4" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none leading-relaxed"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Clause 2: Payment / Remuneration Terms</label>
-                    <textarea id="cl_payment" rows="4" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none leading-relaxed"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Clause 3: Confidentiality & IP</label>
-                    <textarea id="cl_confidentiality" rows="4" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none leading-relaxed"></textarea>
-                </div>
-                <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Clause 4: Termination & Notice Period</label>
-                    <textarea id="cl_termination" rows="3" class="w-full border border-slate-300 rounded p-2 text-sm focus:border-cyan-500 outline-none leading-relaxed"></textarea>
-                </div>
+            <div style="text-align: center; margin-top: 40px; font-size: 8pt; color: #94a3b8; font-family: 'Arial', sans-serif;" class="avoid-page-split">
+                KlassConneqt Private Limited — Confidential HR Document • Generated Electronically
             </div>
         </div>
     </div>
-</div>
 
-<div id="pdf-wrapper">
-    <div id="hr-doc">
+    <script>
+        // --- Init Dates & UI ---
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('c_issue_date').value = today;
+        document.getElementById('c_join_date').value = today;
         
-        <table class="doc-header-table">
-            <tr>
-                <td style="width: 50%;">
-                    <img id="out_logo" src="logo.png" class="logo-img" alt="Logo" onerror="this.style.display='none'">
-                </td>
-                <td style="width: 50%;">
-                    <div class="doc-title" id="out_doc_title">AGREEMENT</div>
-                    <div class="doc-ref">Date: <span id="out_issue_date"></span> | Ref: KC-HR-<span id="out_ref"></span></div>
-                </td>
-            </tr>
-        </table>
+        // --- File Uploads (Logo & Seal) ---
+        let logoBase64 = "";
+        let sealBase64 = "";
 
-        <div class="candidate-block">
-            <p style="font-weight: bold;">To,</p>
-            <p style="font-size: 14pt; font-weight: bold; color: #1a365d; margin-top: 5px;" id="out_c_name">Candidate Name</p>
-            <p id="out_c_address">Address</p>
-        </div>
-
-        <div class="subject-line">Subject: <span id="out_subject"></span></div>
-
-        <p class="pdf-p">Dear <strong id="out_c_name_inline"></strong>,</p>
-        <p class="pdf-p">Following our recent discussions, we are pleased to offer you the position/engagement of <strong id="out_c_role"></strong> at KlassConneqt. Your effective start date will be <strong id="out_join_date"></strong>.</p>
-
-        <h2 class="pdf-h2">1. Scope of Work & Responsibilities</h2>
-        <ul class="pdf-ul" id="out_cl_scope"></ul>
-
-        <h2 class="pdf-h2">2. Compensation & Remuneration</h2>
-        
-        <div id="freelance_commercial_box" class="pdf-commercial-box">
-            <p><strong>Professional Fee:</strong> <span id="out_c_comp_f"></span></p>
-            <p><strong>Frequency/Structure:</strong> <span id="out_c_comp_freq_f"></span></p>
-        </div>
-
-        <table id="onroll_salary_table" class="salary-table" style="display:none;">
-            <thead>
-                <tr>
-                    <th style="width: 60%;">Earnings Component</th>
-                    <th style="width: 40%;">Amount (INR)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Basic Salary</td><td id="t_basic"></td></tr>
-                <tr><td>House Rent Allowance (HRA)</td><td id="t_hra"></td></tr>
-                <tr><td>Special/Other Allowances</td><td id="t_special"></td></tr>
-                <tr class="total-row"><td>Total Gross Compensation</td><td id="t_total"></td></tr>
-            </tbody>
-        </table>
-
-        <p class="pdf-p" id="out_cl_payment"></p>
-
-        <h2 class="pdf-h2">3. Confidentiality & Intellectual Property</h2>
-        <p class="pdf-p" id="out_cl_confidentiality"></p>
-
-        <h2 class="pdf-h2">4. Termination & Notice Period</h2>
-        <p class="pdf-p" id="out_cl_termination"></p>
-
-        <p class="pdf-p" style="margin-top: 20px;">Please sign and return the duplicate copy of this document as a token of your acceptance of the terms and conditions outlined above.</p>
-
-        <table class="pdf-signatures">
-            <tr>
-                <td>
-                    <div class="sig-header">ACCEPTED & AGREED</div>
-                    <div class="sig-line" style="font-weight: bold;">Candidate / Consultant:</div>
-                    <div class="sig-line">Name: <strong id="sig_c_name"></strong></div>
-                    <div style="height: 45px; margin-top: 10px; border-bottom: 1px dashed #a0aec0;"></div>
-                    <div class="sig-line" style="text-align: center; font-size: 8pt; margin-top: 5px;">Signature & Date</div>
-                </td>
-                
-                <td>
-                    <img id="out_seal_1" class="sig-seal-bg" src="" style="display:none;" alt="Seal">
-                    <div class="sig-header">FOR KLASSCONNEQT</div>
-                    <div class="sig-line" style="font-weight: bold;">Authorized Signatory 1:</div>
-                    <div class="sig-line">Name: <span id="out_s1_name"></span></div>
-                    <div class="sig-line">Title: <span id="out_s1_title"></span></div>
-                    <div style="height: 45px; margin-top: 5px; display: flex; align-items: flex-end; justify-content: center;">
-                        <img id="out_s1_img" class="sig-image-render" style="display:none;" alt="Sig 1">
-                    </div>
-                </td>
-
-                <td>
-                    <img id="out_seal_2" class="sig-seal-bg" src="" style="display:none;" alt="Seal">
-                    <div class="sig-header">FOR KLASSCONNEQT</div>
-                    <div class="sig-line" style="font-weight: bold;">Authorized Signatory 2:</div>
-                    <div class="sig-line">Name: <span id="out_s2_name"></span></div>
-                    <div class="sig-line">Title: <span id="out_s2_title"></span></div>
-                    <div style="height: 45px; margin-top: 5px; display: flex; align-items: flex-end; justify-content: center;">
-                        <img id="out_s2_img" class="sig-image-render" style="display:none;" alt="Sig 2">
-                    </div>
-                </td>
-            </tr>
-        </table>
-
-        <div style="text-align: center; margin-top: 30px; font-size: 8pt; color: #94a3b8; font-family: 'Arial', sans-serif;">
-            KlassConneqt Private Limited — Confidential HR Document • Generated Electronically
-        </div>
-    </div>
-</div>
-
-<script>
-    // Set Default Dates
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('c_issue_date').value = today;
-    document.getElementById('c_join_date').value = today;
-    
-    // File Upload States
-    let logoBase64 = "";
-    let sealBase64 = "";
-    let s1Base64 = "";
-    let s2Base64 = "";
-
-    const fileReaders = [
-        { id: 'logo_upload', target: val => logoBase64 = val },
-        { id: 'seal_upload', target: val => sealBase64 = val },
-        { id: 's1_upload', target: val => s1Base64 = val },
-        { id: 's2_upload', target: val => s2Base64 = val }
-    ];
-
-    fileReaders.forEach(readerObj => {
-        document.getElementById(readerObj.id).addEventListener('change', e => {
+        document.getElementById('logo_upload').addEventListener('change', e => {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = ev => readerObj.target(ev.target.result);
-                reader.readAsDataURL(file);
-            }
+            if (file) { const r = new FileReader(); r.onload = ev => logoBase64 = ev.target.result; r.readAsDataURL(file); }
         });
-    });
-
-    // Content Templates
-    const templates = {
-        FREELANCE: {
-            subject: "Agreement for Freelance / Contractual Services",
-            scope: "Deliver training modules strictly as per KlassConneqt curriculum standards.\nConduct practical labs, assignments, and continuous assessments.\nMaintain a professional environment and adhere to batch schedules.",
-            payment: "As an independent contractor, you are responsible for your own taxes. No standard employee benefits (PF, Insurance, Paid Leaves) are applicable to this principal-to-principal engagement.",
-            confidentiality: "You agree to maintain strict confidentiality regarding student data, course material, proprietary code, and business operations. All intellectual property (IP) created during this engagement remains the sole property of KlassConneqt.",
-            termination: "Either party may terminate this agreement by providing a 15-day written notice. Any ongoing batches assigned must be successfully completed or transitioned smoothly before final settlement."
-        },
-        ONROLL: {
-            subject: "Offer of Full-Time Employment",
-            scope: "Execute full-time operational duties assigned by the reporting manager.\nParticipate in internal meetings, sprint planning, and core development/training activities.\nUphold the company’s code of conduct and organizational policies.",
-            payment: "Your compensation is subject to statutory deductions (TDS, PF, Professional Tax) as per government norms. Annual appraisals and performance bonuses will be strictly based on performance metrics.",
-            confidentiality: "You are bound by the company's Non-Disclosure Agreement (NDA). You shall not engage in any dual employment or freelance activities that conflict with KlassConneqt's business interests during your tenure.",
-            termination: "You will be on a probation period of 90 days with a 15-day notice period. Post-confirmation, a standard 45-day notice period is required for separation from either side."
-        }
-    };
-
-    function toggleTemplateContent() {
-        const type = document.getElementById('doc_type').value;
-        const tmpl = templates[type];
-        
-        document.getElementById('cl_subject').value = tmpl.subject;
-        document.getElementById('cl_scope').value = tmpl.scope;
-        document.getElementById('cl_payment').value = tmpl.payment;
-        document.getElementById('cl_confidentiality').value = tmpl.confidentiality;
-        document.getElementById('cl_termination').value = tmpl.termination;
-
-        // Tweak labels slightly
-        if(type === 'ONROLL') {
-            document.getElementById('c_comp').value = "₹ 6,50,000";
-            document.getElementById('c_comp_freq').value = "Per Annum (CTC)";
-        } else {
-            document.getElementById('c_comp').value = "₹ 45,000";
-            document.getElementById('c_comp_freq').value = "Per Month / Per Batch";
-        }
-    }
-
-    // Initialize defaults on load
-    toggleTemplateContent();
-
-    function formatList(text) {
-        if(!text) return "<li>N/A</li>";
-        return text.split('\n').filter(line => line.trim() !== "").map(line => `<li>${line.trim()}</li>`).join('');
-    }
-
-    function generateHRDoc() {
-        const type = document.getElementById('doc_type').value;
-        const cName = document.getElementById('c_name').value;
-        const compAmt = document.getElementById('c_comp').value;
-
-        // Top Header
-        document.getElementById('out_doc_title').innerText = type === 'ONROLL' ? 'APPOINTMENT LETTER' : 'FREELANCE AGREEMENT';
-        document.getElementById('out_ref').innerText = Math.floor(Math.random() * 90000) + 10000;
-        document.getElementById('out_issue_date').innerText = new Date(document.getElementById('c_issue_date').value).toLocaleDateString('en-GB');
-        
-        // Images
-        if(logoBase64) document.getElementById('out_logo').src = logoBase64;
-        
-        const sig1 = document.getElementById('out_s1_img');
-        if(s1Base64) { sig1.src = s1Base64; sig1.style.display = 'block'; } else { sig1.style.display = 'none'; }
-        
-        const sig2 = document.getElementById('out_s2_img');
-        if(s2Base64) { sig2.src = s2Base64; sig2.style.display = 'block'; } else { sig2.style.display = 'none'; }
-
-        const seals = [document.getElementById('out_seal_1'), document.getElementById('out_seal_2')];
-        seals.forEach(seal => {
-            if(sealBase64) { seal.src = sealBase64; seal.style.display = 'block'; } else { seal.style.display = 'none'; }
+        document.getElementById('seal_upload').addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) { const r = new FileReader(); r.onload = ev => sealBase64 = ev.target.result; r.readAsDataURL(file); }
         });
 
-        // Basic Info
-        document.getElementById('out_c_name').innerText = cName;
-        document.getElementById('out_c_name_inline').innerText = cName;
-        document.getElementById('sig_c_name').innerText = cName;
-        document.getElementById('out_c_address').innerText = document.getElementById('c_address').value;
-        document.getElementById('out_c_role').innerText = document.getElementById('c_role').value;
-        document.getElementById('out_join_date').innerText = new Date(document.getElementById('c_join_date').value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        document.getElementById('out_subject').innerText = document.getElementById('cl_subject').value;
-
-        // Signatories
-        document.getElementById('out_s1_name').innerText = document.getElementById('s1_name').value;
-        document.getElementById('out_s1_title').innerText = document.getElementById('s1_title').value;
-        document.getElementById('out_s2_name').innerText = document.getElementById('s2_name').value;
-        document.getElementById('out_s2_title').innerText = document.getElementById('s2_title').value;
-
-        // Clauses
-        document.getElementById('out_cl_scope').innerHTML = formatList(document.getElementById('cl_scope').value);
-        document.getElementById('out_cl_payment').innerText = document.getElementById('cl_payment').value;
-        document.getElementById('out_cl_confidentiality').innerText = document.getElementById('cl_confidentiality').value;
-        document.getElementById('out_cl_termination').innerText = document.getElementById('cl_termination').value;
-
-        // Toggle Salary Structures
-        if(type === 'ONROLL') {
-            document.getElementById('freelance_commercial_box').style.display = 'none';
-            document.getElementById('onroll_salary_table').style.display = 'table';
-            
-            // Basic mock calculation for table (40% basic, 20% HRA, 40% Special)
-            let rawNum = parseFloat(compAmt.replace(/[^0-9.-]+/g,"")) || 0;
-            document.getElementById('t_basic').innerText = `₹ ${(rawNum * 0.4).toLocaleString('en-IN')}`;
-            document.getElementById('t_hra').innerText = `₹ ${(rawNum * 0.2).toLocaleString('en-IN')}`;
-            document.getElementById('t_special').innerText = `₹ ${(rawNum * 0.4).toLocaleString('en-IN')}`;
-            document.getElementById('t_total').innerText = compAmt;
-        } else {
-            document.getElementById('freelance_commercial_box').style.display = 'block';
-            document.getElementById('onroll_salary_table').style.display = 'none';
-            document.getElementById('out_c_comp_f').innerText = compAmt;
-            document.getElementById('out_c_comp_freq_f').innerText = document.getElementById('c_comp_freq').value;
-        }
-
-        // Render PDF
-        const element = document.getElementById('hr-doc');
-        document.getElementById('pdf-wrapper').style.display = 'block';
-
-        const opt = {
-            margin:       [12, 0, 12, 0],
-            filename:     `Agreement_${type}_${cName.replace(/\s+/g, '_')}.pdf`,
-            image:        { type: 'jpeg', quality: 1.0 },
-            html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        // --- Signature Dropdown Logic ---
+        const signatures = {
+            sriram: { name: "SRIRAM MURUGAN", image: "sriram.png" },
+            kowsalya: { name: "KOWSALYA K", image: "kowsalya.png" },
+            priyadharshini: { name: "PRIYADHARSHINI MURUGAN", image: "priyadharshini.png" }
         };
 
-        html2pdf().set(opt).from(element).save().then(() => {
-            document.getElementById('pdf-wrapper').style.display = 'none';
-        });
-    }
-</script>
+        // --- Templates for Toggle ---
+        const templates = {
+            FREELANCE: {
+                subject: "Agreement for Freelance / Contractual Tutor Services",
+                scope: "Deliver training modules and tutoring sessions strictly as per KlassConneqt curriculum standards.\nPrepare necessary course materials, conduct practical labs, and manage assignments.\nProvide timely feedback, assess student performance, and maintain batch schedules effectively.",
+                payment: "For the provision of your services, you will be compensated as per the agreed commercial structure. As an independent contractor, you are solely responsible for the payment of all applicable taxes. No standard employee benefits (such as Provident Fund, health insurance, or paid leave) are applicable to this principal-to-principal engagement.",
+                confidentiality: "You agree to maintain absolute confidentiality regarding student data, course material, proprietary code, and business operations. All intellectual property (IP), training materials, and content created or utilized during this engagement remains the sole and exclusive property of KlassConneqt.",
+                termination: "Either party may terminate this agreement without cause by providing a fifteen (15) days written notice. In the event of termination, any ongoing batches or training commitments assigned to you must be successfully completed or transitioned smoothly prior to the final financial settlement.",
+                misc: "Independent Contractor: This agreement does not create an employer-employee relationship, partnership, or joint venture. Governing Law: This agreement shall be governed by the laws of India, with jurisdiction in Salem, Tamil Nadu."
+            },
+            ONROLL: {
+                subject: "Offer of Full-Time Employment",
+                scope: "Execute full-time operational and technical duties as assigned by the reporting manager.\nParticipate actively in internal meetings, sprint planning, and core development/training activities.\nUphold the company’s code of conduct, professional ethics, and organizational policies at all times.",
+                payment: "Your compensation is subject to statutory deductions (TDS, PF, Professional Tax) as per prevailing government norms. Annual appraisals, increments, and performance bonuses will be strictly based on individual performance metrics and company profitability.",
+                confidentiality: "You are strictly bound by the company's Non-Disclosure Agreement (NDA). You shall not engage in any dual employment, freelance activities, or consultancy that conflicts with KlassConneqt's business interests during your employment tenure.",
+                termination: "You will be on a probation period of 90 days, during which the notice period is 15 days. Post-confirmation, a standard 45-day notice period is mandatory for separation from either side. The company reserves the right to terminate employment immediately for disciplinary reasons.",
+                misc: "Governing Law & Policies: Your employment will be governed by the standard HR policies of KlassConneqt. All disputes are subject to the jurisdiction of the competent courts in Salem, Tamil Nadu."
+            }
+        };
+
+        function toggleTemplateContent() {
+            const type = document.getElementById('doc_type').value;
+            const tmpl = templates[type];
+            
+            document.getElementById('cl_subject').value = tmpl.subject;
+            document.getElementById('cl_scope').value = tmpl.scope;
+            document.getElementById('cl_payment').value = tmpl.payment;
+            document.getElementById('cl_confidentiality').value = tmpl.confidentiality;
+            document.getElementById('cl_termination').value = tmpl.termination;
+            document.getElementById('cl_misc').value = tmpl.misc;
+
+            if(type === 'ONROLL') {
+                document.getElementById('c_comp').value = "₹ 6,50,000";
+                document.getElementById('c_comp_freq').value = "Per Annum (CTC)";
+            } else {
+                document.getElementById('c_comp').value = "₹ 45,000";
+                document.getElementById('c_comp_freq').value = "Per Month / Per Batch";
+            }
+        }
+
+        function formatList(text) {
+            if(!text) return "<li>N/A</li>";
+            return text.split('\n').filter(line => line.trim() !== "").map(line => `<li>${line.trim()}</li>`).join('');
+        }
+
+        function generateHRDoc() {
+            const type = document.getElementById('doc_type').value;
+            const cName = document.getElementById('c_name').value;
+            const compAmt = document.getElementById('c_comp').value;
+            const sigKey = document.getElementById('signatory-select').value;
+            const selectedSig = signatures[sigKey];
+
+            // 1. Setup Header & Basic Info
+            document.getElementById('out_doc_title').innerText = type === 'ONROLL' ? 'APPOINTMENT LETTER' : 'TUTOR AGREEMENT';
+            document.getElementById('out_ref').innerText = Math.floor(Math.random() * 90000) + 10000;
+            document.getElementById('out_issue_date').innerText = new Date(document.getElementById('c_issue_date').value).toLocaleDateString('en-GB');
+            
+            if(logoBase64) document.getElementById('out_logo').src = logoBase64;
+            
+            document.getElementById('out_c_name').innerText = cName;
+            document.getElementById('out_c_name_inline').innerText = cName;
+            document.getElementById('sig_c_name').innerText = cName;
+            document.getElementById('out_c_address').innerText = document.getElementById('c_address').value;
+            document.getElementById('out_c_role').innerText = document.getElementById('c_role').value;
+            document.getElementById('out_join_date').innerText = new Date(document.getElementById('c_join_date').value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('out_subject').innerText = document.getElementById('cl_subject').value;
+
+            // 2. Map Clauses
+            document.getElementById('out_cl_scope').innerHTML = formatList(document.getElementById('cl_scope').value);
+            document.getElementById('out_cl_payment').innerText = document.getElementById('cl_payment').value;
+            document.getElementById('out_cl_confidentiality').innerText = document.getElementById('cl_confidentiality').value;
+            document.getElementById('out_cl_termination').innerText = document.getElementById('cl_termination').value;
+            document.getElementById('out_cl_misc').innerText = document.getElementById('cl_misc').value;
+
+            // 3. Map Compensation View
+            if(type === 'ONROLL') {
+                document.getElementById('freelance_commercial_box').style.display = 'none';
+                document.getElementById('onroll_salary_table').style.display = 'table';
+                
+                let rawNum = parseFloat(compAmt.replace(/[^0-9.-]+/g,"")) || 0;
+                document.getElementById('t_basic').innerText = `₹ ${(rawNum * 0.4).toLocaleString('en-IN')}`;
+                document.getElementById('t_hra').innerText = `₹ ${(rawNum * 0.2).toLocaleString('en-IN')}`;
+                document.getElementById('t_special').innerText = `₹ ${(rawNum * 0.4).toLocaleString('en-IN')}`;
+                document.getElementById('t_total').innerText = compAmt;
+            } else {
+                document.getElementById('freelance_commercial_box').style.display = 'block';
+                document.getElementById('onroll_salary_table').style.display = 'none';
+                document.getElementById('out_c_comp_f').innerText = compAmt;
+                document.getElementById('out_c_comp_freq_f').innerText = document.getElementById('c_comp_freq').value;
+            }
+
+            // 4. Update Signatory Block
+            document.getElementById('signature-image').src = selectedSig.image;
+            document.getElementById('signature-image').style.display = 'block';
+            document.getElementById('signatory-name').innerText = selectedSig.name;
+            
+            const sealImg = document.getElementById('out_seal');
+            if(sealBase64) { sealImg.src = sealBase64; sealImg.style.display = 'block'; } else { sealImg.style.display = 'none'; }
+
+            // 5. Render PDF
+            const element = document.getElementById('hr-doc');
+            document.getElementById('pdf-wrapper').style.display = 'block';
+
+            const opt = {
+                margin:       [10, 0, 10, 0], // Margins for clean A4 printing
+                pagebreak:    { avoid: '.avoid-page-split' },
+                filename:     `Agreement_${type}_${cName.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 1.0 },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                document.getElementById('pdf-wrapper').style.display = 'none';
+            });
+        }
+
+        // Initialize Defaults
+        window.onload = () => {
+            toggleTemplateContent();
+        };
+    </script>
 
 </body>
 </html>
