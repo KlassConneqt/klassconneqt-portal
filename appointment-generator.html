@@ -142,11 +142,11 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Full Name</label>
-                        <input type="text" id="c_name" value="Jane Doe" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        <input type="text" id="c_name" value="Nisha" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Designation / Role</label>
-                        <input type="text" id="c_role" value="Lead Freelance Tutor" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        <input type="text" id="c_role" value="Freelance Tutor" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
                     </div>
                 </div>
                 <div>
@@ -173,11 +173,11 @@
                 <div id="freelance_inputs" class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Professional Fee Amount</label>
-                        <input type="text" id="c_comp_f" value="₹ 45,000" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-cyan-500">
+                        <input type="text" id="c_comp_f" value="₹ 208" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-cyan-500">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Fee Frequency</label>
-                        <input type="text" id="c_comp_freq_f" value="Per Month / Per Batch" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        <input type="text" id="c_comp_freq_f" value="Per Hour/Session" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
                     </div>
                 </div>
 
@@ -228,23 +228,27 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause 1: Scope & Responsibilities (One per line)</label>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause Block 1</label>
                     <textarea id="cl_scope" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause 2: Probation / Special Terms</label>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause Block 2</label>
                     <textarea id="cl_probation" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause 3: Confidentiality & IP</label>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause Block 3 (Payment & Taxes)</label>
+                    <textarea id="cl_payment" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause Block 4 (Confidentiality & IP)</label>
                     <textarea id="cl_confidentiality" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause 4: Termination & Notice Period</label>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause Block 5 (Termination & Misc)</label>
                     <textarea id="cl_termination" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause 5: Non-Compete / Service Bond / Misc</label>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Clause Block 6 (Dispute / Governing Law)</label>
                     <textarea id="cl_misc" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
                 </div>
             </div>
@@ -261,7 +265,7 @@
                         </td>
                         <td style="width: 50%;">
                             <div class="doc-title" id="out_doc_title">AGREEMENT</div>
-                            <div class="doc-ref">Date: <span id="out_issue_date"></span><br>Ref: KC-HR-<span id="out_ref"></span></div>
+                            <div class="doc-ref">Date: <span id="out_issue_date"></span><br>Ref: <span id="out_ref"></span></div>
                         </td>
                     </tr>
                 </table>
@@ -277,10 +281,10 @@
                 <p class="pdf-p">Dear <strong id="out_c_name_inline"></strong>,</p>
                 <p class="pdf-p">Following our recent discussions, we are pleased to offer you the engagement of <strong id="out_c_role"></strong> at KlassConneqt. Your effective start date is <strong id="out_join_date"></strong>.</p>
 
-                <h2 class="pdf-h2">1. Scope of Services & Responsibilities</h2>
+                <h2 class="pdf-h2 pdf-section-title">1. Scope of Services & Responsibilities</h2>
                 <ul class="pdf-ul" id="out_cl_scope"></ul>
 
-                <h2 class="pdf-h2">2. Compensation & Remuneration</h2>
+                <h2 class="pdf-h2 pdf-section-title">2. Compensation & Remuneration</h2>
                 
                 <div id="out_freelance_commercial_box" class="pdf-commercial-box">
                     <p><strong>Professional Fee:</strong> <span id="out_c_comp_f"></span></p>
@@ -301,17 +305,18 @@
                         <tr class="total-row"><td>Total Gross Compensation</td><td id="out_t_total"></td></tr>
                     </tbody>
                 </table>
+                <p class="pdf-p" id="out_cl_payment"></p>
 
-                <h2 class="pdf-h2">3. General Terms & Probation</h2>
+                <h2 class="pdf-h2 pdf-section-title">3. General Terms & Probation</h2>
                 <p class="pdf-p" id="out_cl_probation"></p>
 
-                <h2 class="pdf-h2">4. Confidentiality & Intellectual Property</h2>
+                <h2 class="pdf-h2 pdf-section-title">4. Confidentiality & Intellectual Property</h2>
                 <p class="pdf-p" id="out_cl_confidentiality"></p>
 
-                <h2 class="pdf-h2">5. Term & Termination</h2>
+                <h2 class="pdf-h2 pdf-section-title">5. Term & Termination</h2>
                 <p class="pdf-p" id="out_cl_termination"></p>
 
-                <h2 class="pdf-h2">6. Service Conditions & Governing Law</h2>
+                <h2 class="pdf-h2 pdf-section-title">6. Service Conditions & Governing Law</h2>
                 <p class="pdf-p" id="out_cl_misc"></p>
 
                 <p class="pdf-p" style="margin-top: 20px;">Please sign and return the duplicate copy of this document as a token of your acceptance of the terms and conditions outlined above.</p>
@@ -348,17 +353,17 @@
     </main>
 
     <script>
-        // --- Init Dates ---
+        // --- Init Dates & Unique Ref ---
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('c_issue_date').value = today;
         document.getElementById('c_join_date').value = today;
-        // Generates a unique ID based on Year, Month, Day, and a random 4-digit code (e.g., 260712-8492)
-const d = new Date();
-const uniqueRef = d.getFullYear().toString().slice(-2) + 
-                  (d.getMonth() + 1).toString().padStart(2, '0') + 
-                  d.getDate().toString().padStart(2, '0') + "-" + 
-                  Math.floor(Math.random() * 9999).toString().padStart(4, '0');
-document.getElementById('out_ref').innerText = uniqueRef;
+        
+        const d = new Date();
+        const uniqueRef = "KC-HR-" + d.getFullYear().toString().slice(-2) + 
+                          (d.getMonth() + 1).toString().padStart(2, '0') + 
+                          d.getDate().toString().padStart(2, '0') + "-" + 
+                          Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+        document.getElementById('out_ref').innerText = uniqueRef;
         
         // --- File Uploads (Live Sync) ---
         document.getElementById('logo_upload').addEventListener('change', e => {
@@ -388,17 +393,19 @@ document.getElementById('out_ref').innerText = uniqueRef;
         // --- Exact Templates Matching Provided PDFs ---
         const templates = {
             FREELANCE: {
-                subject: "Agreement for Freelance Tutor Services",
-                scope: "You shall deliver training modules, conduct practical labs, and manage assessments strictly as per KlassConneqt curriculum standards.\nMaintain a highly professional environment, provide prompt feedback to students, and adhere to batch schedules.\nAct as an independent consultant providing specialized educational services.",
-                probation: "As an independent contractor, probation policies do not apply. Your engagement is strictly on a per-batch or per-month deliverable basis. You are responsible for all applicable taxes and statutory requirements.",
-                confidentiality: "You agree to maintain absolute confidentiality regarding student data, course material, proprietary code, and business operations. All intellectual property (IP), training materials, and content created or utilized during this engagement remain the sole and exclusive property of KlassConneqt.",
-                termination: "Either party may terminate this agreement without cause by providing a fifteen (15) days written notice. In the event of termination, any ongoing batches or training commitments assigned to you must be successfully completed or transitioned smoothly prior to the final financial settlement.",
-                misc: "Independent Status: This is a principal-to-principal contract. No employer-employee relationship is formed.\nNon-Solicitation: You shall not solicit KlassConneqt clients or students directly for independent business during and for 1 year after this agreement."
+                subject: "Freelancer Tutor Agreement",
+                scope: "1. Engagement\nThe Tutor agrees to provide online tutoring services to the students of KlassConneqt as an independent freelancer, on a non-exclusive basis.\n\n3. Services\n• Conduct online tutoring sessions as per the schedule (typically 12 classes per month on alternate days).\n• The schedule may change or be rescheduled based on student requests or administrative reasons.\n• Prepare lesson plans and learning materials.\n• Maintain professional behaviour and communication with students and parents.\n• Submit reports and feedback on student progress as required.",
+                probation: "2. Nature of Relationship\nThe Tutor is engaged as a freelancer/independent contractor, not as an employee or agent of the Company. As such, the Tutor is not entitled to employee benefits such as Provident Fund (PF), Employee State Insurance (ESI), health insurance, or paid leave.",
+                payment: "4. Payment Terms\nThe Tutor shall be paid at the rate of ₹208 per hour/session. The standard teaching load is 12 classes per month. Payment shall be made on or before the 7th of the following month via bank transfer to the Tutor’s registered account. Payment is subject to completion of scheduled sessions and submission of session reports.\n\n5. Incentives\nIncentives may be provided based on performance, which will be evaluated from time to time at the sole discretion of the Company. Incentive terms are subject to change and will be communicated separately.\n\n6. Taxes\nThe Company does not deduct taxes at source. The Tutor shall be responsible for any applicable taxes under Indian tax laws and must declare and pay taxes on income received from the Company.",
+                confidentiality: "7. Confidentiality\nThe Tutor agrees to keep all student information, teaching materials, session recordings, and other data confidential and not to disclose or use it for any purpose outside of KlassConneqt.\n\n9. Intellectual Property\nAll materials, session recordings, or lesson plans created during the course of tutoring under KlassConneqt shall be the property of the Company.",
+                termination: "8. Term and Termination\nThis Agreement shall continue until terminated by either party with 15 days' written notice. Immediate termination may occur in case of:\n• Breach of agreement\n• Misconduct\n• Consistent failure to meet performance standards",
+                misc: "10. Dispute Resolution\nIn case of disputes, both parties shall attempt amicable resolution. If unresolved, disputes shall be subject to the jurisdiction of courts in Salem, Tamil Nadu."
             },
             ONROLL: {
-                subject: "Appointment as Full-Time Employee",
-                scope: "You are appointed to execute full-time operational and technical duties as assigned by your reporting manager.\nYou will devote your full time and attention to the business of the company and perform your duties with honesty, diligence, and professionalism.\nParticipate actively in internal meetings, sprint planning, and core organizational activities.",
+                subject: "Offer of Full-Time Employment",
+                scope: "Execute full-time operational and technical duties as assigned by your reporting manager.\nDevote your full time and attention to the business of the company and perform your duties with honesty, diligence, and professionalism.\nParticipate actively in internal meetings, sprint planning, and core organizational activities.",
                 probation: "You will be on a probation period for Six (6) months from your date of joining. During this period, your performance will be evaluated. Post confirmation, you will be eligible for 12 days of paid leave per annum as per company policy.",
+                payment: "Your compensation is subject to statutory deductions (TDS, PF, Professional Tax) as per prevailing government norms. Annual appraisals, increments, and performance bonuses will be strictly based on individual performance metrics and company profitability.",
                 confidentiality: "You are strictly bound by the company's Non-Disclosure Agreement (NDA). You shall not disclose any proprietary information, business strategies, or client data. You shall not engage in any dual employment, freelance activities, or consultancy that conflicts with KlassConneqt's business interests.",
                 termination: "During probation, this employment may be terminated with a 15-day notice period. Post-confirmation, a standard 30-day notice period or salary in lieu thereof is mandatory for separation from either side. The company reserves the right to terminate employment immediately for disciplinary reasons.",
                 misc: "Service Agreement (Bond): You agree to serve the company for a minimum period of 1 Year. Breach of this service period will incur a penalty equivalent to training costs or 3 months' salary.\nNon-Compete: You shall not engage in competing businesses during and for 1 year post-employment."
@@ -448,13 +455,6 @@ document.getElementById('out_ref').innerText = uniqueRef;
             
             document.getElementById('out_subject').innerText = document.getElementById('cl_subject').value;
 
-            // Clauses
-            document.getElementById('out_cl_scope').innerHTML = formatList(document.getElementById('cl_scope').value);
-            document.getElementById('out_cl_probation').innerText = document.getElementById('cl_probation').value;
-            document.getElementById('out_cl_confidentiality').innerText = document.getElementById('cl_confidentiality').value;
-            document.getElementById('out_cl_termination').innerText = document.getElementById('cl_termination').value;
-            document.getElementById('out_cl_misc').innerText = document.getElementById('cl_misc').value;
-
             // Compensation Layout Swap
             if(type === 'ONROLL') {
                 document.getElementById('freelance_inputs').style.display = 'none';
@@ -463,6 +463,18 @@ document.getElementById('out_ref').innerText = uniqueRef;
                 document.getElementById('onroll_inputs').style.display = 'block';
                 document.getElementById('out_onroll_salary_table').style.display = 'table';
                 updateSalaryCalculations();
+                
+                // OnRoll uses Standard HTML formats
+                document.getElementById('out_cl_scope').style.listStyleType = 'disc';
+                document.getElementById('out_cl_scope').style.paddingLeft = '20px';
+                document.getElementById('out_cl_scope').innerHTML = formatList(document.getElementById('cl_scope').value);
+                
+                document.getElementById('out_cl_probation').innerText = document.getElementById('cl_probation').value;
+                document.getElementById('out_cl_payment').innerText = document.getElementById('cl_payment').value;
+                document.getElementById('out_cl_confidentiality').innerText = document.getElementById('cl_confidentiality').value;
+                document.getElementById('out_cl_termination').innerText = document.getElementById('cl_termination').value;
+                document.getElementById('out_cl_misc').innerText = document.getElementById('cl_misc').value;
+                
             } else {
                 document.getElementById('freelance_inputs').style.display = 'grid';
                 document.getElementById('out_freelance_commercial_box').style.display = 'block';
@@ -472,6 +484,19 @@ document.getElementById('out_ref').innerText = uniqueRef;
                 
                 document.getElementById('out_c_comp_f').innerText = document.getElementById('c_comp_f').value;
                 document.getElementById('out_c_comp_freq_f').innerText = document.getElementById('c_comp_freq_f').value;
+                
+                // Freelance injects the exact 1-10 headings inside the text automatically
+                document.getElementById('out_cl_scope').style.listStyleType = 'none';
+                document.getElementById('out_cl_scope').style.paddingLeft = '0';
+                
+                const parseFText = (text) => text.replace(/\n/g, '<br>').replace(/(^\d+\.\s.*?)(<br>|$)/gm, '<strong style="color:#1a365d; font-size:10.5pt; display:block; margin-top:16px; margin-bottom:4px; text-transform:uppercase;">$1</strong>$2');
+                
+                document.getElementById('out_cl_scope').innerHTML = parseFText(document.getElementById('cl_scope').value);
+                document.getElementById('out_cl_probation').innerHTML = parseFText(document.getElementById('cl_probation').value);
+                document.getElementById('out_cl_payment').innerHTML = parseFText(document.getElementById('cl_payment').value);
+                document.getElementById('out_cl_confidentiality').innerHTML = parseFText(document.getElementById('cl_confidentiality').value);
+                document.getElementById('out_cl_termination').innerHTML = parseFText(document.getElementById('cl_termination').value);
+                document.getElementById('out_cl_misc').innerHTML = parseFText(document.getElementById('cl_misc').value);
             }
 
             // Signatory Update
@@ -484,13 +509,23 @@ document.getElementById('out_ref').innerText = uniqueRef;
         document.getElementById('doc_type').addEventListener('change', () => {
             const type = document.getElementById('doc_type').value;
             const tmpl = templates[type];
+            const titles = document.querySelectorAll('.pdf-section-title');
             
             document.getElementById('cl_subject').value = tmpl.subject;
             document.getElementById('cl_scope').value = tmpl.scope;
             document.getElementById('cl_probation').value = tmpl.probation;
+            document.getElementById('cl_payment').value = tmpl.payment || "";
             document.getElementById('cl_confidentiality').value = tmpl.confidentiality;
             document.getElementById('cl_termination').value = tmpl.termination;
             document.getElementById('cl_misc').value = tmpl.misc;
+
+            if(type === 'ONROLL') {
+                titles.forEach(t => t.style.display = 'block');
+            } else {
+                document.getElementById('c_comp_f').value = "₹ 208";
+                document.getElementById('c_comp_freq_f').value = "Per Hour/Session";
+                titles.forEach(t => t.style.display = 'none');
+            }
 
             syncDocument();
         });
@@ -510,7 +545,7 @@ document.getElementById('out_ref').innerText = uniqueRef;
             const opt = {
                 margin:       [15, 0, 15, 0], 
                 pagebreak:    { mode: ['css', 'legacy'], avoid: ['.avoid-page-split', '.pdf-p', '.pdf-h2', '.pdf-ul', '.pdf-li', '.salary-table', '.pdf-commercial-box'] },
-                filename:     `Agreement_${type}_${cName.replace(/\s+/g, '_')}.pdf`,
+                filename:     `Agreement_${type}_${cName}.pdf`,
                 image:        { type: 'jpeg', quality: 1.0 },
                 html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
