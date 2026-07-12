@@ -277,14 +277,32 @@
     <textarea id="cl_dispute" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
 </div>
 
-                <!-- Hidden fields required for ONROLL -->
-<div style="display:none;">
+                <!-- ON-ROLL LEGAL CLAUSES -->
+<div id="onroll_clause_inputs" style="display:none;">
 
-    <textarea id="cl_scope"></textarea>
+    <div>
+        <label class="block text-xs font-medium text-slate-400 mb-1">
+            1. Scope of Duties & Responsibilities
+        </label>
+        <textarea id="cl_scope" rows="6"
+            class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
+    </div>
 
-    <textarea id="cl_probation"></textarea>
+    <div>
+        <label class="block text-xs font-medium text-slate-400 mb-1">
+            2. Probation
+        </label>
+        <textarea id="cl_probation" rows="5"
+            class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
+    </div>
 
-    <textarea id="cl_misc"></textarea>
+    <div>
+        <label class="block text-xs font-medium text-slate-400 mb-1">
+            6. Service Agreement & Non-Compete
+        </label>
+        <textarea id="cl_misc" rows="6"
+            class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 leading-relaxed custom-scrollbar"></textarea>
+    </div>
 
 </div>
             </div>
@@ -597,8 +615,9 @@ if(type==="ONROLL"){
             if(type === 'ONROLL') {
 
     document.getElementById("freelance_sections").style.display = "none";
+document.getElementById("out_onroll_hidden").style.display = "block";
 
-    document.getElementById("out_onroll_hidden").style.display = "block";
+document.getElementById("onroll_clause_inputs").style.display = "block";
                 document.getElementById('freelance_inputs').style.display = 'none';
                 document.getElementById('out_freelance_commercial_box').style.display = 'none';
                 
@@ -618,9 +637,9 @@ if(type==="ONROLL"){
                 
             }else{
 
-    document.getElementById("freelance_sections").style.display = "block";
-
-    document.getElementById("out_onroll_hidden").style.display = "none";
+                document.getElementById("freelance_sections").style.display = "block";
+                document.getElementById("out_onroll_hidden").style.display = "none";
+                document.getElementById("onroll_clause_inputs").style.display = "none";
                 document.getElementById('freelance_inputs').style.display = 'grid';
                 document.getElementById('out_freelance_commercial_box').style.display = 'block';
                 
