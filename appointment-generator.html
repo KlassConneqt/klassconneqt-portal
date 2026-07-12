@@ -365,20 +365,26 @@ FREELANCE AGREEMENT
 
 </div>
 
-<!-- Hidden preview fields for ONROLL -->
+<!-- ON-ROLL CLAUSES -->
 <div id="out_onroll_hidden" style="display:none;">
 
-    <ul id="out_cl_scope"></ul>
+    <h2 class="pdf-h2">1. Scope of Duties & Responsibilities</h2>
+    <ul class="pdf-ul" id="out_cl_scope"></ul>
 
-    <p id="out_cl_probation"></p>
+    <h2 class="pdf-h2">2. Probation</h2>
+    <p class="pdf-p" id="out_cl_probation"></p>
 
-    <p id="out_cl_payment"></p>
+    <h2 class="pdf-h2">3. Compensation & Benefits</h2>
+    <p class="pdf-p" id="out_cl_payment"></p>
 
-    <p id="out_cl_confidentiality"></p>
+    <h2 class="pdf-h2">4. Confidentiality</h2>
+    <p class="pdf-p" id="out_cl_confidentiality"></p>
 
-    <p id="out_cl_termination"></p>
+    <h2 class="pdf-h2">5. Termination</h2>
+    <p class="pdf-p" id="out_cl_termination"></p>
 
-    <p id="out_cl_misc"></p>
+    <h2 class="pdf-h2">6. Service Agreement & Non-Compete</h2>
+    <p class="pdf-p" id="out_cl_misc"></p>
 
 </div>
 
@@ -602,8 +608,6 @@ if(type==="ONROLL"){
                 
                 // Protect ONROLL rendering to avoid breaking if old IDs were removed from HTML
                 if(document.getElementById('out_cl_scope')) {
-                    document.getElementById('out_cl_scope').style.listStyleType = 'disc';
-                    document.getElementById('out_cl_scope').style.paddingLeft = '20px';
                     document.getElementById('out_cl_scope').innerHTML = formatList(document.getElementById('cl_scope').value);
                     document.getElementById('out_cl_probation').innerText = document.getElementById('cl_probation').value;
                     document.getElementById('out_cl_payment').innerText = document.getElementById('cl_payment').value;
