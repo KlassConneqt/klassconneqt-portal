@@ -28,7 +28,12 @@
         }
         
         /* Cover Page */
-        .pdf-cover { height: 250mm; position: relative; text-align: center; margin-top: -12mm; } /* FIX: Pulls cover up to counter the new 12mm JS margin */
+        .pdf-cover {
+    height:250mm;
+    position:relative;
+    text-align:center;
+    margin-top:0;
+} /* FIX: Pulls cover up to counter the new 12mm JS margin */
         .cover-top-bar { background-color: #1a365d; height: 35px; width: calc(100% + 30mm); margin: 0 -15mm 50px -15mm; } /* FIX: Bleeds fully left, right, and top */
         .logo-row { display: flex; justify-content: center; align-items: center; gap: 30px; margin-bottom: 50px; width: 100%; }
         .logo-img { max-height: 100px; max-width: 180px; object-fit: contain; }
@@ -124,6 +129,7 @@
    /* Fix Dispute Resolution Page Break */
 #out_cl_dispute {
     page-break-inside: avoid;
+    break-inside: avoid;
 }
     </style>
 </head>
@@ -687,7 +693,7 @@ element.querySelectorAll('.pdf-section').forEach(section => {
         // Clean Configuration for perfect A4 mapping
         const opt = {
 
-    margin: [10, 10, 10, 10],
+    margin:[0,0,0,0],
 
     filename: `MoU_${p1Name}_${p2Name}.pdf`.replace(/\s+/g, '_'),
 
@@ -710,7 +716,7 @@ element.querySelectorAll('.pdf-section').forEach(section => {
     },
 
     pagebreak: {
-        mode: ['avoid-all', 'css', 'legacy'],
+        mode:['css','legacy'],
         avoid: [
             '.pdf-section',
             '.pdf-commercial-box',
