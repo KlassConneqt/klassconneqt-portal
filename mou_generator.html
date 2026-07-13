@@ -62,11 +62,11 @@
         .pdf-li { margin-bottom: 8px; text-align: justify; }
         
         /* Commercial Box */
-        .pdf-commercial-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #ecc94b; padding: 15px; margin: 15px 0; page-break-inside: avoid; }
+        .pdf-commercial-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #ecc94b; padding: 15px; margin: 15px 0; page-break-inside: avoid; break-inside: avoid; }
         .pdf-commercial-box p { margin-bottom: 8px; }
         
         /* Boxed Signatures */
-        .pdf-signatures { width: 100%; border-collapse: separate; border-spacing: 10px 0; margin-top: 10px; page-break-inside: avoid; font-family: 'Arial', sans-serif; margin-left: -5px; margin-right: -5px; }
+        .pdf-signatures { width: 100%; border-collapse: separate; border-spacing: 10px 0; margin-top: 10px; page-break-inside: avoid; break-inside: avoid; font-family: 'Arial', sans-serif; margin-left: -5px; margin-right: -5px; }
         .pdf-signatures td { width: 50%; vertical-align: top; padding: 10px 15px; border: 1px solid #e2e8f0; background: #fafbfc; position: relative; overflow: hidden; } /* FIX: Reduced padding to fit on Page 4 */
         .sig-header { font-weight: bold; color: #1a365d; font-size: 14pt; margin-bottom: 25px; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px; text-transform: uppercase; }
         .sig-line { margin-bottom: 15px; font-size: 10.5pt; color: #4a5568; position: relative; z-index: 2; }
@@ -562,7 +562,8 @@ If unresolved, the matter shall be subject to the jurisdiction of the competent 
             filename:     `MoU_${p1Name}_${p2Name}.pdf`.replace(/\s+/g, '_'),
             image:        { type: 'jpeg', quality: 1.0 },
             html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: ['css', 'legacy'] } // <-- THIS IS THE PERMANENT FIX
         };
         html2pdf().set(opt).from(element).save().then(() => {
             document.getElementById('pdf-wrapper').style.display = 'none'; // Hide again
