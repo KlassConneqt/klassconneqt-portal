@@ -42,23 +42,40 @@
         .party-tag { font-size: 11pt; font-style: italic; color: #718096; margin-top: 5px; }
 
         /* Content Pages */
-        .pdf-page-break { page-break-before: always; }
-        .pdf-h2 { 
-            font-family: 'Arial', sans-serif; 
-            color: #1a365d; 
-            font-size: 13pt; 
-            font-weight: bold;
-            border-left: 5px solid #3182ce; 
-            padding-left: 12px; 
-            margin-top: 20px; /* FIX: Reduced gap above headings to save page space */ 
-            margin-bottom: 12px; 
-            background: linear-gradient(to right, #f1f5f9 0%, transparent 80%);
-            padding-top: 6px; 
-            padding-bottom: 6px; 
-            page-break-after: avoid;
-        }
-        .pdf-p { margin-bottom: 12px; text-align: justify; }
-        .pdf-ul { padding-left: 25px; margin-bottom: 15px; }
+        .pdf-page-break{
+    page-break-before: always;
+    break-before: page;
+}
+        .pdf-h2 {
+    font-family: 'Arial', sans-serif;
+    color: #1a365d;
+    font-size: 13pt;
+    font-weight: bold;
+    border-left: 5px solid #3182ce;
+    padding-left: 12px;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    background: linear-gradient(to right, #f1f5f9 0%, transparent 80%);
+    padding-top: 6px;
+    padding-bottom: 6px;
+
+    page-break-after: avoid;
+    page-break-inside: avoid;
+
+    break-after: avoid;
+    break-inside: avoid;
+}        .pdf-p { margin-bottom: 12px; text-align: justify; }
+        .pdf-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 20px;
+}
+        .pdf-ul {
+    padding-left: 25px;
+    margin-bottom: 15px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
         .pdf-li { margin-bottom: 8px; text-align: justify; }
         
         /* Commercial Box */
@@ -66,8 +83,36 @@
         .pdf-commercial-box p { margin-bottom: 8px; }
         
         /* Boxed Signatures */
-        .pdf-signatures { width: 100%; border-collapse: separate; border-spacing: 10px 0; margin-top: 10px; page-break-inside: avoid; break-inside: avoid; font-family: 'Arial', sans-serif; margin-left: -5px; margin-right: -5px; }
-        .pdf-signatures td { width: 50%; vertical-align: top; padding: 10px 15px; border: 1px solid #e2e8f0; background: #fafbfc; position: relative; overflow: hidden; } /* FIX: Reduced padding to fit on Page 4 */
+        .pdf-signatures {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px 0;
+    margin-top: 10px;
+    font-family: 'Arial', sans-serif;
+    margin-left: -5px;
+    margin-right: -5px;
+
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.pdf-signatures tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.pdf-signatures td {
+    width: 50%;
+    vertical-align: top;
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+    background: #fafbfc;
+    position: relative;
+    overflow: hidden;
+
+    page-break-inside: avoid;
+    break-inside: avoid;
+} /* FIX: Reduced padding to fit on Page 4 */
         .sig-header { font-weight: bold; color: #1a365d; font-size: 14pt; margin-bottom: 25px; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px; text-transform: uppercase; }
         .sig-line { margin-bottom: 15px; font-size: 10.5pt; color: #4a5568; position: relative; z-index: 2; }
         .sig-space { border-bottom: 1px solid #718096; display: inline-block; width: 65%; height: 15px; margin-left: 5px; }
@@ -295,55 +340,126 @@ If unresolved, the matter shall be subject to the jurisdiction of the competent 
 
         <div class="pdf-page-break"></div>
 
-        <h2 class="pdf-h2">1. PURPOSE</h2>
-        <p class="pdf-p">This Memorandum of Understanding (MoU) is entered into between <strong id="out_p1_name_p1">Party 1</strong> ("Training Partner") and <strong id="out_p2_name_p1">Party 2</strong> ("Placement & Career Development Partner") with the objective of collaboratively delivering industry-relevant training programs and enhancing career opportunities for students and aspiring professionals.</p>
-        <p class="pdf-p">Both parties agree to work together to provide high-quality training, career guidance, placement preparation, and employment support for enrolled candidates.</p>
+        <div class="pdf-section">
 
-        <h2 class="pdf-h2">2. PARTIES</h2>
-        <p class="pdf-p"><strong id="out_p1_name_p2">Party 1</strong><br>
-        <span id="out_p1_desc">Description 1</span></p>
-        <p class="pdf-p"><strong id="out_p2_name_p2">Party 2</strong><br>
-        <span id="out_p2_desc">Description 2</span></p>
+    <h2 class="pdf-h2">1. PURPOSE</h2>
 
-        <h2 class="pdf-h2">3. SCOPE OF COLLABORATION</h2>
-        <p class="pdf-p">The collaboration shall include:</p>
-        <ul class="pdf-ul" id="out_scope_list"></ul>
+    <p class="pdf-p">
+        This Memorandum of Understanding (MoU) is entered into between
+        <strong id="out_p1_name_p1">Party 1</strong>
+        ("Training Partner") and
+        <strong id="out_p2_name_p1">Party 2</strong>
+        ("Placement & Career Development Partner")
+        with the objective of collaboratively delivering industry-relevant
+        training programs and enhancing career opportunities for students
+        and aspiring professionals.
+    </p>
 
-        <h2 class="pdf-h2">4. RESPONSIBILITIES OF <span id="out_p1_name_h">PARTY 1</span></h2>
-        <ul class="pdf-ul" id="out_p1_resp_list"></ul>
+    <p class="pdf-p">
+        Both parties agree to work together to provide high-quality training,
+        career guidance, placement preparation, and employment support
+        for enrolled candidates.
+    </p>
 
-        <h2 class="pdf-h2">5. RESPONSIBILITIES OF <span id="out_p2_name_h">PARTY 2</span></h2>
-        <ul class="pdf-ul" id="out_p2_resp_list"></ul>
+</div>
 
-        <h2 class="pdf-h2">6. COMMERCIAL TERMS</h2>
-        <div class="pdf-commercial-box">
+<div class="pdf-section">
+
+    <h2 class="pdf-h2">2. PARTIES</h2>
+
+    <p class="pdf-p">
+        <strong id="out_p1_name_p2">Party 1</strong><br>
+        <span id="out_p1_desc">Description 1</span>
+    </p>
+
+    <p class="pdf-p">
+        <strong id="out_p2_name_p2">Party 2</strong><br>
+        <span id="out_p2_desc">Description 2</span>
+    </p>
+
+</div>
+
+<div class="pdf-section">
+
+    <h2 class="pdf-h2">3. SCOPE OF COLLABORATION</h2>
+
+    <p class="pdf-p">The collaboration shall include:</p>
+
+    <ul class="pdf-ul" id="out_scope_list"></ul>
+
+</div>
+
+<div class="pdf-section">
+
+    <h2 class="pdf-h2">4. RESPONSIBILITIES OF <span id="out_p1_name_h">PARTY 1</span></h2>
+
+    <ul class="pdf-ul" id="out_p1_resp_list"></ul>
+
+</div>
+
+<div class="pdf-section">
+
+    <h2 class="pdf-h2">5. RESPONSIBILITIES OF <span id="out_p2_name_h">PARTY 2</span></h2>
+
+    <ul class="pdf-ul" id="out_p2_resp_list"></ul>
+
+</div>
+
+<div class="pdf-section">
+<h2 class="pdf-h2">6. COMMERCIAL TERMS</h2>        <div class="pdf-commercial-box">
             <p><strong>Course Name:</strong> <span id="out_c_course"></span></p>
             <p><strong>Special Partnership Fee:</strong> <span id="out_c_fee"></span></p>
             <p><strong>Revenue Sharing:</strong> <span id="out_c_rev"></span></p>
             <p><strong>Payment Terms:</strong> <span id="out_c_terms"></span></p>
         </div>
         <p class="pdf-p" style="font-style: italic; font-size: 10pt; color: #64748b;">The above commercial terms shall be finalized and mutually agreed upon by both parties prior to execution of this partnership.</p>
+    </div>
 
-        <h2 class="pdf-h2">7. MARKETING & BRANDING</h2>
-        <ul class="pdf-ul" id="out_cl_marketing"></ul>
+        <div class="pdf-section">
 
-        <h2 class="pdf-h2">8. CONFIDENTIALITY</h2>
-        <p class="pdf-p" id="out_cl_confidentiality"></p>
+<h2 class="pdf-h2">7. MARKETING & BRANDING</h2>
 
-        <h2 class="pdf-h2">9. TERM OF AGREEMENT</h2>
-        <p class="pdf-p">This MoU shall remain valid for a period of <strong id="out_c_years"></strong> Year(s) commencing from <strong id="out_c_date"></strong> and may be renewed upon mutual written consent.</p>
+<ul class="pdf-ul" id="out_cl_marketing"></ul>
 
-        <h2 class="pdf-h2">10. TERMINATION</h2>
-        <ul class="pdf-ul" id="out_cl_termination"></ul>
+</div>
 
-        <h2 class="pdf-h2">11. DISPUTE RESOLUTION</h2>
-        <div id="out_cl_dispute"></div>
+<div class="pdf-section">
 
-        <h2 class="pdf-h2">12. NON-EXCLUSIVITY</h2>
-        <p class="pdf-p" id="out_cl_nonexclusivity"></p>
+<h2 class="pdf-h2">8. CONFIDENTIALITY</h2>
 
-        <h2 class="pdf-h2">13. ACCEPTANCE</h2>
-        <p class="pdf-p">By signing below, both parties acknowledge and agree to the terms and conditions contained within this Memorandum of Understanding.</p>
+<p id="out_cl_confidentiality"></p>
+
+</div>
+
+<div class="pdf-section">
+<h2 class="pdf-h2">9. TERM OF AGREEMENT</h2>        <p class="pdf-p">This MoU shall remain valid for a period of <strong id="out_c_years"></strong> Year(s) commencing from <strong id="out_c_date"></strong> and may be renewed upon mutual written consent.</p>
+    </div>
+        <div class="pdf-section">
+
+<h2 class="pdf-h2">10. TERMINATION</h2>
+
+<ul class="pdf-ul" id="out_cl_termination"></ul>
+
+</div>
+
+<div class="pdf-section">
+
+<h2 class="pdf-h2">11. DISPUTE RESOLUTION</h2>
+
+<div id="out_cl_dispute"></div>
+
+</div>
+
+<div class="pdf-section">
+
+<h2 class="pdf-h2">12. NON-EXCLUSIVITY</h2>
+
+<p id="out_cl_nonexclusivity"></p>
+
+</div>
+
+<div class="pdf-section">
+<h2 class="pdf-h2">13. ACCEPTANCE</h2>        <p class="pdf-p">By signing below, both parties acknowledge and agree to the terms and conditions contained within this Memorandum of Understanding.</p>
 
         <table class="pdf-signatures">
             <tr>
@@ -388,7 +504,8 @@ If unresolved, the matter shall be subject to the jurisdiction of the competent 
                     <div class="sig-stamp-box">Signature & Seal</div>
                 </td>
             </tr>
-        </table>
+        </table> 
+       </div>
     </div>
 </div>
 
@@ -553,18 +670,57 @@ If unresolved, the matter shall be subject to the jurisdiction of the competent 
         document.getElementById('out_cl_nonexclusivity').innerText = document.getElementById('cl_nonexclusivity').value;
 
         // Execute PDF Engine
-        const element = document.getElementById('mou-doc');
-        document.getElementById('pdf-wrapper').style.display = 'block'; // Unhide temporarily
+        // Execute PDF Engine
+const element = document.getElementById('mou-doc');
+document.getElementById('pdf-wrapper').style.display = 'block';
 
+/* ---------- AUTO PAGE BREAK OPTIMIZER ---------- */
+
+element.querySelectorAll('.pdf-section').forEach(section => {
+
+    section.style.breakBefore = "";
+    section.style.pageBreakBefore = "";
+
+});
+
+/* ----------------------------------------------- */
         // Clean Configuration for perfect A4 mapping
         const opt = {
-            margin:       [12, 0, 12, 0], // FIX: Balanced 12mm margins for top AND bottom
-            filename:     `MoU_${p1Name}_${p2Name}.pdf`.replace(/\s+/g, '_'),
-            image:        { type: 'jpeg', quality: 1.0 },
-            html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak:    { mode: ['css', 'legacy'] } // <-- THIS IS THE PERMANENT FIX
-        };
+
+    margin: [10, 10, 10, 10],
+
+    filename: `MoU_${p1Name}_${p2Name}.pdf`.replace(/\s+/g, '_'),
+
+    image: {
+        type: 'jpeg',
+        quality: 1
+    },
+
+    html2canvas: {
+        scale: 3,
+        useCORS: true,
+        letterRendering: true,
+        scrollY: 0
+    },
+
+    jsPDF: {
+        unit: 'mm',
+        format: 'a4',
+        orientation: 'portrait'
+    },
+
+    pagebreak: {
+        mode: ['avoid-all', 'css', 'legacy'],
+        avoid: [
+            '.pdf-section',
+            '.pdf-commercial-box',
+            '.pdf-signatures',
+            '.pdf-h2',
+            '.pdf-ul'
+        ]
+    }
+
+};
         html2pdf().set(opt).from(element).save().then(() => {
             document.getElementById('pdf-wrapper').style.display = 'none'; // Hide again
         });
